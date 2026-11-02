@@ -27,7 +27,7 @@ O **Painel Nutricional** foi desenvolvido para simplificar e organizar a rotina 
 ### Opção 1: Direto pelo Link da Web (Sem Instalar Nada)
 Acesse diretamente pelo navegador em qualquer computador, tablet ou celular:
 
-👉 **[https://thaycarv.github.io/painel-nutricional/](https://thaycarv.github.io/painel-nutricional/)**
+👉 **[https://painelnutricional.github.io/](https://painelnutricional.github.io/)**
 
 *(Recomendamos favoritar o link no seu navegador!)*
 

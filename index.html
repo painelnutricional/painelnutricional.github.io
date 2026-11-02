@@ -657,6 +657,87 @@
       background: var(--primary-light);
     }
 
+
+    /* Ações do Cabeçalho da Paciente e Histórico de Formulários */
+    .patient-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .patient-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-import-patient-form {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(74, 93, 78, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-import-patient-form:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(74, 93, 78, 0.35);
+    }
+    .patient-forms-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+    }
+    .form-chip {
+      background: #faf8f5;
+      border: 1px solid #e5dcce;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-chip-num {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .form-chip-date {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+    .patient-target-banner {
+      background: #eef4f0;
+      border: 1px solid #c2dbca;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #275630;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
 </style>
 
   <!-- PDF.js para processamento 100% no navegador (offline-first & LGPD compliant) -->
@@ -737,41 +818,46 @@
     // ==========================================
     // MOTOR DE EIXOS TEMÁTICOS DINÂMICOS & FLEXÍVEIS
     // ==========================================
+        function cleanThemeTitle(themeName) {
+      if (!themeName) return "Geral";
+      return themeName.replace(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+/u, '').trim();
+    }
+
     function detectQuestionTheme(q) {
-      if (!q) return "📌 Perguntas & Observações Gerais";
+      if (!q) return "Perguntas & Observações Gerais";
       const lq = q.toLowerCase();
 
       if (/exame|laborat|sangue|bioquim|urina|hemograma|glicose|colesterol|ferritina|creatinina|plaqueta|vitamina d|b12|tsh|t3|t4|laudo/i.test(lq)) {
-        return "🔬 Exames & Dados Laboratoriais";
+        return "Exames & Dados Laboratoriais";
       }
       if (/medicamento|remédio|remedio|suplement|creatina|whey|anticoncepc|fórmula|formula|manipulado|anti-inflamatório|antibiótico/i.test(lq)) {
-        return "💊 Medicamentos & Suplementos";
+        return "Medicamentos & Suplementos";
       }
       if (/intestino|evacua|fezes|gases|inchaço|inchaco|azia|refluxo|estômago|estomago|digest|constip|distensão|dor abdominal|barriga/i.test(lq)) {
-        return "🩺 Digestão, Intestino & Sintomas";
+        return "Digestão, Intestino & Sintomas";
       }
       if (/sono|dorme|acorda|insônia|insonia|cansaço|cansaco|disposição|disposicao|energia|fadiga|tontura|treino|exercício|exercicio|musculação|musculacao|corrida|atividade física|cardio|caminhada/i.test(lq)) {
-        return "⚡ Energia, Sono & Treinos";
+        return "Energia, Sono & Treinos";
       }
       if (/fome|apetite|saciedade|satisfeit|vontade de comer|belisc|doce|chocolate|compulsão|compulsao|beliscar|fissura/i.test(lq)) {
-        return "🍽️ Apetite, Fome & Saciedade";
+        return "Apetite, Fome & Saciedade";
       }
       if (/emoção|emocao|ansiedade|estresse|humor|culpa|tristeza|mindful|pressão|trabalho|rotina no trabalho|tempo livre|lazer/i.test(lq)) {
-        return "🧠 Comportamento, Emoções & Ansiedade";
+        return "Comportamento, Emoções & Ansiedade";
       }
       if (/café da manhã|cafe da manha|almoço|almoco|jantar|lanche|refeição|refeicao|come|prato|água|agua|hidratação|fruta|legume|salada|proteína|proteina|cardápio|cardapio|fim de semana|buffet|delivery/i.test(lq)) {
-        return "🥗 Alimentação, Refeições & Rotina";
+        return "Alimentação, Refeições & Rotina";
       }
       if (/peso|altura|idade|doença|doenca|alergia|intolerância|intolerancia|diagnóstic|diagnostic|expectativa|meta|objetivo|histórico|historico/i.test(lq)) {
-        return "📋 Histórico & Ponto de Partida";
+        return "Histórico & Ponto de Partida";
       }
       if (/ajuste|altera|modifica|mudaria|vitória|vitoria|conquista|dificuldade|desafio|pedra|recado|comentário|sugestão|espaço livre/i.test(lq)) {
-        return "💡 Ajustes Solicitados & Feedback";
+        return "Ajustes Solicitados & Feedback";
       }
-      return "📌 Perguntas & Observações Gerais";
+      return "Perguntas & Observações Gerais";
     }
 
-    function getThemeIcon(themeName) {
+        function getThemeIcon(themeName) {
       if (!themeName) return "📌";
       const lt = themeName.toLowerCase();
       if (lt.includes("exame") || lt.includes("laborat")) return "🔬";
@@ -944,14 +1030,39 @@
       // 1. Cabeçalho do Prontuário da Paciente
       html += '<div class="patient-card">';
       html += '  <div class="patient-card-header">';
-      html += '    <div>';
-      html += '      <div class="patient-name-title">' + name;
-      html += '        <span class="status-badge" style="background-color:' + synth.badgeColor + ';">' + synth.badge + '</span>';
+      html += '    <div class="patient-header-top">';
+      html += '      <div>';
+      html += '        <div class="patient-name-title">' + name;
+      html += '          <span class="status-badge" style="background-color:' + synth.badgeColor + ';">' + synth.badge + '</span>';
+      html += '        </div>';
+      html += '        <div class="patient-meta-info">';
+      html += '          📅 <strong>' + forms.length + (forms.length === 1 ? ' formulário analisado' : ' formulários analisados') + '</strong>' + (forms.length > 0 ? ' • Último registro: <strong>' + forms[forms.length - 1].respondido_em + '</strong>' : '');
+      html += '        </div>';
       html += '      </div>';
-      html += '      <div class="patient-meta-info">';
-      html += '        📅 <strong>' + forms.length + ' formulários analisados</strong> entre <strong>' + forms[0].respondido_em + '</strong> e <strong>' + forms[forms.length - 1].respondido_em + '</strong>';
+      html += '      <div class="patient-header-actions">';
+      html += '        <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
+      html += '          📄 + Importar Formulário para ' + name;
+      html += '        </button>';
+      html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir prontuário desta paciente" style="color: #c62828;">';
+      html += '          🗑️ Excluir';
+      html += '        </button>';
       html += '      </div>';
       html += '    </div>';
+
+      // Histórico de Formulários da Paciente (Chips informativos)
+      if (forms.length > 0) {
+        html += '    <div class="patient-forms-chips">';
+        html += '      <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Formulários nesta paciente:</span>';
+        forms.forEach((f, fIdx) => {
+          const qCount = f.total_perguntas || (f.perguntas_e_respostas ? f.perguntas_e_respostas.length : 0);
+          html += '      <div class="form-chip" title="' + f.titulo_formulario + '">';
+          html += '        <span class="form-chip-num">#' + (fIdx + 1) + '</span>';
+          html += '        <strong>' + f.titulo_formulario + '</strong>';
+          html += '        <span class="form-chip-date">(' + f.respondido_em + ' • ' + qCount + ' perguntas)</span>';
+          html += '      </div>';
+        });
+        html += '    </div>';
+      }
       html += '  </div>';
 
       // 2. Ficha Diagnóstica de Linha de Base (Pré-Consulta)
@@ -1446,18 +1557,73 @@
       showToast(`Paciente ${name} cadastrada com sucesso!`, "👤");
     }
 
+    // ==========================================
+    // IMPORTAÇÃO CONTEXTUAL POR PACIENTE
+    // ==========================================
+    let targetPatientForImport = null;
+
+    function openPdfModalForPatient(patientName) {
+      targetPatientForImport = patientName;
+      openPdfModal();
+      const banner = document.getElementById("pdfTargetPatientBanner");
+      const nameInput = document.getElementById("pdfPatientName");
+      if (banner) {
+        banner.style.display = "flex";
+        banner.innerHTML = `🎯 <strong>Paciente Destino:</strong> O formulário importado será anexado ao prontuário de <strong>${patientName}</strong>.`;
+      }
+      if (nameInput) {
+        nameInput.value = patientName;
+        nameInput.disabled = true; // Fixado para esta paciente
+      }
+    }
+
     function openPdfModal() {
       const modal = document.getElementById("pdfModalOverlay");
       if (modal) {
         modal.classList.add("active");
         resetPdfModalState();
+        const banner = document.getElementById("pdfTargetPatientBanner");
+        const nameInput = document.getElementById("pdfPatientName");
+        if (targetPatientForImport) {
+          if (banner) {
+            banner.style.display = "flex";
+            banner.innerHTML = `🎯 <strong>Paciente Destino:</strong> O formulário importado será anexado ao prontuário de <strong>${targetPatientForImport}</strong>.`;
+          }
+          if (nameInput) {
+            nameInput.value = targetPatientForImport;
+            nameInput.disabled = true;
+          }
+        } else {
+          if (banner) banner.style.display = "none";
+          if (nameInput) nameInput.disabled = false;
+        }
       }
     }
 
     function closePdfModal() {
       const modal = document.getElementById("pdfModalOverlay");
       if (modal) modal.classList.remove("active");
+      targetPatientForImport = null;
       resetPdfModalState();
+    }
+
+    function deleteCurrentPatientPrompt(patientName) {
+      if (confirm(`Deseja realmente excluir o prontuário de ${patientName}? Esta ação não pode ser desfeita.`)) {
+        delete patientsData[patientName];
+        delete clinicalSyntheses[patientName];
+        const idx = patientNames.indexOf(patientName);
+        if (idx !== -1) patientNames.splice(idx, 1);
+        saveToLocalStorage(false);
+
+        if (patientNames.length === 0) {
+          // Se não houver mais pacientes, recriar um demo
+          resetToDemonstrationData();
+        } else {
+          initControls();
+          switchPatient(patientNames[0]);
+        }
+        showToast(`Paciente ${patientName} excluída com sucesso.`, "🗑️");
+      }
     }
 
     function closeModalOnBg(e, modalId) {
@@ -2154,6 +2320,87 @@
       background: var(--primary-light);
     }
 
+
+    /* Ações do Cabeçalho da Paciente e Histórico de Formulários */
+    .patient-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .patient-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-import-patient-form {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(74, 93, 78, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-import-patient-form:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(74, 93, 78, 0.35);
+    }
+    .patient-forms-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+    }
+    .form-chip {
+      background: #faf8f5;
+      border: 1px solid #e5dcce;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-chip-num {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .form-chip-date {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+    .patient-target-banner {
+      background: #eef4f0;
+      border: 1px solid #c2dbca;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #275630;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
 </style>
 
   <!-- Modal de Importação de PDF -->
@@ -2164,6 +2411,7 @@
         <button class="modal-close" onclick="closePdfModal()">&times;</button>
       </div>
       <div class="modal-body">
+                <div id="pdfTargetPatientBanner" class="patient-target-banner" style="display: none;"></div>
         <div class="storage-banner">
           🔒 <strong>100% Seguro & Privado:</strong> O PDF é processado diretamente no seu computador. Nenhum dado de paciente é enviado para a nuvem.
         </div>

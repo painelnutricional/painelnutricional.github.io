@@ -44,12 +44,20 @@ Se preferir ter o programa salvo na sua máquina:
 
 ## 📖 Instruções de Uso
 
-### 1. Como Importar Questionários em PDF
-1. No topo da tela, clique no botão verde **`📄 Importar Questionário (PDF)`**.
-2. Arraste o arquivo PDF do formulário para dentro da tela (ou clique para escolher o arquivo).
-3. O painel lerá todas as páginas do PDF e organizará as respostas nos 7 temas clínicos na hora.
-4. Você pode clicar no botão **`🔒 Sigla`** para usar apenas as iniciais da paciente (ex: *T.P.F.*) e preservar o sigilo.
-5. Clique em **`✅ Salvar no Prontuário`**.
+### 1. Como Cadastrar Pacientes e Importar Formulários em PDF
+Cada questionário é importado diretamente para a sua respectiva paciente:
+
+**Para uma Nova Paciente:**
+1. No topo da tela, clique no botão **`➕ Nova Paciente`** (ao lado de *Paciente Ativa:*).
+2. Digite o nome da paciente (ex: *Camila Santos* ou use iniciais *C.S.*) e confirme.
+3. No topo do prontuário dela, clique no botão verde **`📄 + Importar Formulário para Camila Santos`**.
+4. Arraste ou selecione o arquivo PDF do formulário (Nutrio, Google Forms, Anamnese, etc.).
+5. O painel lerá todas as páginas, organizará as respostas nos eixos clínicos de forma flexível e salvará no prontuário na hora!
+
+**Para Retornos / Consultas Seguintes da Mesma Paciente:**
+1. Selecione a paciente no menu **`Paciente Ativa:`**.
+2. Clique no botão verde **`📄 + Importar Formulário para [Nome]`**.
+3. O novo formulário será adicionado ao histórico como uma nova consulta (`#1`, `#2`...), permitindo acompanhar a evolução cronológica.
 
 ### 2. O que é o arquivo "JSON de Backup"?
 Muitas pessoas não sabem o que é um arquivo `.json` e não há problema nenhum:

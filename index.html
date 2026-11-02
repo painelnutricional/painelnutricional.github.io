@@ -1173,7 +1173,7 @@
         html += '<div style="padding: 32px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border); margin-top: 16px;">';
         html += '  <span style="font-size: 32px; display: block; margin-bottom: 8px;">📄</span>';
         html += '  <strong>Nenhum formulário cadastrado ainda.</strong><br/>';
-        html += '  <span>Clique em <strong>"📄 Importar Questionário (PDF)"</strong> no topo para carregar o primeiro formulário desta paciente.</span>';
+        html += '  <span>Clique no botão verde <strong>"📄 + Importar Formulário para ' + name.replace(/"/g, '&quot;') + '"</strong> no topo do prontuário para carregar o primeiro formulário desta paciente.</span>';
         html += '</div>';
       } else {
         themeEntries.forEach(([themeName, items], idx) => {
@@ -2642,16 +2642,41 @@
         </div>
 
         <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-          📄 1. Como Cadastrar Pacientes e Importar Questionários em PDF
+          📄 1. Como Cadastrar Pacientes e Importar Formulários em PDF
         </h4>
-        <p style="margin-bottom: 8px;">Você não precisa redigitar nada manualmente. Quando sua paciente preencher um formulário (seja no Nutrio, Google Forms ou PDF de anamnese):</p>
-        <ul style="margin-left: 20px; margin-bottom: 12px;">
-          <li>Clique no botão verde <strong><code>📄 Importar Questionário (PDF)</code></strong> no topo.</li>
-          <li>Arraste o arquivo PDF do formulário ou clique para selecioná-lo no seu computador.</li>
-          <li>O painel lerá todas as páginas do PDF, identificará o nome da paciente e organizará as perguntas nos eixos temáticos na hora!</li>
-          <li>Você também pode clicar no botão <strong><code>🔒 Sigla</code></strong> para deixar apenas as iniciais da paciente (ex: <em>T.P.F.</em>), mantendo total sigilo clínico.</li>
-          <li>Para criar um prontuário em branco, use o botão <strong><code>➕ Nova Paciente</code></strong>.</li>
-        </ul>
+        <p style="margin-bottom: 8px;">Você não precisa redigitar nada manualmente. Para manter a organização clínica, cada formulário é importado diretamente para a sua respectiva paciente:</p>
+        
+        <div style="background: #ffffff; border: 1.5px solid #d4e3d7; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+          <strong style="color: #235928; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 14px;">
+            ➕ Para Cadastrar uma Nova Paciente:
+          </strong>
+          <ol style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
+            <li style="margin-bottom: 6px;">No topo da tela, clique no botão <strong><code>➕ Nova Paciente</code></strong> (ao lado de <em>Paciente Ativa:</em>).</li>
+            <li style="margin-bottom: 6px;">Digite o nome da paciente (ex: <em>Camila Santos</em> ou use iniciais como <em>C.S.</em>) e confirme.</li>
+            <li style="margin-bottom: 6px;">O prontuário da paciente será aberto. Clique no botão verde <strong><code>📄 + Importar Formulário para Camila Santos</code></strong> no topo do cartão dela.</li>
+            <li style="margin-bottom: 6px;">Arraste ou selecione o PDF do formulário (Nutrio, Google Forms, Anamnese, Check-in semanal, etc.).</li>
+            <li>O painel lerá todas as páginas, organizará as respostas nos eixos clínicos de forma flexível e salvará o prontuário na hora!</li>
+          </ol>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #e2ddd3; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+          <strong style="color: var(--primary-dark); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 14px;">
+            🔄 Para Adicionar Novos Formulários / Retornos da Mesma Paciente:
+          </strong>
+          <ol style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
+            <li style="margin-bottom: 6px;">Selecione a paciente desejada no menu <strong><code>Paciente Ativa:</code></strong>.</li>
+            <li style="margin-bottom: 6px;">Clique no botão verde <strong><code>📄 + Importar Formulário para [Nome]</code></strong>.</li>
+            <li>O novo formulário será anexado ao histórico dela como uma nova consulta na linha do tempo (com identificadores <em>#1</em>, <em>#2</em>...), permitindo comparar a evolução dela ao longo do tratamento!</li>
+          </ol>
+        </div>
+
+        <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
+          <strong style="color: var(--primary-dark); display: block; margin-bottom: 4px; font-size: 13.5px;">🔒 Sigilo e Exclusão:</strong>
+          <ul style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
+            <li style="margin-bottom: 4px;"><strong>Botão <code>🔒 Sigla</code>:</strong> Clique para alternar entre o nome completo e as iniciais da paciente (ex: <em>C.S.</em>) a qualquer momento para total privacidade (LGPD).</li>
+            <li><strong>Botão <code>🗑️ Excluir</code>:</strong> Fica no topo do prontuário da paciente caso precise remover o registro dela com confirmação de segurança.</li>
+          </ul>
+        </div>
 
         <div style="background: #eef4f0; border: 1.5px solid #cce0d1; padding: 16px 18px; border-radius: 12px; margin: 16px 0;">
           <h4 style="color: #235928; font-size: 15.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">

@@ -1,16 +1,16 @@
-# 🥗 Painel Nutricional • Núcleo Vida Nutrição
+# 🥗 Painel Nutricional
 
-> Sistema de Prontuário, Evolução Clínica e Leitor de Questionários em PDF para Nutricionistas.
+> Prontuário Clínico, Gestão de Formulários e Leitor Inteligente de Questionários em PDF para Nutricionistas.
 
 ---
 
 ## 🌟 O que é o Painel Nutricional?
 
-O **Painel Nutricional** foi desenvolvido para facilitar a rotina clínica de nutricionistas, permitindo consolidar formulários de pré-consulta, anamneses e check-ins periódicos em uma interface limpa, intuitiva e dividida por eixos temáticos clínicos.
+O **Painel Nutricional** foi desenvolvido para simplificar e organizar a rotina clínica de nutricionistas, permitindo consolidar questionários de pré-consulta, anamneses e check-ins periódicos em uma interface limpa, intuitiva e dividida por eixos temáticos clínicos.
 
-- 🔒 **100% Seguro & Privado (LGPD):** O processamento de PDFs e armazenamento é feito exclusivamente no seu computador/navegador. Nenhum dado de paciente sai da sua máquina.
-- 📄 **Leitor Inteligente de PDFs:** Importe questionários exportados em PDF (do Nutrio, Google Forms ou fichas clínicas) com um clique ou arrastando o arquivo.
-- 💾 **Salva Automaticamente:** Tudo o que você digita ou importa fica salvo no seu computador (`localStorage`). Ao fechar e abrir a página, seus dados continuam lá.
+- 🔒 **100% Seguro & Privado (LGPD):** Nenhum dado de paciente sai do seu computador. Todo o processamento de PDFs e salvamento ocorre exclusivamente dentro do seu próprio navegador.
+- 📄 **Leitor Inteligente de Questionários em PDF:** Importe formulários exportados do **Nutrio**, **Google Forms** ou fichas clínicas apenas arrastando o arquivo para a tela.
+- 💾 **Salva Automaticamente:** Tudo o que você digita ou importa fica salvo no seu computador (`localStorage`). Ao fechar e reabrir o navegador, seus dados continuam lá.
 - 📊 **Organização por 7 Temas Clínicos:**
   1. 📋 Histórico & Ponto de Partida
   2. 🥗 Alimentação, Refeições & Rotina
@@ -25,44 +25,42 @@ O **Painel Nutricional** foi desenvolvido para facilitar a rotina clínica de nu
 ## 🚀 Como Usar (Duas Opções Muito Fáceis)
 
 ### Opção 1: Direto pelo Link da Web (Sem Instalar Nada)
-Você e suas colegas podem acessar diretamente pelo navegador em qualquer computador, tablet ou celular:
+Acesse diretamente pelo navegador em qualquer computador, tablet ou celular:
 
-👉 **[Acessar Painel Nutricional Online](https://thaycarv.github.io/painel-nutricional/)**
+👉 **[https://thaycarv.github.io/painel-nutricional/](https://thaycarv.github.io/painel-nutricional/)**
 
-*(Basta salvar o link nos favoritos do seu navegador!)*
+*(Recomendamos favoritar o link no seu navegador!)*
 
 ---
 
-### Opção 2: No Computador (Funciona sem Internet / Offline)
-Se preferir ter o programa salvo no seu computador:
+### Opção 2: No Computador (Funciona 100% Offline)
+Se preferir ter o programa salvo na sua máquina:
 1. Clique no botão verde **Code** no topo desta página do GitHub e selecione **Download ZIP**.
 2. Descompacte a pasta no seu computador.
 3. Dê dois cliques no arquivo **`iniciar_painel.bat`** (ou dê dois cliques em `index.html`).
-4. O painel abrirá instantaneamente no seu navegador padrão (Chrome, Edge, etc.)!
+4. O painel abrirá na hora no seu navegador padrão (Chrome, Edge, etc.)!
 
 ---
 
-## 📖 Passo a Passo: Como Importar um Questionário em PDF
+## 📖 Instruções de Uso
 
+### 1. Como Importar Questionários em PDF
 1. No topo da tela, clique no botão verde **`📄 Importar Questionário (PDF)`**.
-2. Clique no campo indicado para selecionar o arquivo PDF ou **arraste o arquivo PDF** para dentro da janela.
-3. O sistema fará a leitura automática de todas as páginas:
-   - Detecta a **paciente** (ou permite clicar em **`🔒 Sigla`** para anonimizar, ex: `T.P.F.`).
-   - Identifica o **tipo de formulário** e a **data**.
-   - Separa as **perguntas e respostas** automaticamente.
-4. Clique em **`✅ Salvar no Prontuário`**.
-5. Pronto! O prontuário da paciente será atualizado e salvo automaticamente no seu computador.
+2. Arraste o arquivo PDF do formulário para dentro da tela (ou clique para escolher o arquivo).
+3. O painel lerá todas as páginas do PDF e organizará as respostas nos 7 temas clínicos na hora.
+4. Você pode clicar no botão **`🔒 Sigla`** para usar apenas as iniciais da paciente (ex: *T.P.F.*) e preservar o sigilo.
+5. Clique em **`✅ Salvar no Prontuário`**.
+
+### 2. O que é o arquivo "JSON de Backup"?
+Muitas pessoas não sabem o que é um arquivo `.json` e não há problema nenhum:
+> **Pense no arquivo JSON como uma "pastinha compacta" que guarda todos os prontuários das suas pacientes em um único arquivinho leve.**
+
+- **Você NÃO precisa abrir esse arquivo no computador nem entender o que está escrito dentro dele.**
+- **Para guardar uma cópia segura (Exportar Backup):** De tempos em tempos, clique em `💾 Dados & Backup ▾` e selecione `💾 Exportar Backup (JSON)`. Guarde esse arquivo no seu Google Drive, pendrive ou e-mail.
+- **Para recuperar ou mudar de computador (Restaurar Backup):** Se você for atender em outro computador, formatar a máquina ou trocar de notebook, basta abrir o painel, ir em `📥 Restaurar Backup (JSON)` e escolher o arquivo salvo. Todas as suas pacientes reaparecerão no mesmo segundo!
 
 ---
 
-## 💾 Fazendo Backup dos seus Dados
-
-Para garantir que você nunca perca suas informações caso troque de computador ou formate a máquina:
-- Clique no menu **`💾 Dados & Backup ▾`** no canto superior direito.
-- Selecione **`💾 Exportar Backup (JSON)`**. Um arquivo leve será salvo na sua pasta de Downloads.
-- Para abrir seus dados em outro computador, basta abrir o painel nele, ir em **`📥 Restaurar Backup (JSON)`** e selecionar seu arquivo!
-
----
-
-Desenvolvido com carinho para a equipe **Núcleo Vida Nutrição** ✨
-Nutricionista Thaý Carvalho (CRN10-14724)
+<p align="center">
+  Desenvolvido por <strong>Thaý Carvalho - Núcleo Vida Nutrição</strong>
+</p>

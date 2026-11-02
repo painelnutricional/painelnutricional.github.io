@@ -1328,7 +1328,73 @@
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
-    function loadFromLocalStorage() {
+
+    // ==========================================
+    // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
+    // ==========================================
+    const IDB_NAME = 'PainelNutricionalDB_v2';
+    const IDB_STORE = 'prontuarios_store';
+
+    // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().then(isPersistent => {
+        if (isPersistent) {
+          console.log("🔒 Armazenamento persistente e duradouro ativado pelo navegador.");
+        }
+      }).catch(e => console.warn(e));
+    }
+
+    function openIndexedDB() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) return reject(new Error("IndexedDB não suportado"));
+        const req = indexedDB.open(IDB_NAME, 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(IDB_STORE)) {
+            db.createObjectStore(IDB_STORE);
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function syncToIndexedDB(data, summaries) {
+      try {
+        const db = await openIndexedDB();
+        const tx = db.transaction(IDB_STORE, 'readwrite');
+        const store = tx.objectStore(IDB_STORE);
+        store.put(data, 'patientsData');
+        store.put(summaries, 'clinicalSyntheses');
+      } catch (err) {
+        console.warn("Aviso ao espelhar no IndexedDB:", err);
+      }
+    }
+
+    async function tryRecoverFromIndexedDB() {
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction(IDB_STORE, 'readonly');
+          const store = tx.objectStore(IDB_STORE);
+          const reqData = store.get('patientsData');
+          const reqSynth = store.get('clinicalSyntheses');
+
+          tx.oncomplete = () => {
+            if (reqData.result && Object.keys(reqData.result).length > 0) {
+              resolve({ data: reqData.result, summaries: reqSynth.result });
+            } else {
+              resolve(null);
+            }
+          };
+          tx.onerror = () => resolve(null);
+        });
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function loadFromLocalStorage() {
       try {
         const savedData = localStorage.getItem(STORAGE_KEY_DATA);
         const savedSummaries = localStorage.getItem(STORAGE_KEY_SUMMARIES);
@@ -1336,17 +1402,35 @@
           const parsedData = JSON.parse(savedData);
           const parsedSummaries = JSON.parse(savedSummaries);
           if (Object.keys(parsedData).length > 0) {
-            // Limpar e repopular pacientes
             for (const k in patientsData) delete patientsData[k];
             for (const k in clinicalSyntheses) delete clinicalSyntheses[k];
             Object.assign(patientsData, parsedData);
             Object.assign(clinicalSyntheses, parsedSummaries);
-            console.log("✅ Dados carregados com sucesso do armazenamento local (localStorage).");
+            // Sincronizar também no IndexedDB
+            syncToIndexedDB(patientsData, clinicalSyntheses);
+            console.log("✅ Dados carregados com sucesso do armazenamento local.");
+            return;
           }
-        } else {
-          // Primeira execução: salvar os dados de demonstração no localStorage
-          saveToLocalStorage(false);
         }
+
+        // Se localStorage estiver vazio (ex: limpeza acidental de cookies), tentar recuperar do IndexedDB
+        const recovered = await tryRecoverFromIndexedDB();
+        if (recovered && recovered.data && Object.keys(recovered.data).length > 0) {
+          for (const k in patientsData) delete patientsData[k];
+          for (const k in clinicalSyntheses) delete clinicalSyntheses[k];
+          Object.assign(patientsData, recovered.data);
+          if (recovered.summaries) Object.assign(clinicalSyntheses, recovered.summaries);
+          saveToLocalStorage(false);
+          patientNames.length = 0;
+          Object.keys(patientsData).forEach(k => patientNames.push(k));
+          initControls();
+          switchPatient(patientNames[0]);
+          showToast("Prontuários recuperados com sucesso da proteção automática!", "🛡️");
+          return;
+        }
+
+        // Primeira execução: salvar dados iniciais de demonstração
+        saveToLocalStorage(false);
       } catch (err) {
         console.warn("Aviso ao carregar dados locais:", err);
       }
@@ -1356,6 +1440,10 @@
       try {
         localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(patientsData));
         localStorage.setItem(STORAGE_KEY_SUMMARIES, JSON.stringify(clinicalSyntheses));
+        
+        // Espelhamento na segunda camada de proteção (IndexedDB)
+        syncToIndexedDB(patientsData, clinicalSyntheses);
+
         if (showFeedback) {
           showToast("Dados salvos no seu computador!", "💾");
         }

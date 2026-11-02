@@ -704,6 +704,27 @@
       padding-top: 12px;
       border-top: 1px dashed var(--border);
     }
+        .btn-delete-chip {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      font-size: 11px;
+      color: #c62828;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      margin-left: 4px;
+      opacity: 0.65;
+    }
+    .btn-delete-chip:hover {
+      background: #ffebee;
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
     .form-chip {
       background: #faf8f5;
       border: 1px solid #e5dcce;
@@ -1111,6 +1132,7 @@
           html += '        <span class="form-chip-num">#' + (fIdx + 1) + '</span>';
           html += '        <strong>' + f.titulo_formulario + '</strong>';
           html += '        <span class="form-chip-date">(' + f.respondido_em + ' • ' + qCount + ' perguntas)</span>';
+          html += '        <button class="btn-delete-chip" onclick="deletePatientFormPrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + fIdx + ', event)" title="Excluir este formulário (caso tenha importado o arquivo errado)">🗑️</button>';
           html += '      </div>';
         });
         html += '    </div>';
@@ -1707,6 +1729,22 @@ initControls();
       if (modal) modal.classList.remove("active");
       targetPatientForImport = null;
       resetPdfModalState();
+    }
+
+        function deletePatientFormPrompt(patientName, formIdx, event) {
+      if (event) event.stopPropagation();
+      const forms = patientsData[patientName];
+      if (!forms || !forms[formIdx]) return;
+      const formToDelete = forms[formIdx];
+      const formTitle = formToDelete.titulo_formulario || `Formulário #${formIdx + 1}`;
+
+      if (confirm(`Deseja realmente apagar o "${formTitle}" de ${patientName}?\n\nEsta ação removerá apenas este arquivo/formulário do prontuário da paciente.`)) {
+        forms.splice(formIdx, 1);
+        saveToLocalStorage(false);
+        initControls();
+        renderPatientView(patientName);
+        showToast(`Formulário "${formTitle}" excluído com sucesso!`, "🗑️");
+      }
     }
 
     function deleteCurrentPatientPrompt(patientName) {
@@ -2513,6 +2551,27 @@ initControls();
       padding-top: 12px;
       border-top: 1px dashed var(--border);
     }
+        .btn-delete-chip {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      font-size: 11px;
+      color: #c62828;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      margin-left: 4px;
+      opacity: 0.65;
+    }
+    .btn-delete-chip:hover {
+      background: #ffebee;
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
     .form-chip {
       background: #faf8f5;
       border: 1px solid #e5dcce;
@@ -2713,7 +2772,8 @@ initControls();
           <strong style="color: var(--primary-dark); display: block; margin-bottom: 4px; font-size: 13.5px;">🔒 Sigilo e Exclusão:</strong>
           <ul style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
             <li style="margin-bottom: 4px;"><strong>Botão <code>🔒 Sigla</code>:</strong> Clique para alternar entre o nome completo e as iniciais da paciente (ex: <em>C.S.</em>) a qualquer momento para total privacidade (LGPD).</li>
-            <li><strong>Botão <code>🗑️ Excluir</code>:</strong> Fica no topo do prontuário da paciente caso precise remover o registro dela com confirmação de segurança.</li>
+            <li style="margin-bottom: 4px;"><strong>Apagar um Formulário Específico (Upload Errado):</strong> Se você enviou um PDF errado ou duplicado, basta clicar no ícone <code>🗑️</code> ao lado daquele formulário específico (ex: <em>#2</em>) na linha de formulários da paciente. Isso remove apenas aquele PDF, sem apagar a paciente!</li>
+            <li><strong>Excluir Paciente Completa:</strong> Use o botão vermelho <code>🗑️ Excluir</code> no topo do prontuário caso queira remover todo o registro da paciente com confirmação de segurança.</li>
           </ul>
         </div>
 

@@ -799,7 +799,7 @@
 
       // 3. Resumo da Evolução Analisada
       html += '  <div class="evolution-card">';
-      html += '    <strong>📊 Evolução Clínica:</strong> ' + synth.evolutionSummary;
+      html += '    <strong>📊 Evolução Clínica:</strong> ' + (synth.evolutionSummary || (synth.evolucao && synth.evolucao.sintese) || "Acompanhamento clínico regular.");
       html += '  </div>';
 
       // 4. Vitórias vs Pontos de Atenção
@@ -968,7 +968,7 @@
     const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v1';
     const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v1';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
-    const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(patientSummaries));
+    const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
     function loadFromLocalStorage() {
       try {
@@ -980,9 +980,9 @@
           if (Object.keys(parsedData).length > 0) {
             // Limpar e repopular pacientes
             for (const k in patientsData) delete patientsData[k];
-            for (const k in patientSummaries) delete patientSummaries[k];
+            for (const k in clinicalSyntheses) delete clinicalSyntheses[k];
             Object.assign(patientsData, parsedData);
-            Object.assign(patientSummaries, parsedSummaries);
+            Object.assign(clinicalSyntheses, parsedSummaries);
             console.log("✅ Dados carregados com sucesso do armazenamento local (localStorage).");
           }
         } else {
@@ -997,7 +997,7 @@
     function saveToLocalStorage(showFeedback = true) {
       try {
         localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(patientsData));
-        localStorage.setItem(STORAGE_KEY_SUMMARIES, JSON.stringify(patientSummaries));
+        localStorage.setItem(STORAGE_KEY_SUMMARIES, JSON.stringify(clinicalSyntheses));
         if (showFeedback) {
           showToast("Dados salvos no seu computador!", "💾");
         }
@@ -1010,9 +1010,9 @@
     function resetToDemonstrationData() {
       if (confirm("Deseja realmente restaurar os dados originais de demonstração? Isso redefinirá as alterações não exportadas.")) {
         for (const k in patientsData) delete patientsData[k];
-        for (const k in patientSummaries) delete patientSummaries[k];
+        for (const k in clinicalSyntheses) delete clinicalSyntheses[k];
         Object.assign(patientsData, JSON.parse(JSON.stringify(DEFAULT_PATIENTS_BACKUP)));
-        Object.assign(patientSummaries, JSON.parse(JSON.stringify(DEFAULT_SUMMARIES_BACKUP)));
+        Object.assign(clinicalSyntheses, JSON.parse(JSON.stringify(DEFAULT_SUMMARIES_BACKUP)));
         saveToLocalStorage(false);
         patientNames.length = 0;
         Object.keys(patientsData).forEach(k => patientNames.push(k));
@@ -1028,7 +1028,7 @@
         versao: "1.0",
         data_exportacao: new Date().toISOString(),
         pacientes: patientsData,
-        sumarios: patientSummaries
+        sumarios: clinicalSyntheses
       };
       const blob = new Blob([JSON.stringify(backupObj, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -1054,9 +1054,9 @@
           const parsed = JSON.parse(e.target.result);
           if (parsed.pacientes && typeof parsed.pacientes === 'object') {
             for (const k in patientsData) delete patientsData[k];
-            for (const k in patientSummaries) delete patientSummaries[k];
+            for (const k in clinicalSyntheses) delete clinicalSyntheses[k];
             Object.assign(patientsData, parsed.pacientes);
-            if (parsed.sumarios) Object.assign(patientSummaries, parsed.sumarios);
+            if (parsed.sumarios) Object.assign(clinicalSyntheses, parsed.sumarios);
             saveToLocalStorage(false);
             patientNames.length = 0;
             Object.keys(patientsData).forEach(k => patientNames.push(k));
@@ -1156,19 +1156,19 @@
         }]
       }];
 
-      patientSummaries[name] = {
+      clinicalSyntheses[name] = {
+        badge: "Cadastro Recente",
+        badgeColor: "#4a5d4e",
         baseline: {
           objetivo: "Reeducação alimentar e acompanhamento nutricional personalizado.",
-          antropometria: "Aguardando medição antropométrica.",
+          historico: "Aguardando histórico clínico e antropometria.",
           queixas: "Aguardando preenchimento do formulário de pré-consulta.",
           rotina: "Aguardando informações sobre rotina e treinos."
         },
-        evolucao: {
-          sintese: "Paciente recém-cadastrada no painel. Pronto para importar questionários em PDF.",
-          vitorias: ["Cadastro inicial realizado no painel."],
-          atencao: ["Importar o PDF do questionário da paciente para gerar a síntese clínica."],
-          condutaSugerida: "Realizar anamnese e planejar metas iniciais."
-        }
+        evolutionSummary: "Paciente recém-cadastrada no painel. Pronto para importar questionários em PDF.",
+        vitorias: ["Cadastro inicial realizado no painel."],
+        atencao: ["Importar o PDF do questionário da paciente para gerar a síntese clínica."],
+        condutaSugerida: "Realizar anamnese e planejar metas iniciais."
       };
 
       patientNames.unshift(name);
@@ -1223,7 +1223,11 @@
     // PARSER INTELIGENTE DE PDF DE FORMULÁRIO
     // ==========================================
     if (window.pdfjsLib) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdf.worker.min.js';
+      if (window.location.protocol === 'file:') {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdf.worker.min.js';
+      } else {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdf.worker.min.js';
+      }
     }
 
     // Drag and Drop para a Dropzone
@@ -1488,7 +1492,7 @@
       patientsData[patientName].push(newForm);
 
       // Gerar ou atualizar sumário da paciente
-      if (!patientSummaries[patientName]) {
+      if (!clinicalSyntheses[patientName]) {
         // Tentar extrair do formulário informações para os 4 cards da baseline
         let objetivo = "Reeducação alimentar e equilíbrio nutricional.";
         let antropometria = "Avaliação física e peso inicial relatados no formulário.";
@@ -1504,23 +1508,23 @@
           if (lp.includes("rotina") || lp.includes("treino") || lp.includes("exercício")) rotina = lr;
         });
 
-        patientSummaries[patientName] = {
+        clinicalSyntheses[patientName] = {
+          badge: "Acompanhamento Ativo",
+          badgeColor: "#2e7d32",
           baseline: {
             objetivo: objetivo,
-            antropometria: antropometria,
+            historico: antropometria,
             queixas: queixas,
             rotina: rotina
           },
-          evolucao: {
-            sintese: `${patientName} teve seu formulário "${formTitle}" importado com sucesso via PDF. Respostas organizadas nos temas clínicos abaixo.`,
-            vitorias: ["Formulário preenchido e analisado pela equipe."],
-            atencao: ["Verificar pontos destacados nas respostas dos questionários."],
-            condutaSugerida: "Seguir com as recomendações personalizadas."
-          }
+          evolutionSummary: `${patientName} teve seu formulário "${formTitle}" importado com sucesso via PDF. Respostas organizadas nos temas clínicos abaixo.`,
+          vitorias: ["Formulário preenchido e analisado pela equipe."],
+          atencao: ["Verificar pontos destacados nas respostas dos questionários."],
+          condutaSugerida: "Seguir com as recomendações personalizadas."
         };
       } else {
         // Se já existia, adicionar nota de novo formulário
-        patientSummaries[patientName].evolucao.sintese += ` [Atualizado com ${formTitle} em ${formDate}]`;
+        clinicalSyntheses[patientName].evolucao.sintese += ` [Atualizado com ${formTitle} em ${formDate}]`;
       }
 
       saveToLocalStorage(false);

@@ -1296,20 +1296,7 @@
           Object.keys(patientsData).forEach(k => patientNames.push(k));
 
       
-    // ==========================================
-    // MODAL DE INSTRUÇÕES
-    // ==========================================
-    function openInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.add("active");
-    }
-
-    function closeInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.remove("active");
-    }
-
-    initControls();
+initControls();
           switchPatient(patientNames[0]);
           alert('✅ ' + raw.length + ' formulários carregados com sucesso! O painel foi atualizado.');
         } catch(err) {
@@ -1463,20 +1450,7 @@
         patientNames.length = 0;
         Object.keys(patientsData).forEach(k => patientNames.push(k));
     
-    // ==========================================
-    // MODAL DE INSTRUÇÕES
-    // ==========================================
-    function openInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.add("active");
-    }
-
-    function closeInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.remove("active");
-    }
-
-    initControls();
+initControls();
         switchPatient("T.P.F. (Demonstração)");
         showToast("Dados de demonstração restaurados!", "🔄");
       }
@@ -1521,20 +1495,7 @@
             patientNames.length = 0;
             Object.keys(patientsData).forEach(k => patientNames.push(k));
         
-    // ==========================================
-    // MODAL DE INSTRUÇÕES
-    // ==========================================
-    function openInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.add("active");
-    }
-
-    function closeInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.remove("active");
-    }
-
-    initControls();
+initControls();
             switchPatient(patientNames[0]);
             showToast("Backup restaurado com sucesso!", "✅");
           } else {
@@ -1648,20 +1609,7 @@
       patientNames.unshift(name);
       saveToLocalStorage(false);
   
-    // ==========================================
-    // MODAL DE INSTRUÇÕES
-    // ==========================================
-    function openInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.add("active");
-    }
-
-    function closeInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.remove("active");
-    }
-
-    initControls();
+initControls();
       switchPatient(name);
       closeNewPatientModal();
       showToast(`Paciente ${name} cadastrada com sucesso!`, "👤");
@@ -1790,6 +1738,30 @@
           handlePdfFileUpload(e.dataTransfer.files);
         }
       });
+    }
+
+    
+    // ==========================================
+    // UTILITÁRIOS E MODAIS GERAIS
+    // ==========================================
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function openInstructionsModal() {
+      const modal = document.getElementById("instructionsModalOverlay");
+      if (modal) modal.classList.add("active");
+    }
+
+    function closeInstructionsModal() {
+      const modal = document.getElementById("instructionsModalOverlay");
+      if (modal) modal.classList.remove("active");
     }
 
     async function handlePdfFileUpload(files) {
@@ -2084,20 +2056,7 @@
       saveToLocalStorage(false);
       closePdfModal();
   
-    // ==========================================
-    // MODAL DE INSTRUÇÕES
-    // ==========================================
-    function openInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.add("active");
-    }
-
-    function closeInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.remove("active");
-    }
-
-    initControls();
+initControls();
       switchPatient(patientName);
       showToast(`Formulário de ${patientName} importado com sucesso!`, "📄");
     }
@@ -2107,20 +2066,7 @@
 
 
 
-    // ==========================================
-    // MODAL DE INSTRUÇÕES
-    // ==========================================
-    function openInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.add("active");
-    }
-
-    function closeInstructionsModal() {
-      const modal = document.getElementById("instructionsModalOverlay");
-      if (modal) modal.classList.remove("active");
-    }
-
-    initControls();
+initControls();
     switchPatient(currentPatient);
   </script>
 

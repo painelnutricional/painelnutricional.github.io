@@ -594,6 +594,69 @@
       font-weight: 700;
     }
 
+
+    /* Botões de Flexibilidade nos Temas */
+    .btn-theme-action {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-theme-action:hover {
+      background: var(--bg);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-move-qa {
+      background: #faf8f5;
+      border: 1px dashed #d5ccbe;
+      color: #8c6a38;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-move-qa:hover {
+      background: #fdf5e6;
+      border-color: #b38b59;
+      color: #5d4013;
+    }
+    .theme-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-new-theme {
+      background: #f1f6f2;
+      border: 1.5px dashed var(--primary);
+      color: var(--primary-dark);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-new-theme:hover {
+      background: var(--primary-light);
+    }
+
 </style>
 
   <!-- PDF.js para processamento 100% no navegador (offline-first & LGPD compliant) -->
@@ -670,18 +733,130 @@
   <script>
     const patientsData = {"T.P.F. (Demonstração)": [{"id": 99001, "uuid": "camila-pre-consulta-2026-10", "paciente": "T.P.F. (Demonstração)", "paciente_id": 99001, "paciente_telefone": "11988887766", "titulo_formulario": "Formulário de Pré-Consulta Oficial", "respondido_em": "01/10/2026 19:40", "total_perguntas": 33, "perguntas_respondidas": 32, "perguntas_e_respostas": [{"identificador": "p01", "tipo": "text", "obrigatoria": true, "pergunta": "O que te fez buscar acompanhamento nutricional neste momento? O que você gostaria de melhorar além do peso?", "resposta": "Busco emagrecer de forma sustentável sem efeito sanfona. Quero ter mais disposição matinal, regular meu intestino que sempre foi travado e parar de descontar o estresse do trabalho em doces."}, {"identificador": "p02", "tipo": "text", "obrigatoria": true, "pergunta": "Você tem alguma doença já diagnosticada (De qualquer tipo)?", "resposta": "Não tenho nenhuma doença diagnosticada."}, {"identificador": "p03", "tipo": "text", "obrigatoria": true, "pergunta": "Você tem alguma alergia alimentar, intolerância ou doença celíaca?", "resposta": "Nenhuma alergia severa, mas percebo que leite puro me causa desconforto e gases."}, {"identificador": "p04", "tipo": "text", "obrigatoria": true, "pergunta": "Liste todos medicamentos e suplementos que faz uso", "resposta": "Anticoncepcional oral e vitamina D (2.000 UI)."}, {"identificador": "p05", "tipo": "text", "obrigatoria": true, "pergunta": "Qual é seu peso atual e sua altura? Se tiver um peso que deseja alcançar, pode informar também.", "resposta": "Altura 1,64m e peso atual 71,5 kg. Meta desejada em torno de 63 kg com saúde."}, {"identificador": "p06", "tipo": "text", "obrigatoria": true, "pergunta": "Como é sua rotina na semana?", "resposta": "Acordo 06h15, treino musculação às 06h45. Trabalho das 09h às 19h (híbrido). Chego em casa exausta e costumo pedir delivery se não tiver nada pronto."}, {"identificador": "p07", "tipo": "text", "obrigatoria": true, "pergunta": "O que você come no café da manhã?", "resposta": "Antes tomava só café preto adoçado correndo. Agora quero estruturar com ovos e fruta."}, {"identificador": "p08", "tipo": "text", "obrigatoria": true, "pergunta": "O que você come no almoço?", "resposta": "No escritório almoço em buffet a quilo (costumo colocar arroz, frango ou carne e pouca salada). Em casa faço o básico."}, {"identificador": "p09", "tipo": "text", "obrigatoria": true, "pergunta": "O que você come no lanche da tarde?", "resposta": "Geralmente café com bolacha recheada ou pão de queijo da cafeteria da empresa."}, {"identificador": "p10", "tipo": "text", "obrigatoria": true, "pergunta": "Como funciona seu intestino? Com que frequência você evacua?", "resposta": "Muito preso. Fico 3 a 4 dias sem ir ao banheiro, com dor, fezes ressecadas e barriga muito inchada."}, {"identificador": "p11", "tipo": "text", "obrigatoria": true, "pergunta": "Quanto de água você costuma beber por dia?", "resposta": "Pouquíssima, cerca de 1 litro no máximo. Esqueço de beber água na correria das reuniões."}, {"identificador": "p12", "tipo": "text", "obrigatoria": true, "pergunta": "Como está seu nível de energia durante o dia?", "resposta": "Acordo cansada e tenho muita sonolência pós-almoço. Dependo de cafeína o dia inteiro."}, {"identificador": "p13", "tipo": "text", "obrigatoria": true, "pergunta": "Qual motivo mais costuma influenciar você a comer?", "resposta": "Ansiedade, estresse e cansaço mental."}]}, {"id": 99002, "uuid": "camila-checkin-2026-10", "paciente": "T.P.F. (Demonstração)", "paciente_id": 99001, "paciente_telefone": "11988887766", "titulo_formulario": "Acompanhamento de Evolução (Check-in 1)", "respondido_em": "25/10/2026 11:15", "total_perguntas": 20, "perguntas_respondidas": 20, "perguntas_e_respostas": [{"identificador": "c01", "tipo": "radio", "obrigatoria": true, "pergunta": "O quanto você se dedicou nas últimas semanas?", "resposta": "5 - Dei o meu melhor (nota 9/10)"}, {"identificador": "c02", "tipo": "radio", "obrigatoria": true, "pergunta": "Como está sua aderência ao plano de refeições?", "resposta": "Estou conseguindo seguir tudo com muita tranquilidade e prazer."}, {"identificador": "c03", "tipo": "radio", "obrigatoria": true, "pergunta": "Tem pulado alguma refeição?", "resposta": "Não pulei nenhuma. O lanche da tarde proteico foi essencial para eliminar a fome noturna."}, {"identificador": "c04", "tipo": "radio", "obrigatoria": true, "pergunta": "Você tem ido ao banheiro diariamente?", "resposta": "Sim! Meu intestino regulou 100%. Estou evacuando todos os dias pela manhã sem esforço."}, {"identificador": "c05", "tipo": "radio", "obrigatoria": true, "pergunta": "Você sentiu desconforto abdominal, como gases ou inchaço nos últimos dias?", "resposta": "Praticamente zero. A barriga desinchou muito e me sinto super leve."}, {"identificador": "c06", "tipo": "radio", "obrigatoria": true, "pergunta": "Como você avaliaria a qualidade do seu sono esta semana?", "resposta": "Dormi muito bem em quase todas as noites. Sono profundo e reparador."}, {"identificador": "c07", "tipo": "radio", "obrigatoria": true, "pergunta": "Como está a sua disposição durante o dia?", "resposta": "Nota 8! Acordando com energia para o treino das 06h45 e sem sonolência à tarde."}, {"identificador": "c08", "tipo": "radio", "obrigatoria": true, "pergunta": "Você sentiu culpa ou arrependimento em relação a algo que comeu esta semana?", "resposta": "Não senti culpa. Aprendi a saborear meu chocolate 70% na sobremesa com paz."}, {"identificador": "c09", "tipo": "radio", "obrigatoria": true, "pergunta": "Você presta atenção nas texturas e nos sabores dos alimentos enquanto come?", "resposta": "Sim, passei a almoçar longe do computador e isso aumentou muito minha saciedade."}, {"identificador": "c10", "tipo": "text", "obrigatoria": true, "pergunta": "Você gostaria de fazer alguma alteração no seu planejamento alimentar?", "resposta": "Gostaria de orientação sobre o melhor horário para tomar a Creatina e opções de snacks salgados práticos para viagens a trabalho."}, {"identificador": "c11", "tipo": "text", "obrigatoria": true, "pergunta": "Tem alguma outra informação relevante que queira compartilhar com a sua nutri esta semana?", "resposta": "Thaý, me pesei hoje de manhã e a balança marcou 69,7 kg (-1,8 kg)! Minha calça favorita já fechou confortável e estou muito feliz e motivada!"}]}]};
     const clinicalSyntheses = {"T.P.F. (Demonstração)": {"badge": "Alta Adesão & Resultados (Demonstração)", "badgeColor": "#2e7d32", "baseline": {"objetivo": "Reeducação alimentar para emagrecimento sustentável (71,5kg → ~63kg), regularização do intestino preso crônico e controle da compulsão por doces.", "historico": "29 anos, 1,64m. Ganho de 4 kg no último ano por estresse e dietas restritivas do passado com efeito sanfona.", "queixas": "Cansaço matinal crônico, evacuação a cada 3 dias com dor/inchaço e fissura incontrolável por doces entre 16h e 18h no trabalho.", "rotina": "Arquiteta, rotina híbrida (escritório/home office). Treinos de musculação 3x a 4x/semana às 06h45 da manhã."}, "evolutionSummary": "T.P.F. apresentou excelente adesão ao plano. O trânsito intestinal normalizou (evacuação diária macia) com psyllium e 2,7L de água. A disposição matinal subiu, o lanche da tarde proteico reduziu os episódios de compulsão noturna e a balança baixou de 71,5 kg para 69,7 kg (-1,8 kg).", "vitorias": ["Intestino 100% regularizado: evacuações diárias macias e sem dor.", "Redução de 1,8 kg (71,5 kg → 69,7 kg) e -3 cm de cintura.", "Disposição para treinar musculação logo cedo às 06h45.", "Redução significativa da compulsão noturna e adaptação ao chocolate 70% na sobremesa."], "atencao": ["Atenção a escolhas em restaurante a quilo nos dias presenciais de escritório.", "Manter o ritmo da água (2,7L) nos finais de semana.", "Solicitou orientação sobre Whey, diferenciais e formas de uso."], "condutaSugerida": ""}};
-    const categoryNames = {"historico_dados":{"title":"Histórico & Ponto de Partida","icon":"📋"},"alimentacao_rotina":{"title":"Alimentação, Refeições & Rotina","icon":"🥗"},"fome_saciedade":{"title":"Apetite, Fome & Saciedade","icon":"🍽️"},"digestao_sintomas":{"title":"Digestão, Intestino & Sintomas","icon":"🩺"},"energia_sono":{"title":"Energia, Sono & Treinos","icon":"⚡"},"emocional_comportamento":{"title":"Comportamento, Emoções & Ansiedade","icon":"🧠"},"ajustes_feedback":{"title":"Ajustes Solicitados, Vitórias & Feedback","icon":"💡"}};
-
-    function categorizeQuestionClient(q) {
+    
+    // ==========================================
+    // MOTOR DE EIXOS TEMÁTICOS DINÂMICOS & FLEXÍVEIS
+    // ==========================================
+    function detectQuestionTheme(q) {
+      if (!q) return "📌 Perguntas & Observações Gerais";
       const lq = q.toLowerCase();
-      if (lq.includes('altera') || lq.includes('modificar') || lq.includes('compartilhar') || lq.includes('mudaria') || lq.includes('espaço livre') || lq.includes('gostaria de') || lq.includes('recado') || lq.includes('fácil de seguir') || lq.includes('vitória') || lq.includes('desafio') || lq.includes('pedra')) return 'ajustes_feedback';
-      if (lq.includes('doença') || lq.includes('diagnóstic') || lq.includes('medicamento') || lq.includes('exame') || lq.includes('alergia') || lq.includes('intolerância') || lq.includes('histórico familiar') || lq.includes('buscou') || lq.includes('peso atual') || lq.includes('altura') || lq.includes('mudou nos últimos meses') || lq.includes('expectativa') || (lq.includes('dieta') && lq.includes('antes'))) return 'historico_dados';
-      if (lq.includes('intestino') || lq.includes('evacua') || lq.includes('fezes') || lq.includes('gases') || lq.includes('inchaço') || lq.includes('azia') || lq.includes('refluxo') || lq.includes('náusea') || lq.includes('estômago') || lq.includes('desconforto abdominal')) return 'digestao_sintomas';
-      if (lq.includes('sono') || lq.includes('disposição') || lq.includes('energia') || lq.includes('cansaço') || lq.includes('fadiga') || lq.includes('tontura') || lq.includes('treino') || lq.includes('exercício') || lq.includes('atividade física') || lq.includes('concentração')) return 'energia_sono';
-      if (lq.includes('emoção') || lq.includes('ansiedade') || lq.includes('estresse') || lq.includes('humor') || lq.includes('culpa') || lq.includes('tristeza') || lq.includes('mindful') || lq.includes('outras atividades') || lq.includes('celular') || lq.includes('atenção')) return 'emocional_comportamento';
-      if (lq.includes('fome') || lq.includes('apetite') || lq.includes('satisfeit') || lq.includes('saciedade') || lq.includes('doce') || lq.includes('vontade de comer') || lq.includes('proteína primeiro')) return 'fome_saciedade';
-      return 'alimentacao_rotina';
+
+      if (/exame|laborat|sangue|bioquim|urina|hemograma|glicose|colesterol|ferritina|creatinina|plaqueta|vitamina d|b12|tsh|t3|t4|laudo/i.test(lq)) {
+        return "🔬 Exames & Dados Laboratoriais";
+      }
+      if (/medicamento|remédio|remedio|suplement|creatina|whey|anticoncepc|fórmula|formula|manipulado|anti-inflamatório|antibiótico/i.test(lq)) {
+        return "💊 Medicamentos & Suplementos";
+      }
+      if (/intestino|evacua|fezes|gases|inchaço|inchaco|azia|refluxo|estômago|estomago|digest|constip|distensão|dor abdominal|barriga/i.test(lq)) {
+        return "🩺 Digestão, Intestino & Sintomas";
+      }
+      if (/sono|dorme|acorda|insônia|insonia|cansaço|cansaco|disposição|disposicao|energia|fadiga|tontura|treino|exercício|exercicio|musculação|musculacao|corrida|atividade física|cardio|caminhada/i.test(lq)) {
+        return "⚡ Energia, Sono & Treinos";
+      }
+      if (/fome|apetite|saciedade|satisfeit|vontade de comer|belisc|doce|chocolate|compulsão|compulsao|beliscar|fissura/i.test(lq)) {
+        return "🍽️ Apetite, Fome & Saciedade";
+      }
+      if (/emoção|emocao|ansiedade|estresse|humor|culpa|tristeza|mindful|pressão|trabalho|rotina no trabalho|tempo livre|lazer/i.test(lq)) {
+        return "🧠 Comportamento, Emoções & Ansiedade";
+      }
+      if (/café da manhã|cafe da manha|almoço|almoco|jantar|lanche|refeição|refeicao|come|prato|água|agua|hidratação|fruta|legume|salada|proteína|proteina|cardápio|cardapio|fim de semana|buffet|delivery/i.test(lq)) {
+        return "🥗 Alimentação, Refeições & Rotina";
+      }
+      if (/peso|altura|idade|doença|doenca|alergia|intolerância|intolerancia|diagnóstic|diagnostic|expectativa|meta|objetivo|histórico|historico/i.test(lq)) {
+        return "📋 Histórico & Ponto de Partida";
+      }
+      if (/ajuste|altera|modifica|mudaria|vitória|vitoria|conquista|dificuldade|desafio|pedra|recado|comentário|sugestão|espaço livre/i.test(lq)) {
+        return "💡 Ajustes Solicitados & Feedback";
+      }
+      return "📌 Perguntas & Observações Gerais";
     }
+
+    function getThemeIcon(themeName) {
+      if (!themeName) return "📌";
+      const lt = themeName.toLowerCase();
+      if (lt.includes("exame") || lt.includes("laborat")) return "🔬";
+      if (lt.includes("medicamento") || lt.includes("suplement")) return "💊";
+      if (lt.includes("digest") || lt.includes("intestino") || lt.includes("sintoma")) return "🩺";
+      if (lt.includes("sono") || lt.includes("energia") || lt.includes("treino")) return "⚡";
+      if (lt.includes("fome") || lt.includes("apetite") || lt.includes("saciedade")) return "🍽️";
+      if (lt.includes("emoç") || lt.includes("emoc") || lt.includes("ansiedade") || lt.includes("comportamento")) return "🧠";
+      if (lt.includes("aliment") || lt.includes("refeiç") || lt.includes("refeic") || lt.includes("rotina")) return "🥗";
+      if (lt.includes("histór") || lt.includes("histor") || lt.includes("partida")) return "📋";
+      if (lt.includes("ajuste") || lt.includes("vitór") || lt.includes("vitor") || lt.includes("feedback")) return "💡";
+      return "📌";
+    }
+
+    function renameThemePrompt(patientName, oldThemeName, event) {
+      if (event) event.stopPropagation();
+      const newName = prompt(`Digite o novo nome para o eixo temático:`, oldThemeName);
+      if (!newName || !newName.trim() || newName.trim() === oldThemeName) return;
+
+      const trimmedNew = newName.trim();
+      const forms = patientsData[patientName] || [];
+      let updatedCount = 0;
+
+      forms.forEach(f => {
+        (f.perguntas_e_respostas || []).forEach(qa => {
+          const currentTheme = qa.tema || detectQuestionTheme(qa.pergunta);
+          if (currentTheme === oldThemeName) {
+            qa.tema = trimmedNew;
+            updatedCount++;
+          }
+        });
+      });
+
+      saveToLocalStorage(false);
+      renderPatientView(patientName);
+      showToast(`Tema renomeado para "${trimmedNew}"! (${updatedCount} perguntas atualizadas)`, "✏️");
+    }
+
+    function moveQuestionThemePrompt(patientName, formIdx, qaIdx, currentTheme, event) {
+      if (event) event.stopPropagation();
+      const forms = patientsData[patientName] || [];
+      const targetQa = forms[formIdx]?.perguntas_e_respostas?.[qaIdx];
+      if (!targetQa) return;
+
+      const existingThemes = new Set();
+      forms.forEach(f => {
+        (f.perguntas_e_respostas || []).forEach(qa => {
+          existingThemes.add(qa.tema || detectQuestionTheme(qa.pergunta));
+        });
+      });
+
+      const themesList = Array.from(existingThemes);
+      let promptMsg = `Mover esta pergunta para qual eixo temático?\n\nTemas atuais deste prontuário:\n` +
+        themesList.map((t, i) => `${i + 1}. ${t}`).join('\n') +
+        `\n\nDigite o NÚMERO do tema acima OU digite o NOME de um novo tema:`;
+
+      const choice = prompt(promptMsg, currentTheme);
+      if (!choice || !choice.trim()) return;
+
+      let newTheme = choice.trim();
+      const num = parseInt(newTheme, 10);
+      if (!isNaN(num) && num >= 1 && num <= themesList.length) {
+        newTheme = themesList[num - 1];
+      }
+
+      targetQa.tema = newTheme;
+      saveToLocalStorage(false);
+      renderPatientView(patientName);
+      showToast(`Pergunta movida para "${newTheme}" com sucesso!`, "📁");
+    }
+
+    function createNewThemePrompt(patientName) {
+      const themeName = prompt("Digite o nome do novo eixo temático que você deseja criar:");
+      if (!themeName || !themeName.trim()) return;
+      const cleanTheme = themeName.trim();
+      
+      // Permitir associar imediatamente ou guardar para mover perguntas
+      const forms = patientsData[patientName] || [];
+      if (forms.length > 0 && forms[0].perguntas_e_respostas && forms[0].perguntas_e_respostas.length > 0) {
+        alert(`Eixo temático "${cleanTheme}" pronto!\n\nAgora basta clicar em "📁 Mover tema" em qualquer pergunta que queira colocar neste novo eixo.`);
+      } else {
+        showToast(`Eixo "${cleanTheme}" criado!`, "💡");
+      }
+    }
+
 
     const patientNames = Object.keys(patientsData);
     let currentPatient = patientNames[0];
@@ -764,22 +939,6 @@
         condutaSugerida: "Manter acompanhamento."
       };
 
-      const categorized = {};
-      Object.keys(categoryNames).forEach(k => categorized[k] = []);
-
-      forms.forEach(f => {
-        (f.perguntas_e_respostas || []).forEach(qa => {
-          const cat = categorizeQuestionClient(qa.pergunta);
-          categorized[cat].push({
-            form: f.titulo_formulario,
-            date: f.respondido_em,
-            pergunta: qa.pergunta,
-            resposta: qa.resposta,
-            obrigatoria: qa.obrigatoria
-          });
-        });
-      });
-
       let html = '';
 
       // 1. Cabeçalho do Prontuário da Paciente
@@ -845,27 +1004,59 @@
         html += '  </div>';
       }
 
-      // 6. Central Inteligente de Respostas (Accordions)
-      html += '  <div class="functional-area-header">';
-      html += '    <div class="functional-title">📂 Respostas dos Formulários por Tema</div>';
-      html += '    <input type="text" id="qaFilterInput" class="filter-search-box" placeholder="🔍 Buscar perguntas ou respostas..." oninput="filterAnswers(this.value)" />';
+      // 6. Eixos Temáticos Flexíveis & Dinâmicos
+      const dynamicThemes = {};
+      forms.forEach((f, formIdx) => {
+        (f.perguntas_e_respostas || []).forEach((qa, qaIdx) => {
+          const theme = qa.tema || detectQuestionTheme(qa.pergunta);
+          if (!dynamicThemes[theme]) dynamicThemes[theme] = [];
+          dynamicThemes[theme].push({
+            form: f.titulo_formulario,
+            date: f.respondido_em,
+            pergunta: qa.pergunta,
+            resposta: qa.resposta,
+            obrigatoria: qa.obrigatoria,
+            formIdx: formIdx,
+            qaIdx: qaIdx
+          });
+        });
+      });
+
+      html += '  <div class="functional-area-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 24px;">';
+      html += '    <div>';
+      html += '      <div class="functional-title">📂 Respostas dos Formulários por Tema</div>';
+      html += '      <div style="font-size: 12.5px; color: var(--text-muted);">Eixos temáticos flexíveis e adaptáveis. Você pode renomear temas ou mover perguntas livremente.</div>';
+      html += '    </div>';
+      html += '    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">';
+      html += '      <input type="text" id="qaFilterInput" class="filter-search-box" placeholder="🔍 Buscar perguntas ou respostas..." oninput="filterAnswers(this.value)" />';
+      html += '      <button class="btn-new-theme" onclick="createNewThemePrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Criar um novo eixo temático personalizado">➕ Novo Eixo</button>';
+      html += '    </div>';
       html += '  </div>';
 
       html += '  <div id="accordionGroup">';
-      Object.entries(categoryNames).forEach(([catKey, info], idx) => {
-        const items = categorized[catKey] || [];
-        const isOpen = idx === 0 || idx === 1 ? ' open' : '';
+      const themeEntries = Object.entries(dynamicThemes);
 
-        html += '<div class="accordion-item' + isOpen + '" data-cat="' + catKey + '">';
-        html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
-        html += '    <div class="acc-title">' + info.icon + ' <span>' + info.title + '</span> <span class="acc-count">' + items.length + ' respostas</span></div>';
-        html += '    <div class="acc-icon">▼</div>';
-        html += '  </div>';
-        html += '  <div class="accordion-body">';
+      if (themeEntries.length === 0) {
+        html += '<div style="padding: 32px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border); margin-top: 16px;">';
+        html += '  <span style="font-size: 32px; display: block; margin-bottom: 8px;">📄</span>';
+        html += '  <strong>Nenhum formulário cadastrado ainda.</strong><br/>';
+        html += '  <span>Clique em <strong>"📄 Importar Questionário (PDF)"</strong> no topo para carregar o primeiro formulário desta paciente.</span>';
+        html += '</div>';
+      } else {
+        themeEntries.forEach(([themeName, items], idx) => {
+          const isOpen = idx === 0 || idx === 1 ? ' open' : '';
+          const icon = getThemeIcon(themeName);
 
-        if (items.length === 0) {
-          html += '<p style="color: #888; font-size: 13px;">Nenhum registro específico para esta categoria.</p>';
-        } else {
+          html += '<div class="accordion-item' + isOpen + '" data-cat="' + themeName.replace(/"/g, '&quot;') + '">';
+          html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
+          html += '    <div class="acc-title">' + icon + ' <span>' + themeName + '</span> <span class="acc-count">' + items.length + (items.length === 1 ? ' resposta' : ' respostas') + '</span></div>';
+          html += '    <div class="theme-header-right">';
+          html += '      <button class="btn-theme-action" onclick="renameThemePrompt(\'' + name.replace(/'/g, "\\'") + '\', \'' + themeName.replace(/'/g, "\\'") + '\', event)" title="Renomear este tema">✏️ Renomear</button>';
+          html += '      <div class="acc-icon">▼</div>';
+          html += '    </div>';
+          html += '  </div>';
+          html += '  <div class="accordion-body">';
+
           items.forEach(qaItem => {
             let resp = qaItem.resposta;
             let isNotFilled = false;
@@ -881,23 +1072,25 @@
 
             const searchString = (qaItem.pergunta + ' ' + resp).toLowerCase();
 
-            html += '<div class="qa-card" data-text="' + searchString + '">';
-            html += '  <div class="qa-meta">';
-            html += '    <span class="qa-meta-form">📄 ' + qaItem.form + '</span>';
-            html += '    <span>•</span>';
-            html += '    <span>📅 ' + qaItem.date + '</span>';
+            html += '<div class="qa-card" data-text="' + searchString.replace(/"/g, '&quot;') + '">';
+            html += '  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">';
+            html += '    <div class="qa-meta">';
+            html += '      <span class="qa-meta-form">📄 ' + qaItem.form + '</span>';
+            html += '      <span>•</span>';
+            html += '      <span>📅 ' + qaItem.date + '</span>';
+            html += '    </div>';
+            html += '    <button class="btn-move-qa" onclick="moveQuestionThemePrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + qaItem.formIdx + ', ' + qaItem.qaIdx + ', \'' + themeName.replace(/'/g, "\\'") + '\', event)" title="Mover esta pergunta para outro tema">📁 Mover tema</button>';
             html += '  </div>';
             html += '  <div class="qa-question">' + qaItem.pergunta + '</div>';
             html += '  <div class="qa-answer' + (isNotFilled ? ' not-filled' : '') + '">' + resp + '</div>';
             html += '</div>';
           });
-        }
 
-        html += '  </div>';
-        html += '</div>';
-      });
+          html += '  </div>';
+          html += '</div>';
+        });
+      }
       html += '  </div>';
-
       html += '</div>';
 
       document.getElementById('mainContent').innerHTML = html;
@@ -1457,30 +1650,41 @@
         detectedTitle = fileName.replace(/\.pdf$/i, '');
       }
 
-      // 4. Extrair Perguntas e Respostas
+      // 4. Extrair Perguntas e Respostas com detecção dinâmica de eixos temáticos
       const qaList = [];
       let currentQ = "";
       let currentA = "";
+      let currentSection = "";
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
 
-        // Critérios para detectar início de uma nova pergunta:
-        // A) Linhas numeradas: 1., 1), 01 -, etc.
-        // B) Linhas terminadas em ponto de interrogação ?
-        // C) Prefixos como "Pergunta:", "Questão:"
+        // Detectar se a linha é um título de seção/eixo temático no PDF
+        const isExplicitSection = /^(?:seção|secao|módulo|modulo|parte|eixo|bloco)\s*[\d\w]*\s*[:\-]\s*(.+)/i.exec(line);
+        const isCapsHeader = /^[A-ZÀ-Ú\s\d\-_]{4,45}$/.test(line) && !line.includes('?') && !/^(?:NUTRICIONISTA|PACIENTE|DATA|RESPOSTA|PERGUNTA)/i.test(line);
+
+        if (isExplicitSection) {
+          currentSection = isExplicitSection[1].trim();
+          continue;
+        } else if (isCapsHeader && lines[i+1] && (lines[i+1].includes('?') || /^\d+[\.\)\-]/.test(lines[i+1]))) {
+          currentSection = line.trim();
+          continue;
+        }
+
         const isNumbered = /^\d{1,2}[\.\)\-]\s+/.test(line);
         const isPrefix = /^(?:pergunta|quest[ãa]o)\s*[:\-]/i.test(line);
         const isQuestionMark = line.endsWith("?") && line.length > 10;
 
         if (isNumbered || isPrefix || isQuestionMark) {
           if (currentQ) {
+            const cleanQ = currentQ.replace(/^\d{1,2}[\.\)\-]\s*/, '').replace(/^(?:pergunta|quest[ãa]o)\s*[:\-]\s*/i, '').trim();
             qaList.push({
               identificador: "p" + String(qaList.length + 1).padStart(2, "0"),
               tipo: "text",
               obrigatoria: true,
-              pergunta: currentQ.replace(/^\d{1,2}[\.\)\-]\s*/, '').replace(/^(?:pergunta|quest[ãa]o)\s*[:\-]\s*/i, '').trim(),
+              tema: currentSection || detectQuestionTheme(cleanQ),
+              pergunta: cleanQ,
               resposta: currentA.trim() || "Sem resposta registrada."
             });
             currentQ = "";
@@ -1489,25 +1693,24 @@
           currentQ = line;
         } else {
           if (currentQ) {
-            // Se já temos uma pergunta, o texto subsequente é resposta
             const cleanLine = line.replace(/^(?:resposta|r)\s*[:\-]\s*/i, '');
             currentA += (currentA ? " " : "") + cleanLine;
           }
         }
       }
 
-      // Push final question
       if (currentQ) {
+        const cleanQ = currentQ.replace(/^\d{1,2}[\.\)\-]\s*/, '').replace(/^(?:pergunta|quest[ãa]o)\s*[:\-]\s*/i, '').trim();
         qaList.push({
           identificador: "p" + String(qaList.length + 1).padStart(2, "0"),
           tipo: "text",
           obrigatoria: true,
-          pergunta: currentQ.replace(/^\d{1,2}[\.\)\-]\s*/, '').replace(/^(?:pergunta|quest[ãa]o)\s*[:\-]\s*/i, '').trim(),
+          tema: currentSection || detectQuestionTheme(cleanQ),
+          pergunta: cleanQ,
           resposta: currentA.trim() || "Sem resposta registrada."
         });
       }
 
-      // Se o parser estrito de perguntas não encontrou muitas perguntas, tentar blocos por parágrafo
       if (qaList.length === 0) {
         lines.forEach((l, idx) => {
           if (l.includes("?") || l.length > 30) {
@@ -1515,6 +1718,7 @@
               identificador: "p" + String(qaList.length + 1).padStart(2, "0"),
               tipo: "text",
               obrigatoria: true,
+              tema: currentSection || detectQuestionTheme(l),
               pergunta: l,
               resposta: lines[idx + 1] ? lines[idx + 1] : "Registrado no formulário."
             });
@@ -1887,6 +2091,69 @@
       font-weight: 700;
     }
 
+
+    /* Botões de Flexibilidade nos Temas */
+    .btn-theme-action {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-theme-action:hover {
+      background: var(--bg);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-move-qa {
+      background: #faf8f5;
+      border: 1px dashed #d5ccbe;
+      color: #8c6a38;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-move-qa:hover {
+      background: #fdf5e6;
+      border-color: #b38b59;
+      color: #5d4013;
+    }
+    .theme-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-new-theme {
+      background: #f1f6f2;
+      border: 1.5px dashed var(--primary);
+      color: var(--primary-dark);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-new-theme:hover {
+      background: var(--primary-light);
+    }
+
 </style>
 
   <!-- Modal de Importação de PDF -->
@@ -1988,29 +2255,29 @@
       </div>
       <div class="modal-body" style="line-height: 1.7; font-size: 14px;">
         
-        <div style="background: #faf5ee; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 12px;">
+        <div style="background: #faf5ee; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 14px;">
           <h4 style="color: var(--primary-dark); font-size: 15px; margin-bottom: 6px;">💡 Bem-vinda ao seu Painel de Prontuários!</h4>
-          <p style="color: var(--text); margin: 0;">Este aplicativo foi criado para simplificar e organizar o acompanhamento das suas pacientes. Ele reúne respostas de questionários, avaliações e relatórios em uma tela clínica dividida em <strong>7 temas fundamentais</strong>.</p>
+          <p style="color: var(--text); margin: 0;">Este aplicativo foi criado para simplificar e organizar o acompanhamento das suas pacientes. Ele reúne respostas de questionários, avaliações e relatórios em uma tela clínica dividida nos temas identificados no formulário.</p>
         </div>
 
         <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
           📄 1. Como Cadastrar Pacientes e Importar Questionários em PDF
         </h4>
-        <p style="margin-bottom: 8px;">Você <strong>não precisa redigitar nada manualmente</strong>. Quando sua paciente preencher um formulário (seja no Nutrio, Google Forms ou PDF de anamnese):</p>
+        <p style="margin-bottom: 8px;">Você não precisa redigitar nada manualmente. Quando sua paciente preencher um formulário (seja no Nutrio, Google Forms ou PDF de anamnese):</p>
         <ul style="margin-left: 20px; margin-bottom: 12px;">
           <li>Clique no botão verde <strong><code>📄 Importar Questionário (PDF)</code></strong> no topo.</li>
           <li>Arraste o arquivo PDF do formulário ou clique para selecioná-lo no seu computador.</li>
-          <li>O painel lerá todas as páginas do PDF, identificará o nome da paciente e organizará as perguntas nos 7 eixos temáticos na hora!</li>
+          <li>O painel lerá todas as páginas do PDF, identificará o nome da paciente e organizará as perguntas nos eixos temáticos na hora!</li>
           <li>Você também pode clicar no botão <strong><code>🔒 Sigla</code></strong> para deixar apenas as iniciais da paciente (ex: <em>T.P.F.</em>), mantendo total sigilo clínico.</li>
           <li>Para criar um prontuário em branco, use o botão <strong><code>➕ Nova Paciente</code></strong>.</li>
         </ul>
 
         <div style="background: #eef4f0; border: 1.5px solid #cce0d1; padding: 16px 18px; border-radius: 12px; margin: 16px 0;">
           <h4 style="color: #235928; font-size: 15.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-            💾 2. O que é o arquivo "JSON de Backup"? (Explicado de forma simples)
+            💾 2. O que é o arquivo "JSON de Backup"?
           </h4>
           <p style="margin-bottom: 8px;">
-            Muitas pessoas não sabem o que é um arquivo <code>.json</code> e isso é totalmente normal! A ideia por trás dele é <strong>muito simples</strong>:
+            Muitas pessoas não sabem o que é um arquivo <code>.json</code> e isso é totalmente normal! A ideia por trás dele é muito simples:
           </p>
           <div style="background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px dashed #2e7d32; margin-bottom: 10px;">
             <p style="margin: 0; color: #1e4620; font-weight: 600;">
@@ -2018,19 +2285,33 @@
             </p>
           </div>
           <p style="margin-bottom: 8px; color: #b33a00; font-weight: 600;">
-            ⚠️ Você NUNCA precisa abrir esse arquivo no computador nem entender o que está escrito dentro dele!
+            ⚠️ Você não precisa abrir esse arquivo no computador nem entender o que está escrito dentro dele!
           </p>
-          <p style="margin-bottom: 6px;">Ele serve apenas para <strong>duas ações práticas</strong> no menu <code>💾 Dados & Backup ▾</code>:</p>
+          <p style="margin-bottom: 6px;">Ele serve apenas para duas ações práticas no menu <code>💾 Dados & Backup ▾</code>:</p>
           <ul style="margin-left: 20px;">
             <li style="margin-bottom: 6px;"><strong>Para Guardar uma Cópia Segura (Exportar Backup):</strong> De tempos em tempos, clique em <code>💾 Exportar Backup (JSON)</code>. O arquivo será baixado para a sua pasta de Downloads. Você pode guardar uma cópia no seu Google Drive, e-mail ou pendrive.</li>
             <li><strong>Para Recuperar ou Mudar de Computador (Restaurar Backup):</strong> Se você for usar o painel em outro computador (ex: no consultório), trocar de notebook ou formatar a máquina, basta abrir o link, ir em <code>📥 Restaurar Backup (JSON)</code> e escolher o seu arquivo salvo. Todas as suas pacientes voltam no mesmo segundo!</li>
           </ul>
         </div>
 
+        <div style="background: #fdfaf3; border: 1.5px solid #e8dec8; padding: 14px 16px; border-radius: 10px; margin: 16px 0;">
+          <h4 style="color: #8c6226; font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            🎨 3. Flexibilidade Total nos Eixos Temáticos
+          </h4>
+          <p style="margin: 0 0 6px 0; color: var(--text);">
+            Como existem formulários de todos os tipos (clínicos, esportivos, exames, pediátricos, check-ins semanais, etc.), o painel é flexível e adaptável:
+          </p>
+          <ul style="margin-left: 20px; color: var(--text);">
+            <li><strong>Temas Automáticos ou Personalizados:</strong> O painel agrupa as perguntas pelos temas detectados no seu formulário.</li>
+            <li><strong>Renomear Temas:</strong> Clique no botão <code>✏️ Renomear</code> no cabeçalho de qualquer tema para alterar o título como preferir.</li>
+            <li><strong>Mover Perguntas:</strong> Em qualquer pergunta, clique em <code>📁 Mover tema</code> para transferi-la de eixo temático a qualquer momento.</li>
+          </ul>
+        </div>
+
         <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-          🔒 3. Segurança & Sigilo Total (LGPD)
+          🔒 4. Segurança & Sigilo Total (LGPD)
         </h4>
-        <p style="margin: 0;">Nenhum dado das suas pacientes vai para a nuvem de terceiros ou servidores externos. Todas as informações e PDFs são lidos e guardados <strong>exclusivamente na memória do navegador do seu computador</strong>.</p>
+        <p style="margin: 0;">Nenhum dado das suas pacientes vai para a nuvem de terceiros ou servidores externos. Todas as informações e PDFs são lidos e guardados exclusivamente na memória do navegador do seu computador.</p>
 
       </div>
       <div class="modal-footer">

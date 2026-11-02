@@ -862,38 +862,41 @@
       return themeName.replace(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+/u, '').trim();
     }
 
-    function detectQuestionTheme(q) {
-      if (!q) return "Perguntas & Observações Gerais";
-      const lq = q.toLowerCase();
+    function detectQuestionTheme(text) {
+      if (!text) return "Orientações & Observações Clínicas";
+      const lq = text.toLowerCase();
 
-      if (/exame|laborat|sangue|bioquim|urina|hemograma|glicose|colesterol|ferritina|creatinina|plaqueta|vitamina d|b12|tsh|t3|t4|laudo/i.test(lq)) {
+      if (/exame|laborat|sangue|bioquim|urina|hemograma|glicose|colesterol|ferritina|creatinina|plaqueta|vitamina\s*d|b12|tsh|t3|t4|laudo/i.test(lq)) {
         return "Exames & Dados Laboratoriais";
       }
-      if (/medicamento|remédio|remedio|suplement|creatina|whey|anticoncepc|fórmula|formula|manipulado|anti-inflamatório|antibiótico/i.test(lq)) {
+      if (/medicamento|remédio|remedio|suplement|creatina|whey|stevia|eritritol|adoçante|adocante|anticoncepc|fórmula|formula|manipulado|anti-inflamatório|antibiótico/i.test(lq)) {
         return "Medicamentos & Suplementos";
       }
       if (/intestino|evacua|fezes|gases|inchaço|inchaco|azia|refluxo|estômago|estomago|digest|constip|distensão|dor abdominal|barriga/i.test(lq)) {
         return "Digestão, Intestino & Sintomas";
       }
-      if (/sono|dorme|acorda|insônia|insonia|cansaço|cansaco|disposição|disposicao|energia|fadiga|tontura|treino|exercício|exercicio|musculação|musculacao|corrida|atividade física|cardio|caminhada/i.test(lq)) {
+      if (/sono|dorme|acorda|insônia|insonia|cansaço|cansaco|disposição|disposicao|energia|fadiga|tontura|treino|exercício|exercicio|musculação|musculacao|corrida|atividade física|cardio|caminhada|rendimento/i.test(lq)) {
         return "Energia, Sono & Treinos";
       }
-      if (/fome|apetite|saciedade|satisfeit|vontade de comer|belisc|doce|chocolate|compulsão|compulsao|beliscar|fissura/i.test(lq)) {
+      if (/fome|apetite|saciedade|satisfeit|vontade de comer|belisc|doce|chocolate|compulsão|compulsao|fissura|sobremesa|paçoca|bombom|picolé|doce de leite/i.test(lq)) {
         return "Apetite, Fome & Saciedade";
       }
-      if (/emoção|emocao|ansiedade|estresse|humor|culpa|tristeza|mindful|pressão|trabalho|rotina no trabalho|tempo livre|lazer/i.test(lq)) {
+      if (/emoção|emocao|ansiedade|estresse|humor|culpa|tristeza|mindful|pressão|trabalho|tempo livre|lazer|autocuidado|autoconhecimento|se acolher|se observar/i.test(lq)) {
         return "Comportamento, Emoções & Ansiedade";
       }
-      if (/café da manhã|cafe da manha|almoço|almoco|jantar|lanche|refeição|refeicao|come|prato|água|agua|hidratação|fruta|legume|salada|proteína|proteina|cardápio|cardapio|fim de semana|buffet|delivery/i.test(lq)) {
+      if (/cuidado importante|avaliação médica|avaliacao medica|médico|medico|alerta|desmaio|dor no peito|falta de ar|atendimento imediato/i.test(lq)) {
+        return "Sinais de Alerta & Cuidados Clínicos";
+      }
+      if (/café da manhã|cafe da manha|almoço|almoco|jantar|lanche|refeição|refeicao|come|prato|água|agua|hidratação|fruta|legume|salada|proteína|proteina|carboidrato|cardápio|cardapio|fim de semana|buffet|delivery|regularidade|sanduíche|sanduiche|hambúrguer|hamburguer|sushi|bolo de milho|arroz|pão|pao|ovos|iogurte|aveia/i.test(lq)) {
         return "Alimentação, Refeições & Rotina";
       }
-      if (/peso|altura|idade|doença|doenca|alergia|intolerância|intolerancia|diagnóstic|diagnostic|expectativa|meta|objetivo|histórico|historico/i.test(lq)) {
+      if (/peso|altura|idade|doença|doenca|alergia|intolerância|intolerancia|diagnóstic|meta|objetivo|histórico|historico|começo da jornada|comeco da jornada/i.test(lq)) {
         return "Histórico & Ponto de Partida";
       }
-      if (/ajuste|altera|modifica|mudaria|vitória|vitoria|conquista|dificuldade|desafio|pedra|recado|comentário|sugestão|espaço livre/i.test(lq)) {
-        return "Ajustes Solicitados & Feedback";
+      if (/ajuste|altera|modifica|mudaria|vitória|vitoria|conquista|dificuldade|desafio|recado|comentário|comentario|sugestão|sugestao|daqui pra frente|questionário|questionario/i.test(lq)) {
+        return "Evolução & Ajustes Solicitados";
       }
-      return "Perguntas & Observações Gerais";
+      return "Orientações & Observações Clínicas";
     }
 
         function getThemeIcon(themeName) {
@@ -906,8 +909,10 @@
       if (lt.includes("fome") || lt.includes("apetite") || lt.includes("saciedade")) return "🍽️";
       if (lt.includes("emoç") || lt.includes("emoc") || lt.includes("ansiedade") || lt.includes("comportamento")) return "🧠";
       if (lt.includes("aliment") || lt.includes("refeiç") || lt.includes("refeic") || lt.includes("rotina")) return "🥗";
+      if (lt.includes("alerta") || lt.includes("cuidado") || lt.includes("médic")) return "⚠️";
       if (lt.includes("histór") || lt.includes("histor") || lt.includes("partida")) return "📋";
-      if (lt.includes("ajuste") || lt.includes("vitór") || lt.includes("vitor") || lt.includes("feedback")) return "💡";
+      if (lt.includes("ajuste") || lt.includes("vitór") || lt.includes("vitor") || lt.includes("evolu")) return "💡";
+      if (lt.includes("orientaç") || lt.includes("orientac") || lt.includes("conduta")) return "📝";
       return "📌";
     }
 
@@ -1792,7 +1797,7 @@ initControls();
       const status = document.getElementById("pdfProcessingStatus");
       if (status) {
         status.style.display = "block";
-        status.innerText = "⏳ Lendo páginas e analisando formulário...";
+        status.innerText = "⏳ Extraindo todas as palavras e analisando o documento completo...";
       }
 
       try {
@@ -1804,27 +1809,48 @@ initControls();
           const page = await pdf.getPage(i);
           const textContent = await page.getTextContent();
           
-          // Agrupar itens de texto por linha (Y)
-          const items = textContent.items;
+          // Ordenar itens por ordem visual de leitura: Y decrescente (topo para base), depois X crescente (esquerda para direita)
+          const items = (textContent.items || []).slice();
+          items.sort((a, b) => {
+            const yDiff = b.transform[5] - a.transform[5];
+            if (Math.abs(yDiff) > 5) return yDiff;
+            return a.transform[4] - b.transform[4];
+          });
+
           let pageLines = [];
-          let currentY = null;
-          let currentLine = "";
+          let curLine = "";
+          let lastY = null;
+          let lastXEnd = null;
 
           items.forEach(item => {
-            const str = item.str.trim();
+            const str = item.str;
             if (!str) return;
-            const y = Math.round(item.transform[5]);
-            if (currentY === null || Math.abs(currentY - y) < 4) {
-              currentLine += (currentLine ? " " : "") + str;
-              currentY = y;
+            const x = item.transform[4];
+            const y = item.transform[5];
+            const w = item.width || 0;
+
+            if (lastY === null || Math.abs(y - lastY) > 5) {
+              if (curLine.trim()) pageLines.push(curLine.trim());
+              curLine = str;
+              lastY = y;
             } else {
-              if (currentLine) pageLines.push(currentLine);
-              currentLine = str;
-              currentY = y;
+              const spaceNeeded = lastXEnd !== null && (x - lastXEnd) > 2 && !curLine.endsWith(" ") && !str.startsWith(" ");
+              curLine += (spaceNeeded ? " " : "") + str;
             }
+            lastXEnd = x + w;
           });
-          if (currentLine) pageLines.push(currentLine);
-          fullLines = fullLines.concat(pageLines);
+          if (curLine.trim()) pageLines.push(curLine.trim());
+
+          // Filtrar rodapés e numeração de página pura
+          const cleanedPageLines = pageLines.filter(l => {
+            if (/^\d{1,3}$/.test(l)) return false;
+            if (/^P[áa]gina\s+\d+(\s+de\s+\d+)?$/i.test(l)) return false;
+            if (/CRN\d+-\d+/i.test(l)) return false;
+            if (/^Nutricionista\s+Tha[ýy]\s+Carvalho$/i.test(l)) return false;
+            return true;
+          });
+
+          fullLines = fullLines.concat(cleanedPageLines);
         }
 
         const fullText = fullLines.join("\n");
@@ -1844,14 +1870,14 @@ initControls();
         if (nameInput) nameInput.value = targetPatientForImport || extracted.patientName;
         if (titleInput) titleInput.value = extracted.formTitle;
         if (dateInput) dateInput.value = extracted.date;
-        if (countSpan) countSpan.innerText = `${extracted.qaList.length} perguntas e respostas identificadas`;
+        if (countSpan) countSpan.innerText = `${extracted.qaList.length} tópicos e orientações extraídos`;
         if (sampleDiv) {
           const safeEsc = (typeof escapeHtml === 'function') 
             ? escapeHtml 
             : (s => s ? String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : '');
           sampleDiv.innerHTML = extracted.qaList.slice(0, 5).map((qa, idx) => 
-            `<strong>P${idx+1}: ${safeEsc(qa.pergunta)}</strong>\n↳ <em>${safeEsc(qa.resposta)}</em>\n`
-          ).join('\n') + (extracted.qaList.length > 5 ? `\n... e mais ${extracted.qaList.length - 5} perguntas extraídas.` : '');
+            `<strong>Item ${idx+1} [${safeEsc(qa.tema)}]: ${safeEsc(qa.pergunta)}</strong>\n↳ <em>${safeEsc(qa.resposta)}</em>\n`
+          ).join('\n') + (extracted.qaList.length > 5 ? `\n... e mais ${extracted.qaList.length - 5} tópicos extraídos.` : '');
         }
 
         if (preview) preview.style.display = "flex";
@@ -1862,6 +1888,42 @@ initControls();
         if (status) status.style.display = "none";
         alert("Erro ao ler o arquivo PDF: " + err.message);
       }
+    }
+
+    function isDocumentItemHeader(line) {
+      if (!line) return false;
+      const trimmed = line.trim();
+      const clean = trimmed.replace(/[^\w\sÀ-ú]/g, '').trim();
+
+      // 1. Pergunta numerada: "1. ...", "01) ...", "Q1:"
+      if (/^\d{1,2}[\.\)\-]\s+/.test(trimmed)) return true;
+
+      // 2. Prefixo explícito de pergunta ou tópico
+      if (/^(?:pergunta|quest[ãa]o|item|t[óo]pico)\s*[:\-0-9]/i.test(trimmed)) return true;
+
+      // 3. Termina com interrogação
+      if (trimmed.endsWith('?') && trimmed.length < 140) return true;
+
+      // 4. Rótulo de campo curto terminado em dois pontos: "Objetivo:", "Medicamentos:"
+      if (trimmed.endsWith(':') && trimmed.length <= 60) return true;
+
+      // 5. Horário de refeição ou cronograma: "07:30 Café da manhã", "12:00 Almoço"
+      if (/^\d{2}:\d{2}\s+/.test(trimmed)) return true;
+
+      // 6. Título em MAIÚSCULAS curto (ex: "REGULARIDADE", "PROTEÍNA", "CARBOIDRATO", "BASE", "MONTAGEM BASE", "SOBREMESA")
+      if (clean === clean.toUpperCase() && clean.length >= 3 && clean.length <= 40 && !clean.startsWith('PAGINA')) {
+        return true;
+      }
+
+      // 7. Seção clínica curta e específica na sua própria linha
+      if (trimmed.length <= 35 && /^(?:café da manhã|cafe da manha|almoço|almoco|lanche da tarde|lanche|jantar|antes da corrida|depois do treino|sexta-feira|sushi|sábado e domingo|sabado e domingo|cuidado importante|o que observar)\b/i.test(trimmed)) {
+        return true;
+      }
+
+      // 8. Marcadores com marcadores especiais
+      if (/^[•▪►]\s+/.test(trimmed)) return true;
+
+      return false;
     }
 
     function parseQuestionnaireText(lines, fullText, fileName) {
@@ -1882,8 +1944,8 @@ initControls();
 
       if (!detectedName) {
         // Tentar extrair do nome do arquivo
-        const cleanFile = fileName.replace(/\.pdf$/i, '').replace(/[_\-+]/g, ' ');
-        const parts = cleanFile.split(/\s+/).filter(w => !['questionario', 'formulario', 'pre', 'consulta', 'checkin', 'nutrio', 'anamnese'].includes(w.toLowerCase()));
+        const cleanFile = fileName.replace(/\.pdf$/i, '').replace(/[\_\-+]/g, ' ');
+        const parts = cleanFile.split(/\s+/).filter(w => !['questionario', 'formulario', 'pre', 'consulta', 'checkin', 'nutrio', 'anamnese', 'orientacoes', 'nutricionais'].includes(w.toLowerCase()));
         if (parts.length > 0) {
           detectedName = parts.join(' ');
         } else {
@@ -1910,7 +1972,9 @@ initControls();
       // 3. Detectar Título
       let detectedTitle = "Formulário de Acompanhamento";
       const ltext = fullText.toLowerCase();
-      if (ltext.includes("pré-consulta") || ltext.includes("pre-consulta") || ltext.includes("anamnese")) {
+      if (ltext.includes("orientações nutricionais") || ltext.includes("orientacoes nutricionais")) {
+        detectedTitle = "Orientações Nutricionais";
+      } else if (ltext.includes("pré-consulta") || ltext.includes("pre-consulta") || ltext.includes("anamnese")) {
         detectedTitle = "Formulário de Pré-Consulta";
       } else if (ltext.includes("check-in") || ltext.includes("checkin") || ltext.includes("semanal")) {
         detectedTitle = "Acompanhamento de Evolução (Check-in)";
@@ -1918,79 +1982,63 @@ initControls();
         detectedTitle = fileName.replace(/\.pdf$/i, '');
       }
 
-      // 4. Extrair Perguntas e Respostas com detecção dinâmica de eixos temáticos
+      // 4. Segmentação Inteligente e Extração Completa de Palavras
       const qaList = [];
-      let currentQ = "";
-      let currentA = "";
-      let currentSection = "";
+      let currentHeader = "";
+      let currentBody = [];
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
 
-        // Detectar se a linha é um título de seção/eixo temático no PDF
-        const isExplicitSection = /^(?:seção|secao|módulo|modulo|parte|eixo|bloco)\s*[\d\w]*\s*[:\-]\s*(.+)/i.exec(line);
-        const isCapsHeader = /^[A-ZÀ-Ú\s\d\-_]{4,45}$/.test(line) && !line.includes('?') && !/^(?:NUTRICIONISTA|PACIENTE|DATA|RESPOSTA|PERGUNTA)/i.test(line);
-
-        if (isExplicitSection) {
-          currentSection = isExplicitSection[1].trim();
-          continue;
-        } else if (isCapsHeader && lines[i+1] && (lines[i+1].includes('?') || /^\d+[\.\)\-]/.test(lines[i+1]))) {
-          currentSection = line.trim();
-          continue;
-        }
-
-        const isNumbered = /^\d{1,2}[\.\)\-]\s+/.test(line);
-        const isPrefix = /^(?:pergunta|quest[ãa]o)\s*[:\-]/i.test(line);
-        const isQuestionMark = line.endsWith("?") && line.length > 10;
-
-        if (isNumbered || isPrefix || isQuestionMark) {
-          if (currentQ) {
-            const cleanQ = currentQ.replace(/^\d{1,2}[\.\)\-]\s*/, '').replace(/^(?:pergunta|quest[ãa]o)\s*[:\-]\s*/i, '').trim();
+        if (isDocumentItemHeader(line)) {
+          if (currentHeader) {
+            const bodyText = currentBody.join(" ").trim();
+            const fullItemText = currentHeader + " " + bodyText;
             qaList.push({
               identificador: "p" + String(qaList.length + 1).padStart(2, "0"),
               tipo: "text",
               obrigatoria: true,
-              tema: currentSection || detectQuestionTheme(cleanQ),
-              pergunta: cleanQ,
-              resposta: currentA.trim() || "Sem resposta registrada."
+              tema: detectQuestionTheme(fullItemText),
+              pergunta: currentHeader,
+              resposta: bodyText || "Registrado nas orientações do formulário."
             });
-            currentQ = "";
-            currentA = "";
+            currentBody = [];
           }
-          currentQ = line;
+          currentHeader = line;
         } else {
-          if (currentQ) {
-            const cleanLine = line.replace(/^(?:resposta|r)\s*[:\-]\s*/i, '');
-            currentA += (currentA ? " " : "") + cleanLine;
+          if (!currentHeader) {
+            currentHeader = line;
+          } else {
+            currentBody.push(line);
           }
         }
       }
 
-      if (currentQ) {
-        const cleanQ = currentQ.replace(/^\d{1,2}[\.\)\-]\s*/, '').replace(/^(?:pergunta|quest[ãa]o)\s*[:\-]\s*/i, '').trim();
+      if (currentHeader) {
+        const bodyText = currentBody.join(" ").trim();
+        const fullItemText = currentHeader + " " + bodyText;
         qaList.push({
           identificador: "p" + String(qaList.length + 1).padStart(2, "0"),
           tipo: "text",
           obrigatoria: true,
-          tema: currentSection || detectQuestionTheme(cleanQ),
-          pergunta: cleanQ,
-          resposta: currentA.trim() || "Sem resposta registrada."
+          tema: detectQuestionTheme(fullItemText),
+          pergunta: currentHeader,
+          resposta: bodyText || "Registrado nas orientações do formulário."
         });
       }
 
-      if (qaList.length === 0) {
+      // Salvaguarda final: se qaList for vazio mas houver linhas, segmentar linha por linha
+      if (qaList.length === 0 && lines.length > 0) {
         lines.forEach((l, idx) => {
-          if (l.includes("?") || l.length > 30) {
-            qaList.push({
-              identificador: "p" + String(qaList.length + 1).padStart(2, "0"),
-              tipo: "text",
-              obrigatoria: true,
-              tema: currentSection || detectQuestionTheme(l),
-              pergunta: l,
-              resposta: lines[idx + 1] ? lines[idx + 1] : "Registrado no formulário."
-            });
-          }
+          qaList.push({
+            identificador: "p" + String(idx + 1).padStart(2, "0"),
+            tipo: "text",
+            obrigatoria: true,
+            tema: detectQuestionTheme(l),
+            pergunta: `Item ${idx + 1}`,
+            resposta: l
+          });
         });
       }
 

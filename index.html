@@ -992,6 +992,14 @@
     let currentPatient = patientNames[0];
 
     function initControls() {
+      // Garantir que 100% dos pacientes em patientsData estejam na lista
+      const allKeys = Object.keys(patientsData);
+      allKeys.forEach(k => {
+        if (!patientNames.includes(k)) {
+          patientNames.push(k);
+        }
+      });
+
       const menu = document.getElementById('customOptionsMenu');
       if (!menu) return;
       menu.innerHTML = '';
@@ -1417,7 +1425,15 @@ initControls();
             Object.assign(clinicalSyntheses, parsedSummaries);
             // Sincronizar também no IndexedDB
             syncToIndexedDB(patientsData, clinicalSyntheses);
-            console.log("✅ Dados carregados com sucesso do armazenamento local.");
+
+            // Reconstruir lista de pacientes ativa e sincronizar tela
+            patientNames.length = 0;
+            Object.keys(patientsData).forEach(k => patientNames.push(k));
+            initControls();
+            if (patientNames.length > 0) {
+              switchPatient(patientNames[0]);
+            }
+            console.log("✅ Dados carregados com sucesso do armazenamento local. Pacientes ativas:", patientNames);
             return;
           }
         }
@@ -1591,7 +1607,13 @@ initControls();
         return;
       }
       if (patientsData[name]) {
-        alert("Já existe uma paciente cadastrada com este nome/sigla.");
+        if (!patientNames.includes(name)) {
+          patientNames.unshift(name);
+        }
+        initControls();
+        switchPatient(name);
+        closeNewPatientModal();
+        showToast(`Paciente ${name} já estava cadastrada e foi selecionada!`, "👤");
         return;
       }
 
@@ -2129,12 +2151,15 @@ initControls();
       showToast(`Formulário de ${patientName} importado com sucesso!`, "📄");
     }
 
-    // Inicialização da persistência local
-    loadFromLocalStorage();
+    // Inicialização da persistência local assíncrona
+    loadFromLocalStorage().then(() => {
+      initControls();
+      if (patientNames.length > 0) {
+        switchPatient(patientNames[0]);
+      }
+    });
 
-
-
-initControls();
+    initControls();
     switchPatient(currentPatient);
   </script>
 

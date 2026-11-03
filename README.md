@@ -142,17 +142,18 @@ O arquivo de backup é a garantia de portabilidade e proteção total dos seus d
 
 ## 🎨 Estúdios de Design Visual (Modo: 1 / 2)
 
-O painel foi desenhado para superar interfaces genéricas e oferecer uma experiência visual autêntica de consultório de alto padrão, permitindo alternar instantaneamente entre dois modos através do seletor **`Modo: 1 / 2`** no cabeçalho:
+O painel adota a estética exclusiva **Quiet Luxury**, combinando elegância atemporal, respiro visual e sofisticação médica inspirada em spas clínicos de bem-estar (*Aesop, Oura Ring e centros de longevidade*). 
 
-* 🧘 **Modo 1: Quiet Luxury (Padrão do Sistema):**
-  - **Atmosfera:** Serenidade, respiro visual e sofisticação médica inspirada na estética de bem-estar (*Aesop, Oura Ring e spas clínicos de longevidade*).
-  - **Tipografia:** Serif clássica contemporânea (*Cormorant Garamond*) para títulos, nomes e citações de pacientes, combinada com *Outfit* para métricas e leitura limpa.
+A profissional pode alternar instantaneamente entre os dois ambientes no cabeçalho através do seletor **`Modo: 1 / 2`**:
+
+* 🧘 **Modo 1: Quiet Luxury (Claro — Padrão do Sistema):**
+  - **Atmosfera:** Serenidade, luminosidade suave e leitura confortável.
+  - **Tipografia:** Serif clássica contemporânea (*Cormorant Garamond*) para títulos e nomes de pacientes, combinada com *Outfit* para métricas e leitura clínica fluida.
   - **Paleta:** Fundo em tom pedra calcária/areia suave (`#F6F4EE`), cartões flutuantes em marfim perolado (`#FFFFFF` / `#FCFBF8`) e acentos refinados em eucalipto e argila.
 
-* ⚡ **Modo 2: Linear Health:**
-  - **Atmosfera:** Precisão cirúrgica, alta tecnologia e minimalismo suíço (*inspirado em Linear, Vercel e Apple*).
-  - **Tipografia:** Sem serifa geométrica de alta definição (*Inter Display*), com espaçamento refinado (*tracking -0.02em*).
-  - **Paleta:** Off-white contemporâneo (`#F8F9FA`), bordas de precisão em 1px cinza suave e micro-acentos em verde esmeralda clínico (`#10B981`).
+* 🌙 **Modo 2: Quiet Luxury Dark (Modo Escuro Nobre):**
+  - **Atmosfera:** O mesmo requinte e sofisticação do Quiet Luxury, adaptado para ambientes escuros com acabamento aveludado (sem pretos chapados ou contrastes agressivos).
+  - **Paleta:** Fundo em ardósia carvão quente (`#161514`), cartões nobres (`#201F1D`), texto em marfim perolado (`#EDEAE3`) e acentos em dourado argila suave (`#C7A77D`) e verde sálvia (`#6E8B75`).
 
 ---
 

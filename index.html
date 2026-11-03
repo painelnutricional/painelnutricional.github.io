@@ -1604,6 +1604,57 @@
       }
     }
 
+    /* Controles do Cabeçalho: Seletor no Topo e Ações Abaixo */
+    .header-patient-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    .header-quick-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #fbfaf7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .quick-actions-divider {
+      width: 1px;
+      height: 14px;
+      background: #e2dfd7;
+      margin: 0 3px;
+    }
+    .btn-action-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-action-ghost:hover {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 900px) {
+      .header-patient-controls {
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+
     .btn-privacy-toggle {
       display: inline-flex;
       align-items: center;
@@ -1633,6 +1684,446 @@
     .btn-privacy-toggle.inactive:hover {
       background: #ffe0b2;
       transform: translateY(-1px);
+    }
+
+    /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
+    .summary-dashboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .summary-section-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .summary-block-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-block-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    /* Rodapé e Botão de Apoio via Pix */
+    .app-footer {
+      padding: 24px 20px 36px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+      background: #faf9f6;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 12px;
+    }
+    .btn-support-pill {
+      background: #faf5ee;
+      border: 1.5px solid var(--accent);
+      color: #8c6226;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .btn-support-pill:hover {
+      background: #f4ecdf;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(179, 139, 89, 0.15);
+    }
+    /* ==================================================== */
+    /* SISTEMA DE DESIGN EXCLUSIVO: QUIET LUXURY (MODO 1: CLARO / MODO 2: ESCURO) */
+    /* ==================================================== */
+
+    /* MODO 1: QUIET LUXURY CLARO (Padrão do Sistema) */
+    body, body.mode-quiet-luxury-light, body:not(.mode-quiet-luxury-dark) {
+      --bg: #F6F4EE;
+      --card-bg: #FFFFFF;
+      --card-subtle-bg: #FCFBF8;
+      --text: #2E2C29;
+      --text-muted: #7D7871;
+      --border: rgba(46, 44, 41, 0.08);
+      --border-focus: #2E2C29;
+      --primary: #4D6452;
+      --primary-dark: #1F1D1B;
+      --primary-light: #EBE8DF;
+      --accent: #8C7355;
+      --accent-light: #FAF8F5;
+      --success: #3E5A44;
+      --font-family-base: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-family-serif: 'Cormorant Garamond', Georgia, serif;
+      --card-shadow: 0 15px 40px -10px rgba(46, 44, 41, 0.04), 0 1px 3px rgba(46, 44, 41, 0.02);
+      --border-radius-card: 22px;
+      font-family: var(--font-family-base);
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    body.mode-quiet-luxury-light .top-header,
+    body:not(.mode-quiet-luxury-dark) .top-header {
+      background: rgba(246, 244, 238, 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(46, 44, 41, 0.08);
+      box-shadow: 0 2px 16px rgba(46, 44, 41, 0.03);
+    }
+
+    body.mode-quiet-luxury-light .brand-text h1,
+    body:not(.mode-quiet-luxury-dark) .brand-text h1 {
+      font-family: var(--font-family-serif);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--primary-dark);
+    }
+    body.mode-quiet-luxury-light .brand-text span,
+    body:not(.mode-quiet-luxury-dark) .brand-text span {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    body.mode-quiet-luxury-light .patient-card,
+    body:not(.mode-quiet-luxury-dark) .patient-card {
+      border-radius: var(--border-radius-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      padding: 38px 44px;
+      background: var(--card-bg);
+    }
+
+    body.mode-quiet-luxury-light .patient-name-title,
+    body:not(.mode-quiet-luxury-dark) .patient-name-title {
+      font-family: var(--font-family-serif);
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--primary-dark);
+    }
+
+    body.mode-quiet-luxury-light .status-badge,
+    body:not(.mode-quiet-luxury-dark) .status-badge {
+      font-family: var(--font-family-base);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-radius: 100px;
+      padding: 5px 14px;
+    }
+
+    body.mode-quiet-luxury-light .summary-section-block,
+    body:not(.mode-quiet-luxury-dark) .summary-section-block {
+      background: var(--card-subtle-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+    }
+    body.mode-quiet-luxury-light .summary-block-title,
+    body:not(.mode-quiet-luxury-dark) .summary-block-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: #6C665F;
+    }
+
+    /* MODO 2: QUIET LUXURY DARK (Modo Escuro Nobre & Aveludado) */
+    body.mode-quiet-luxury-dark {
+      --bg: #161514;
+      --card-bg: #201F1D;
+      --card-subtle-bg: #282724;
+      --text: #EDEAE3;
+      --text-muted: #9C968D;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: #EDEAE3;
+      --primary: #6E8B75;
+      --primary-dark: #EDEAE3;
+      --primary-light: #282724;
+      --accent: #C7A77D;
+      --accent-light: #282724;
+      --success: #6E8B75;
+      --font-family-base: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-family-serif: 'Cormorant Garamond', Georgia, serif;
+      --card-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+      --border-radius-card: 22px;
+      font-family: var(--font-family-base);
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    body.mode-quiet-luxury-dark .top-header {
+      background: rgba(22, 21, 20, 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    body.mode-quiet-luxury-dark .brand-text h1 {
+      font-family: var(--font-family-serif);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #EDEAE3;
+    }
+    body.mode-quiet-luxury-dark .brand-text span {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #9C968D;
+    }
+
+    body.mode-quiet-luxury-dark .patient-card {
+      border-radius: var(--border-radius-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      padding: 38px 44px;
+      background: var(--card-bg);
+    }
+
+    body.mode-quiet-luxury-dark .patient-name-title {
+      font-family: var(--font-family-serif);
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #EDEAE3;
+    }
+
+    body.mode-quiet-luxury-dark .status-badge {
+      font-family: var(--font-family-base);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-radius: 100px;
+      padding: 5px 14px;
+      background: rgba(110, 139, 117, 0.15) !important;
+      border: 1px solid #6E8B75 !important;
+      color: #B9D6C0 !important;
+    }
+
+    body.mode-quiet-luxury-dark .summary-section-block {
+      background: var(--card-subtle-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+    }
+    body.mode-quiet-luxury-dark .summary-block-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: #C7A77D;
+    }
+
+    body.mode-quiet-luxury-dark .view-tab-btn {
+      color: #9C968D;
+    }
+    body.mode-quiet-luxury-dark .view-tab-btn:hover {
+      color: #EDEAE3;
+    }
+    body.mode-quiet-luxury-dark .view-tab-btn.active {
+      background: #282724;
+      color: #EDEAE3;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    body.mode-quiet-luxury-dark .custom-select-trigger,
+    body.mode-quiet-luxury-dark .selector-container {
+      background: #201F1D;
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #EDEAE3;
+    }
+    body.mode-quiet-luxury-dark .custom-options-menu {
+      background: #201F1D;
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+    body.mode-quiet-luxury-dark .custom-option {
+      color: #EDEAE3;
+    }
+    body.mode-quiet-luxury-dark .custom-option:hover {
+      background: #282724;
+    }
+
+    body.mode-quiet-luxury-dark .header-quick-actions {
+      background: #201F1D;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    body.mode-quiet-luxury-dark .btn-action-ghost {
+      color: #9C968D;
+    }
+    body.mode-quiet-luxury-dark .btn-action-ghost:hover {
+      background: #282724;
+      color: #EDEAE3;
+    }
+
+    body.mode-quiet-luxury-dark .app-footer {
+      background: #121110;
+      border-color: rgba(255, 255, 255, 0.06);
+      color: #9C968D;
+    }
+    body.mode-quiet-luxury-dark .btn-support-pill {
+      background: #201F1D;
+      border-color: #8C7355;
+      color: #C7A77D;
+    }
+    body.mode-quiet-luxury-dark .btn-support-pill:hover {
+      background: #282724;
+    }
+
+    body.mode-quiet-luxury-dark .modal-box {
+      background: #201F1D;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #EDEAE3;
+    }
+    body.mode-quiet-luxury-dark .modal-header h3 {
+      color: #EDEAE3;
+    }
+
+    /* Gaveta Discreta de Envios da Paciente */
+    .patient-submissions-drawer {
+      margin: 12px 0 18px 0;
+    }
+    .submissions-collapse {
+      display: inline-block;
+    }
+    .submissions-summary-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      list-style: none;
+    }
+    body.mode-quiet-luxury-dark .submissions-summary-pill {
+      background: rgba(255, 255, 255, 0.04);
+      color: #9C968D;
+    }
+    .submissions-summary-pill::-webkit-details-marker {
+      display: none;
+    }
+    .submissions-summary-pill:hover {
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--primary-dark);
+      border-color: rgba(46, 44, 41, 0.15);
+    }
+    body.mode-quiet-luxury-dark .submissions-summary-pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #EDEAE3;
+    }
+    .submissions-count-icon {
+      font-size: 13px;
+    }
+    .submissions-toggle-arrow {
+      font-size: 10px;
+      opacity: 0.7;
+      transition: transform 0.2s ease;
+    }
+    .submissions-collapse[open] .submissions-toggle-arrow {
+      transform: rotate(180deg);
+    }
+    .compact-drawer-chips {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px;
+      background: var(--card-subtle-bg);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+    .compact-chip {
+      padding: 4px 10px !important;
+      font-size: 12px !important;
+      gap: 6px !important;
+    }
+    .form-chip-title-cut {
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Seletor Segmentado no Cabeçalho (Modo: 1 / 2) */
+    .mode-toggle-segmented {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: rgba(0, 0, 0, 0.04);
+      padding: 2px 4px;
+      border-radius: 6px;
+      user-select: none;
+    }
+    body.mode-quiet-luxury-dark .mode-toggle-segmented {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .mode-label-text {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0 3px;
+      letter-spacing: 0.2px;
+    }
+    .btn-mode-pill {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-mode-pill:hover {
+      color: var(--primary-dark);
+    }
+    .btn-mode-pill.active {
+      background: #ffffff;
+      color: #1F1D1B;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+    body.mode-quiet-luxury-dark .btn-mode-pill.active {
+      background: #282724;
+      color: #EDEAE3;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
     }
 
     /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
@@ -2308,8 +2799,8 @@
         <div class="quick-actions-divider"></div>
         <div class="mode-toggle-segmented" title="Alternar estilo visual do painel">
           <span class="mode-label-text">Modo:</span>
-          <button id="btnMode1" class="btn-mode-pill active" onclick="setVisualMode(1)" title="Modo 1: Quiet Luxury (Padrão)">1</button>
-          <button id="btnMode2" class="btn-mode-pill" onclick="setVisualMode(2)" title="Modo 2: Linear Health">2</button>
+          <button id="btnMode1" class="btn-mode-pill active" onclick="setVisualMode(1)" title="Modo 1: Quiet Luxury (Claro - Padrão)">1</button>
+          <button id="btnMode2" class="btn-mode-pill" onclick="setVisualMode(2)" title="Modo 2: Quiet Luxury Dark (Modo Escuro)">2</button>
         </div>
         <input type="file" id="pdfFileInputDirect" accept=".pdf" style="display: none;" onchange="handlePdfFileUpload(this.files)" multiple />
       </div>
@@ -2603,6 +3094,7 @@
 
     function switchPatient(name) {
       currentPatient = name;
+      currentViewMode = 'summary'; // Por padrão, sempre abre no Resumo Clínico
       updateTriggerLabel(name);
       renderPatientView(name);
     }
@@ -2616,7 +3108,7 @@
     });
 
     
-    let currentViewMode = localStorage.getItem('painel_view_mode') || 'summary'; // 'themes' | 'forms' | 'evolution' | 'summary'
+    let currentViewMode = 'summary'; // Sempre inicia no Resumo Clínico // 'themes' | 'forms' | 'evolution' | 'summary'
     let isOrganizeMode = false;
     let globalSearchQuery = '';
 
@@ -3162,26 +3654,34 @@
       html += '      </div>';
       html += '      <div class="patient-header-actions">';
       html += '        <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
-      html += '          📄 + Importar Formulário para ' + displayName;
+      html += '          📄 + Importar Formulário';
       html += '        </button>';
-      html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir prontuário desta paciente" style="color: #c62828;">';
-      html += '          🗑️ Excluir';
+      html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir cadastro desta paciente" style="color: #c62828;">';
+      html += '          🗑️ Excluir cadastro';
       html += '        </button>';
       html += '      </div>';
       html += '    </div>';
 
       if (forms.length > 0) {
-        html += '    <div class="patient-forms-chips">';
-        html += '      <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Envios desta paciente:</span>';
+        html += '    <div class="patient-submissions-drawer">';
+        html += '      <details class="submissions-collapse">';
+        html += '        <summary class="submissions-summary-pill" title="Clique para ver ou excluir arquivos importados">';
+        html += '          <span class="submissions-count-icon">📁</span>';
+        html += '          <span class="submissions-count-text">' + forms.length + (forms.length === 1 ? ' formulário arquivado' : ' formulários arquivados') + '</span>';
+        html += '          <span class="submissions-toggle-arrow">▾</span>';
+        html += '        </summary>';
+        html += '        <div class="compact-drawer-chips">';
         forms.forEach((f, fIdx) => {
           const qCount = f.total_perguntas || (f.perguntas_e_respostas ? f.perguntas_e_respostas.length : 0);
-          html += '      <div class="form-chip" title="' + escapeHtml(f.titulo_formulario) + '">';
-          html += '        <span class="form-chip-num">#' + (fIdx + 1) + '</span>';
-          html += '        <strong>' + escapeHtml(f.titulo_formulario) + '</strong>';
-          html += '        <span class="form-chip-date">(' + escapeHtml(f.respondido_em) + ' • ' + qCount + ' q)</span>';
-          html += '        <button class="btn-delete-chip" onclick="deletePatientFormPrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + fIdx + ', event)" title="Excluir este formulário (caso tenha importado o arquivo errado)">🗑️</button>';
-          html += '      </div>';
+          html += '          <div class="form-chip compact-chip" title="' + escapeHtml(f.titulo_formulario) + '">';
+          html += '            <span class="form-chip-num">#' + (fIdx + 1) + '</span>';
+          html += '            <strong class="form-chip-title-cut">' + escapeHtml(f.titulo_formulario) + '</strong>';
+          html += '            <span class="form-chip-date">(' + escapeHtml(f.respondido_em) + ')</span>';
+          html += '            <button class="btn-delete-chip" onclick="deletePatientFormPrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + fIdx + ', event)" title="Excluir este arquivo">🗑️</button>';
+          html += '          </div>';
         });
+        html += '        </div>';
+        html += '      </details>';
         html += '    </div>';
       }
       html += '  </div>';
@@ -3884,6 +4384,85 @@ initControls();
         // Modo 1: Quiet Luxury (Padrão)
         body.classList.remove("mode-linear-health");
         body.classList.add("mode-quiet-luxury");
+        if (btn1) btn1.classList.add("active");
+        if (btn2) btn2.classList.remove("active");
+        try { localStorage.setItem("painel_nutri_visual_mode", "1"); } catch(e){}
+      }
+    }
+
+    function initVisualMode() {
+      let savedMode = "1";
+      try {
+        savedMode = localStorage.getItem("painel_nutri_visual_mode") || "1";
+      } catch(e){}
+      setVisualMode(savedMode === "2" ? 2 : 1);
+    }
+
+    function openSupportModal() {
+      const modal = document.getElementById("supportModalOverlay");
+      if (modal) modal.classList.add("active");
+    }
+
+    function closeSupportModal() {
+      const modal = document.getElementById("supportModalOverlay");
+      if (modal) modal.classList.remove("active");
+    }
+
+    function copyPixKey() {
+      const pixKey = "f3605cd9-0b5c-48e4-9a5d-a45e7fd00b68";
+      const btn = document.getElementById("btnCopyPix");
+      const input = document.getElementById("pixKeyInput");
+
+      const onSuccess = () => {
+        if (btn) {
+          btn.innerHTML = "✅ Chave Copiada!";
+          btn.style.background = "#2e7d32";
+          btn.style.borderColor = "#2e7d32";
+          btn.style.color = "#ffffff";
+          setTimeout(() => {
+            btn.innerHTML = "📋 Copiar Chave";
+            btn.style.background = "";
+            btn.style.borderColor = "";
+            btn.style.color = "";
+          }, 3000);
+        }
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pixKey).then(onSuccess).catch(() => {
+          if (input) {
+            input.select();
+            document.execCommand("copy");
+            onSuccess();
+          }
+        });
+      } else if (input) {
+        input.select();
+        document.execCommand("copy");
+        onSuccess();
+      }
+    }
+  
+    
+    // Funções de Apoio ao Projeto via Pix
+    
+    // Controle Dinâmico de Modos Visuais (Modo 1: Quiet Luxury / Modo 2: Linear Health)
+    function setVisualMode(mode) {
+      const body = document.body;
+      const btn1 = document.getElementById("btnMode1");
+      const btn2 = document.getElementById("btnMode2");
+
+      if (mode === 2) {
+        // Modo 2: Quiet Luxury Dark (Modo Escuro)
+        body.classList.remove("mode-quiet-luxury-light");
+        body.classList.add("mode-quiet-luxury-dark");
+        if (btn1) btn1.classList.remove("active");
+        if (btn2) btn2.classList.add("active");
+        try { localStorage.setItem("painel_nutri_visual_mode", "2"); } catch(e){}
+      } else {
+        // Modo 1: Quiet Luxury Claro (Padrão)
+        body.classList.remove("mode-quiet-luxury-dark");
+        body.classList.add("mode-quiet-luxury-light");
         if (btn1) btn1.classList.add("active");
         if (btn2) btn2.classList.remove("active");
         try { localStorage.setItem("painel_nutri_visual_mode", "1"); } catch(e){}

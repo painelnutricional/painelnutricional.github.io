@@ -1628,14 +1628,16 @@ initControls();
         alert("Por favor, informe a sigla ou nome da paciente.");
         return;
       }
-      if (patientsData[name]) {
-        if (!patientNames.includes(name)) {
-          patientNames.unshift(name);
+      // Verificação insensível a maiúsculas/minúsculas para evitar duplicatas confusas
+      const existingKey = Object.keys(patientsData).find(k => k.trim().toLowerCase() === name.toLowerCase());
+      if (existingKey) {
+        if (!patientNames.includes(existingKey)) {
+          patientNames.unshift(existingKey);
         }
         initControls();
-        switchPatient(name);
+        switchPatient(existingKey);
         closeNewPatientModal();
-        showToast(`Paciente ${name} já estava cadastrada e foi selecionada!`, "👤");
+        showToast(`Paciente ${existingKey} já cadastrada. Prontuário aberto!`, "👤");
         return;
       }
 
@@ -1846,6 +1848,18 @@ initControls();
       if (modal) modal.classList.remove("active");
     }
 
+    
+    function isQuestionStarter(line) {
+      if (!line) return false;
+      const lq = line.trim().toLowerCase();
+      const starters = [
+        'como', 'o que', 'o quanto', 'quanto', 'qual', 'quais', 'você', 'voce', 'tem', 'teve',
+        'se', 'sobre', 'ao terminar', 'quando', 'nos últimos', 'nos ultimos', 'as suas', 'na sua',
+        'por que', 'porque', 'liste', 'descreva', 'identifique', 'gostaria de', 'em quais'
+      ];
+      return starters.some(s => lq.startsWith(s)) || /^\d{1,2}[\.\)\-]\s+/.test(line.trim());
+    }
+
     async function handlePdfFileUpload(files) {
       if (!files || files.length === 0) return;
       const file = files[0];
@@ -1863,58 +1877,225 @@ initControls();
       try {
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        
+        let allExtractedQa = [];
         let fullLines = [];
+        let isTwoColDoc = false;
 
+        // Pass 1: Identificar se o documento possui tabelas de 2 colunas (ex: Nutrio / Anamnese em colunas)
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
           const textContent = await page.getTextContent();
-          
-          // Ordenar itens por ordem visual de leitura: Y decrescente (topo para base), depois X crescente (esquerda para direita)
-          const items = (textContent.items || []).slice();
-          items.sort((a, b) => {
-            const yDiff = b.transform[5] - a.transform[5];
-            if (Math.abs(yDiff) > 5) return yDiff;
-            return a.transform[4] - b.transform[4];
-          });
+          const items = (textContent.items || []).filter(it => it.str && it.str.trim());
 
-          let pageLines = [];
-          let curLine = "";
-          let lastY = null;
-          let lastXEnd = null;
-
-          items.forEach(item => {
-            const str = item.str;
-            if (!str) return;
-            const x = item.transform[4];
-            const y = item.transform[5];
-            const w = item.width || 0;
-
-            if (lastY === null || Math.abs(y - lastY) > 5) {
-              if (curLine.trim()) pageLines.push(curLine.trim());
-              curLine = str;
-              lastY = y;
-            } else {
-              const spaceNeeded = lastXEnd !== null && (x - lastXEnd) > 2 && !curLine.endsWith(" ") && !str.startsWith(" ");
-              curLine += (spaceNeeded ? " " : "") + str;
-            }
-            lastXEnd = x + w;
-          });
-          if (curLine.trim()) pageLines.push(curLine.trim());
-
-          // Filtrar rodapés e numeração de página pura
-          const cleanedPageLines = pageLines.filter(l => {
-            if (/^\d{1,3}$/.test(l)) return false;
-            if (/^P[áa]gina\s+\d+(\s+de\s+\d+)?$/i.test(l)) return false;
-            if (/CRN\d+-\d+/i.test(l)) return false;
-            if (/^Nutricionista\s+Tha[ýy]\s+Carvalho$/i.test(l)) return false;
+          const bodyItems = items.filter(it => {
+            const y = it.transform[5];
+            const str = it.str.trim();
+            if (y < 40 || y > 750) return false;
+            if (/CRN\d+-\d+/i.test(str)) return false;
+            if (/^P[áa]gina\s+\d+(\s+de\s+\d+)?$/i.test(str)) return false;
+            if (/^Nutricionista\s+Tha[ýy]\s+Carvalho$/i.test(str)) return false;
+            if (/^Emitido em/i.test(str)) return false;
             return true;
           });
 
-          fullLines = fullLines.concat(cleanedPageLines);
+          let leftItems = bodyItems.filter(it => it.transform[4] < 185);
+          let rightItems = bodyItems.filter(it => it.transform[4] >= 185);
+
+          if (i === 1) {
+            leftItems = leftItems.filter(it => it.transform[5] < 700);
+            rightItems = rightItems.filter(it => it.transform[5] < 700);
+          }
+
+          const col2Aligned = rightItems.filter(it => it.transform[4] >= 185 && it.transform[4] <= 215).length;
+          const qCount = leftItems.filter(it => isQuestionStarter(it.str) || it.str.endsWith('?') || it.str.endsWith(':')).length;
+          const hasTwoCols = qCount >= 6 && col2Aligned >= 10;
+          if (hasTwoCols) isTwoColDoc = true;
         }
 
-        const fullText = fullLines.join("\n");
-        const extracted = parseQuestionnaireText(fullLines, fullText, file.name);
+        // Pass 2: Extrair conteúdo respeitando a estrutura do documento
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const items = (textContent.items || []).filter(it => it.str && it.str.trim());
+
+          const bodyItems = items.filter(it => {
+            const y = it.transform[5];
+            const str = it.str.trim();
+            if (y < 40 || y > 750) return false;
+            if (/CRN\d+-\d+/i.test(str)) return false;
+            if (/^P[áa]gina\s+\d+(\s+de\s+\d+)?$/i.test(str)) return false;
+            if (/^Nutricionista\s+Tha[ýy]\s+Carvalho$/i.test(str)) return false;
+            if (/^Emitido em/i.test(str)) return false;
+            return true;
+          });
+
+          if (isTwoColDoc) {
+            let leftItems = bodyItems.filter(it => it.transform[4] < 185);
+            let rightItems = bodyItems.filter(it => it.transform[4] >= 185);
+
+            if (i === 1) {
+              leftItems = leftItems.filter(it => it.transform[5] < 700);
+              rightItems = rightItems.filter(it => it.transform[5] < 700);
+            }
+
+            // Se for página de continuação com texto apenas na coluna esquerda (ex: pergunta que terminou na pág 3)
+            if (leftItems.length > 0 && rightItems.length === 0) {
+              const extraText = leftItems.map(it => it.str.trim()).join(' ');
+              if (allExtractedQa.length > 0) {
+                allExtractedQa[allExtractedQa.length - 1].pergunta += ' ' + extraText;
+              }
+              continue;
+            }
+
+            // Agrupar itens da coluna esquerda por pergunta com base na distância Y
+            leftItems.sort((a, b) => b.transform[5] - a.transform[5]);
+
+            const qClusters = [];
+            let curCluster = [];
+
+            for (const it of leftItems) {
+              if (curCluster.length === 0) {
+                curCluster.push(it);
+              } else {
+                const prevY = curCluster[curCluster.length - 1].transform[5];
+                const gap = prevY - it.transform[5];
+                const isStarter = isQuestionStarter(it.str);
+                if (gap > 15.0 || (gap > 13.0 && isStarter)) {
+                  qClusters.push(curCluster);
+                  curCluster = [it];
+                } else {
+                  curCluster.push(it);
+                }
+              }
+            }
+            if (curCluster.length > 0) qClusters.push(curCluster);
+
+            // Parear cada grupo de pergunta com as respostas correspondentes na coluna direita
+            for (const qGroup of qClusters) {
+              const qText = qGroup.map(it => it.str.trim()).join(' ');
+              const yTop = Math.max(...qGroup.map(it => it.transform[5]));
+              const yBottom = Math.min(...qGroup.map(it => it.transform[5]));
+
+              const matchingAnswers = rightItems.filter(it => {
+                const y = it.transform[5];
+                return y >= (yBottom - 13) && y <= (yTop + 13);
+              });
+              matchingAnswers.sort((a, b) => {
+                const yDiff = b.transform[5] - a.transform[5];
+                if (Math.abs(yDiff) > 5) return yDiff;
+                return a.transform[4] - b.transform[4];
+              });
+
+              const aText = matchingAnswers.map(it => it.str.trim()).join(' ');
+              allExtractedQa.push({
+                pergunta: qText,
+                resposta: aText || "Sem resposta registrada.",
+                page: i
+              });
+            }
+
+          } else {
+            // Documento de coluna única contínua (ex: Orientações Nutricionais)
+            items.sort((a, b) => {
+              const yDiff = b.transform[5] - a.transform[5];
+              if (Math.abs(yDiff) > 5) return yDiff;
+              return a.transform[4] - b.transform[4];
+            });
+
+            let pageLines = [];
+            let curLine = "";
+            let lastY = null;
+            let lastXEnd = null;
+
+            items.forEach(item => {
+              const str = item.str;
+              if (!str) return;
+              const x = item.transform[4];
+              const y = item.transform[5];
+              const w = item.width || 0;
+
+              if (lastY === null || Math.abs(y - lastY) > 5) {
+                if (curLine.trim()) pageLines.push(curLine.trim());
+                curLine = str;
+                lastY = y;
+              } else {
+                const spaceNeeded = lastXEnd !== null && (x - lastXEnd) > 2 && !curLine.endsWith(" ") && !str.startsWith(" ");
+                curLine += (spaceNeeded ? " " : "") + str;
+              }
+              lastXEnd = x + w;
+            });
+            if (curLine.trim()) pageLines.push(curLine.trim());
+
+            const cleanedPageLines = pageLines.filter(l => {
+              if (/^\d{1,3}$/.test(l)) return false;
+              if (/^P[áa]gina\s+\d+(\s+de\s+\d+)?$/i.test(l)) return false;
+              if (/CRN\d+-\d+/i.test(l)) return false;
+              if (/^Nutricionista\s+Tha[ýy]\s+Carvalho$/i.test(l)) return false;
+              return true;
+            });
+
+            fullLines = fullLines.concat(cleanedPageLines);
+          }
+        }
+
+        let extracted = null;
+
+        if (isTwoColDoc && allExtractedQa.length > 0) {
+          // Fusão de continuação entre quebras de página (ex: pergunta cortada entre página 1 e 2)
+          const merged = [];
+          for (const item of allExtractedQa) {
+            if (merged.length > 0 && !isQuestionStarter(item.pergunta) && !merged[merged.length - 1].pergunta.endsWith('?') && !merged[merged.length - 1].pergunta.endsWith(':')) {
+              merged[merged.length - 1].pergunta += ' ' + item.pergunta;
+              if (item.resposta && item.resposta !== "Sem resposta registrada.") {
+                merged[merged.length - 1].resposta = (merged[merged.length - 1].resposta + ' ' + item.resposta).trim();
+              }
+            } else {
+              merged.push(item);
+            }
+          }
+
+          const finalQaList = merged.map((it, idx) => ({
+            identificador: "p" + String(idx + 1).padStart(2, "0"),
+            tipo: "text",
+            obrigatoria: true,
+            tema: detectQuestionTheme(it.pergunta + " " + it.resposta),
+            pergunta: it.pergunta,
+            resposta: it.resposta || "Sem resposta registrada."
+          }));
+
+          // Detectar nome/sigla da paciente
+          let detectedPatient = targetPatientForImport || "";
+          if (!detectedPatient) {
+            const cleanFile = file.name.replace(/\.pdf$/i, '').replace(/[\_\-+]/g, ' ');
+            const parts = cleanFile.split(/\s+/).filter(w => !['acompanhamento', 'quinzenal', 'mensal', 'semanal', 'questionario', 'formulario', 'pre', 'consulta', 'checkin', 'nutrio', 'anamnese', 'orientacoes', 'nutricionais', 'relatorio', 'evolucao'].includes(w.toLowerCase()));
+            if (parts.length > 0) {
+              detectedPatient = parts.join(' ');
+            } else {
+              detectedPatient = currentPatient || "Paciente Importada";
+            }
+          }
+
+          let detectedTitle = "Acompanhamento Nutricional";
+          const lfileName = file.name.toLowerCase();
+          if (lfileName.includes("quinzenal")) detectedTitle = "Acompanhamento Quinzenal";
+          else if (lfileName.includes("check-in") || lfileName.includes("checkin") || lfileName.includes("semanal")) detectedTitle = "Check-in de Evolução";
+          else if (lfileName.includes("pre") || lfileName.includes("anamnese")) detectedTitle = "Formulário de Pré-Consulta";
+          else detectedTitle = file.name.replace(/\.pdf$/i, '');
+
+          extracted = {
+            patientName: detectedPatient,
+            formTitle: detectedTitle,
+            date: new Date().toLocaleDateString('pt-BR'),
+            qaList: finalQaList
+          };
+
+        } else {
+          // Documento de texto contínuo
+          const fullText = fullLines.join("\n");
+          extracted = parseQuestionnaireText(fullLines, fullText, file.name);
+        }
+
         window._currentExtractedPdf = extracted;
 
         // Preencher visualização

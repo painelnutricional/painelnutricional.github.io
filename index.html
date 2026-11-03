@@ -1243,6 +1243,57 @@
       }
     }
 
+    /* Controles do Cabeçalho: Seletor no Topo e Ações Abaixo */
+    .header-patient-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    .header-quick-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #fbfaf7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .quick-actions-divider {
+      width: 1px;
+      height: 14px;
+      background: #e2dfd7;
+      margin: 0 3px;
+    }
+    .btn-action-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-action-ghost:hover {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 900px) {
+      .header-patient-controls {
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+
     .btn-privacy-toggle {
       display: inline-flex;
       align-items: center;
@@ -1272,6 +1323,34 @@
     .btn-privacy-toggle.inactive:hover {
       background: #ffe0b2;
       transform: translateY(-1px);
+    }
+
+    /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
+    .summary-dashboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .summary-section-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .summary-block-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-block-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
     }
 
     /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
@@ -2351,8 +2430,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v6';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v6';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v7';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v7';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -2360,7 +2439,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v6';
+    const IDB_NAME = 'PainelNutricionalDB_v7';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)
@@ -2849,6 +2928,17 @@ initControls();
       return starters.some(s => lq.startsWith(s)) || /^\d{1,2}[\.\)\-]\s+/.test(line.trim());
     }
 
+    
+    // Acionador universal e seguro de upload de arquivos PDF
+    function triggerPdfFileInput(event) {
+      if (event && event.target && event.target.tagName === 'INPUT') return;
+      const input = document.getElementById("pdfFileInput") || document.getElementById("pdfFileInputDirect");
+      if (input) {
+        input.value = "";
+        input.click();
+      }
+    }
+  
     async function handlePdfFileUpload(files) {
       if (!files || files.length === 0) return;
       const file = files[0];
@@ -2865,7 +2955,31 @@ initControls();
 
       try {
         const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let pdf;
+        try {
+          if (window.pdfjsLib) {
+            if (window.location.protocol === 'file:') {
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdf.worker.js';
+            } else {
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            }
+          }
+          pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        } catch (workerErr) {
+          console.warn("Worker local/CDN indisponível, tentando fallback inline:", workerErr);
+          try {
+            if (window.pdfjsLib) {
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            }
+            pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          } catch (cdnErr) {
+            console.warn("Tentando com fake worker inline:", cdnErr);
+            if (window.pdfjsLib) {
+              pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+            }
+            pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          }
+        }
         
         let allExtractedQa = [];
         let fullLines = [];
@@ -3125,6 +3239,12 @@ initControls();
       const trimmed = line.trim();
       const clean = trimmed.replace(/[^\w\sÀ-ú]/g, '').trim();
 
+      // Pergunta de formulário (ex: Google Forms com campo obrigatório '*')
+      if (trimmed.endsWith('*') && trimmed.length < 160) return true;
+
+      // Início típico de pergunta clínica
+      if (typeof isQuestionStarter === 'function' && isQuestionStarter(trimmed) && trimmed.length < 160) return true;
+
       // 1. Pergunta numerada: "1. ...", "01) ...", "Q1:"
       if (/^\d{1,2}[\.\)\-]\s+/.test(trimmed)) return true;
 
@@ -3134,14 +3254,14 @@ initControls();
       // 3. Termina com interrogação
       if (trimmed.endsWith('?') && trimmed.length < 140) return true;
 
-      // 4. Rótulo de campo curto terminado em dois pontos: "Objetivo:", "Medicamentos:"
-      if (trimmed.endsWith(':') && trimmed.length <= 60) return true;
+      // 4. Rótulo de campo curto terminado em dois pontos: "Objetivo:", "Medicamentos:" (evitando "Other:")
+      if (trimmed.endsWith(':') && trimmed.length <= 60 && !trimmed.toLowerCase().startsWith('other')) return true;
 
       // 5. Horário de refeição ou cronograma: "07:30 Café da manhã", "12:00 Almoço"
       if (/^\d{2}:\d{2}\s+/.test(trimmed)) return true;
 
-      // 6. Título em MAIÚSCULAS curto (ex: "REGULARIDADE", "PROTEÍNA", "CARBOIDRATO", "BASE", "MONTAGEM BASE", "SOBREMESA")
-      if (clean === clean.toUpperCase() && clean.length >= 3 && clean.length <= 40 && !clean.startsWith('PAGINA')) {
+      // 6. Título em MAIÚSCULAS curto com letras
+      if (/[A-ZÀ-Ú]/.test(clean) && clean === clean.toUpperCase() && clean.length >= 3 && clean.length <= 40 && !clean.startsWith('PAGINA')) {
         return true;
       }
 
@@ -3157,25 +3277,70 @@ initControls();
     }
 
     function parseQuestionnaireText(lines, fullText, fileName) {
+      const cleanLines = (lines || []).filter(l => {
+        const t = l.trim();
+        if (!t) return false;
+        if (/^https?:\/\/docs\.google\.com/i.test(t)) return false;
+        if (/^untitled\s+form\s*-\s*google\s+forms/i.test(t)) return false;
+        if (/^formul[áa]rio\s+sem\s+t[íi]tulo/i.test(t)) return false;
+        if (/^\d+\s*\/\s*\d+$/.test(t)) return false;
+        if (/^\d{2}\/\d{2}\/\d{4}/.test(t) && t.includes(',')) return false;
+        if (/\bindica\s+uma\s+pergunta\s+obrigat[óo]ria\b/i.test(t)) return false;
+        if (/\beste\s+conte[úu]do\s+n[ãa]o\s+foi\s+criado\s+nem\s+aprovado\b/i.test(t)) return false;
+        if (/^The respondent's email/i.test(t)) return false;
+        return true;
+      });
+
       // 1. Detectar Paciente
       let detectedName = "";
-      const nameRegexes = [
-        /(?:paciente|nome(?:\s+completo|\s+da\s+paciente)?)\s*[:\-]\s*([^\n\r,\.]+)/i,
-        /^(?:olá|ola|paciente)\s*[,:\-]?\s*([A-ZÀ-Ú][a-zà-ú]+(?:\s+[A-ZÀ-Ú][a-zà-ú]+)+)/m
-      ];
 
-      for (const rx of nameRegexes) {
-        const match = fullText.match(rx);
-        if (match && match[1] && match[1].trim().length > 2) {
-          detectedName = match[1].trim();
+      // Prioridade 1: Se as primeiras linhas contêm o nome próprio da respondente (Google Forms)
+      for (let i = 0; i < Math.min(6, cleanLines.length); i++) {
+        const l = cleanLines[i].trim();
+        const words = l.split(/\s+/);
+        if (words.length >= 2 && words.length <= 5 && /^[A-ZÀ-Ú][a-zà-ú]+(?:\s+[a-zà-ú]+)?(?:\s+[A-ZÀ-Ú][a-zà-ú]+)+$/.test(l) && !l.includes('@') && !l.toLowerCase().includes('nutri') && !l.toLowerCase().includes('espera')) {
+          detectedName = l;
           break;
         }
       }
 
+      // Prioridade 2: Resposta direta da pergunta "Qual é o seu nome?"
       if (!detectedName) {
-        // Tentar extrair do nome do arquivo
+        for (let i = 0; i < cleanLines.length; i++) {
+          const line = cleanLines[i].trim();
+          if (/^(?:qual\s+[ée]\s+o\s+seu\s+nome|nome(?:\s+completo|\s+da\s+paciente)?)\b/i.test(line)) {
+            for (let j = i + 1; j < Math.min(i + 4, cleanLines.length); j++) {
+              const nextLine = cleanLines[j].trim();
+              if (nextLine && !nextLine.startsWith('http') && !nextLine.endsWith('*') && nextLine.length > 2 && nextLine.length < 80) {
+                detectedName = nextLine;
+                break;
+              }
+            }
+            if (detectedName) break;
+          }
+        }
+      }
+
+      // Prioridade 3: Regexes em fullText
+      if (!detectedName) {
+        const nameRegexes = [
+          /(?:paciente|nome(?:\s+completo|\s+da\s+paciente)?)\s*[:\-]\s*([^\n\r,\.]+)/i,
+          /qual\s+[ée]\s+o\s+seu\s+nome\s*\??\s*\*?\s*\n+([A-ZÀ-Ú][a-zà-ú]+(?:\s+[A-ZÀ-Ú][a-zà-ú]+)+)/i,
+          /^(?:olá|ola|paciente)\s*[,:\-]?\s*([A-ZÀ-Ú][a-zà-ú]+(?:\s+[A-ZÀ-Ú][a-zà-ú]+)+)/m
+        ];
+
+        for (const rx of nameRegexes) {
+          const match = fullText.match(rx);
+          if (match && match[1] && match[1].trim().length > 2) {
+            detectedName = match[1].trim();
+            break;
+          }
+        }
+      }
+
+      if (!detectedName) {
         const cleanFile = fileName.replace(/\.pdf$/i, '').replace(/[\_\-+]/g, ' ');
-        const parts = cleanFile.split(/\s+/).filter(w => !['questionario', 'formulario', 'pre', 'consulta', 'checkin', 'nutrio', 'anamnese', 'orientacoes', 'nutricionais'].includes(w.toLowerCase()));
+        const parts = cleanFile.split(/\s+/).filter(w => !['untitled', 'google', 'forms', 'questionario', 'formulario', 'pre', 'consulta', 'checkin', 'nutrio', 'anamnese', 'orientacoes', 'nutricionais'].includes(w.toLowerCase()));
         if (parts.length > 0) {
           detectedName = parts.join(' ');
         } else {
@@ -3204,22 +3369,29 @@ initControls();
       const ltext = fullText.toLowerCase();
       if (ltext.includes("orientações nutricionais") || ltext.includes("orientacoes nutricionais")) {
         detectedTitle = "Orientações Nutricionais";
-      } else if (ltext.includes("pré-consulta") || ltext.includes("pre-consulta") || ltext.includes("anamnese")) {
-        detectedTitle = "Formulário de Pré-Consulta";
+      } else if (ltext.includes("pré-consulta") || ltext.includes("pre-consulta") || ltext.includes("anamnese") || ltext.includes("espera")) {
+        detectedTitle = "Formulário de Pré-Consulta / Anamnese";
       } else if (ltext.includes("check-in") || ltext.includes("checkin") || ltext.includes("semanal")) {
         detectedTitle = "Acompanhamento de Evolução (Check-in)";
+      } else if (fileName.toLowerCase().includes("untitled") || ltext.includes("google forms")) {
+        detectedTitle = "Questionário de Acompanhamento (Google Forms)";
       } else {
         detectedTitle = fileName.replace(/\.pdf$/i, '');
       }
 
-      // 4. Segmentação Inteligente e Extração Completa de Palavras
+      // 4. Segmentação Inteligente e Extração Completa
       const qaList = [];
       let currentHeader = "";
       let currentBody = [];
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
+      for (let i = 0; i < cleanLines.length; i++) {
+        const line = cleanLines[i].trim();
         if (!line) continue;
+
+        if (line === '*' && currentHeader) {
+          currentHeader += ' *';
+          continue;
+        }
 
         if (isDocumentItemHeader(line)) {
           if (currentHeader) {
@@ -3258,15 +3430,14 @@ initControls();
         });
       }
 
-      // Salvaguarda final: se qaList for vazio mas houver linhas, segmentar linha por linha
-      if (qaList.length === 0 && lines.length > 0) {
-        lines.forEach((l, idx) => {
+      if (qaList.length === 0 && cleanLines.length > 0) {
+        cleanLines.forEach((l, idx) => {
           qaList.push({
             identificador: "p" + String(idx + 1).padStart(2, "0"),
             tipo: "text",
             obrigatoria: true,
             tema: detectQuestionTheme(l),
-            pergunta: `Item ${idx + 1}`,
+            pergunta: 'Item ' + (idx + 1),
             resposta: l
           });
         });
@@ -3837,10 +4008,11 @@ initControls();
           🔒 <strong>100% Seguro & Privado:</strong> O PDF é processado diretamente no seu computador. Nenhum dado de paciente é enviado para a nuvem.
         </div>
         
-        <div class="drop-zone" id="pdfDropZone" onclick="document.getElementById('pdfFileInput').click()">
+        <div class="drop-zone" id="pdfDropZone" onclick="triggerPdfFileInput(event)">
           <span class="drop-zone-icon">📥</span>
           <p>Clique para selecionar ou arraste o PDF do questionário aqui</p>
           <span>Compatível com questionários do Nutrio, Google Forms, Anamneses e Check-ins</span>
+          <input type="file" id="pdfFileInput" accept=".pdf,application/pdf" style="display: none;" onchange="handlePdfFileUpload(this.files)" />
         </div>
 
         <div id="pdfProcessingStatus" style="display: none; padding: 12px; background: #faf5ee; border-radius: 8px; font-size: 13px; color: var(--accent); font-weight: 600; text-align: center;">

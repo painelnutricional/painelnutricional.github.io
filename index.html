@@ -785,7 +785,342 @@
       box-shadow: 0 4px 10px rgba(74, 93, 78, 0.3);
     }
 
-</style>
+
+    /* ==========================================
+       BARRA DE MODOS DE VISUALIZAÇÃO E BUSCA UNIVERSAL
+       ========================================== */
+    .view-mode-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 24px;
+      margin-bottom: 20px;
+      border-top: 1.5px solid var(--border);
+      padding-top: 20px;
+    }
+    .view-tabs-container {
+      display: inline-flex;
+      background: #f0ede6;
+      padding: 4px;
+      border-radius: 10px;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .view-tab-btn {
+      padding: 8px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      border-radius: 7px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    .view-tab-btn:hover {
+      color: var(--primary-dark);
+    }
+    .view-tab-btn.active {
+      background: white;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      font-weight: 700;
+    }
+    .view-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 1;
+      justify-content: flex-end;
+    }
+    .search-box-wrapper {
+      position: relative;
+      min-width: 270px;
+      max-width: 420px;
+      flex: 1;
+    }
+    .search-box-wrapper input {
+      width: 100%;
+      padding: 9px 34px 9px 34px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13.5px;
+      outline: none;
+      background: white;
+      transition: all 0.2s;
+    }
+    .search-box-wrapper input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(74, 93, 78, 0.12);
+    }
+    .search-icon-left {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+    .search-clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      font-size: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: none;
+    }
+    .search-clear-btn:hover {
+      color: #c62828;
+    }
+    .search-results-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid #c8e6c9;
+      white-space: nowrap;
+    }
+    mark.search-highlight {
+      background-color: #fff176;
+      color: #2e3b2e;
+      padding: 1px 3px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    /* Limpeza de UI: Modo Organização e botões discretos */
+    .btn-organize-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-organize-toggle:hover {
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+    .btn-organize-toggle.active {
+      background: var(--primary-dark);
+      color: white;
+      border-color: var(--primary-dark);
+    }
+    .organize-only {
+      display: none !important;
+    }
+    .organize-active .organize-only {
+      display: inline-flex !important;
+    }
+    .btn-move-qa {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .qa-card:hover .btn-move-qa,
+    .organize-active .btn-move-qa {
+      opacity: 1;
+    }
+
+    /* Visão Por Formulário */
+    .form-submission-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .form-submission-header {
+      padding: 16px 22px;
+      background: #faf9f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid transparent;
+      transition: background 0.2s;
+    }
+    .form-submission-header:hover {
+      background: #f4f2ec;
+    }
+    .form-submission-card.open .form-submission-header {
+      border-bottom-color: var(--border);
+    }
+    .form-sub-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-sub-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #e8ede8;
+      color: var(--primary-dark);
+    }
+    .form-sub-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .form-submission-body {
+      display: none;
+      padding: 20px;
+    }
+    .form-submission-card.open .form-submission-body {
+      display: block;
+    }
+    .form-qa-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Visão de Linha do Tempo Evolutiva */
+    .evolution-metrics-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .evo-metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .evo-metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .evo-metric-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .evo-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      padding-left: 20px;
+    }
+    .evo-timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: #d8dfd8;
+    }
+    .evo-node {
+      position: relative;
+    }
+    .evo-node::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 0 3px #f0ede6;
+    }
+    .evo-node-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .evo-node-form {
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    .evo-node-question {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .evo-node-answer {
+      font-size: 14px;
+      background: #faf9f6;
+      border: 1px solid #edebe4;
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #333;
+      line-height: 1.5;
+    }
+    .med-facts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .med-fact-card {
+      background: #fbfbf9;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+    .med-fact-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .med-fact-body {
+      font-size: 13.5px;
+      color: #444;
+      line-height: 1.45;
+    }
+  
+  </style>
 
   <!-- PDF.js para processamento 100% no navegador (offline-first & LGPD compliant) -->
   <script src="lib/pdf.min.js"></script>
@@ -1086,12 +1421,509 @@
       }
     });
 
+    
+    let currentViewMode = localStorage.getItem('painel_view_mode') || 'themes'; // 'themes' | 'forms' | 'evolution' | 'summary'
+    let isOrganizeMode = false;
+    let globalSearchQuery = '';
+
+    function switchViewMode(mode) {
+      currentViewMode = mode;
+      localStorage.setItem('painel_view_mode', mode);
+      
+      document.querySelectorAll('.view-tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-mode') === mode) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const orgBtn = document.getElementById('btnOrganizeToggle');
+      if (orgBtn) {
+        orgBtn.style.display = (mode === 'themes') ? 'inline-flex' : 'none';
+      }
+
+      renderActiveView();
+    }
+
+    function toggleOrganizeMode() {
+      isOrganizeMode = !isOrganizeMode;
+      const container = document.getElementById('activeViewContent');
+      const btn = document.getElementById('btnOrganizeToggle');
+      if (container) {
+        container.classList.toggle('organize-active', isOrganizeMode);
+      }
+      if (btn) {
+        btn.classList.toggle('active', isOrganizeMode);
+        btn.innerHTML = isOrganizeMode ? '✅ Concluir Organização' : '🛠️ Organizar Eixos';
+      }
+    }
+
+    function handleGlobalSearch(query) {
+      globalSearchQuery = (query || '').trim();
+      const clearBtn = document.getElementById('searchClearBtn');
+      if (clearBtn) {
+        clearBtn.style.display = globalSearchQuery ? 'block' : 'none';
+      }
+      renderActiveView();
+    }
+
+    function clearGlobalSearch() {
+      const input = document.getElementById('globalSearchInput');
+      if (input) input.value = '';
+      handleGlobalSearch('');
+    }
+
+    function highlightText(text, query) {
+      if (!text) return '';
+      if (!query || !query.trim()) return escapeHtml(text);
+      const escapedText = escapeHtml(text);
+      const q = query.trim();
+      const qEscaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp('(' + qEscaped + ')', 'gi');
+      return escapedText.replace(regex, '<mark class="search-highlight">$1</mark>');
+    }
+
+    function renderActiveView() {
+      const contentEl = document.getElementById('activeViewContent');
+      if (!contentEl) return;
+      const forms = patientsData[currentPatient] || [];
+      const synth = clinicalSyntheses[currentPatient] || {
+        badge: "Em Acompanhamento",
+        badgeColor: "#4a5d4e",
+        baseline: { objetivo: "Acompanhamento geral", historico: "Registrado no prontuário", queixas: "Relatadas em formulário", rotina: "Rotina padrão" },
+        evolutionSummary: "Paciente em acompanhamento regular.",
+        vitorias: ["Adesão ao plano"],
+        atencao: ["Revisão periódica"],
+        condutaSugerida: "Manter acompanhamento."
+      };
+
+      let html = '';
+      let matchCount = 0;
+
+      if (currentViewMode === 'themes') {
+        const res = renderThemesViewHtml(currentPatient, forms, globalSearchQuery);
+        html = res.html;
+        matchCount = res.matchCount;
+      } else if (currentViewMode === 'forms') {
+        const res = renderFormsViewHtml(currentPatient, forms, globalSearchQuery);
+        html = res.html;
+        matchCount = res.matchCount;
+      } else if (currentViewMode === 'evolution') {
+        const res = renderEvolutionViewHtml(currentPatient, forms, globalSearchQuery);
+        html = res.html;
+        matchCount = res.matchCount;
+      } else if (currentViewMode === 'summary') {
+        html = renderSummaryViewHtml(currentPatient, forms, synth);
+      }
+
+      contentEl.innerHTML = html;
+      contentEl.classList.toggle('organize-active', isOrganizeMode);
+
+      const badge = document.getElementById('searchResultsBadge');
+      if (badge) {
+        if (globalSearchQuery) {
+          badge.style.display = 'inline-flex';
+          badge.innerHTML = '🎯 ' + matchCount + (matchCount === 1 ? ' resposta encontrada' : ' respostas encontradas');
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    }
+
+    function renderThemesViewHtml(patientName, forms, searchQuery) {
+      const queryLower = (searchQuery || '').toLowerCase();
+      let matchCount = 0;
+
+      const dynamicThemes = {};
+      forms.forEach((f, formIdx) => {
+        (f.perguntas_e_respostas || []).forEach((qa, qaIdx) => {
+          const theme = qa.tema || detectQuestionTheme(qa.pergunta);
+          if (!dynamicThemes[theme]) dynamicThemes[theme] = [];
+
+          let resp = qa.resposta;
+          let isNotFilled = false;
+          if (resp === null || resp === undefined || resp === '') {
+            isNotFilled = true;
+            resp = qa.obrigatoria === false ? 'Não se aplica / Não relatado' : 'Não preenchido';
+          } else if (Array.isArray(resp)) {
+            resp = resp.join(', ');
+          } else {
+            resp = String(resp);
+          }
+
+          const isMatch = !queryLower || qa.pergunta.toLowerCase().includes(queryLower) || resp.toLowerCase().includes(queryLower);
+          if (isMatch && queryLower) matchCount++;
+
+          dynamicThemes[theme].push({
+            form: f.titulo_formulario,
+            date: f.respondido_em,
+            pergunta: qa.pergunta,
+            resposta: resp,
+            isNotFilled: isNotFilled,
+            obrigatoria: qa.obrigatoria,
+            formIdx: formIdx,
+            qaIdx: qaIdx,
+            isMatch: isMatch
+          });
+        });
+      });
+
+      let html = '';
+      const themeEntries = Object.entries(dynamicThemes);
+
+      if (themeEntries.length === 0) {
+        html += '<div style="padding: 32px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border); margin-top: 16px;">';
+        html += '  <span style="font-size: 32px; display: block; margin-bottom: 8px;">📄</span>';
+        html += '  <strong>Nenhum formulário cadastrado ainda.</strong><br/>';
+        html += '  <span>Clique no botão verde acima para carregar o primeiro formulário desta paciente.</span>';
+        html += '</div>';
+        return { html, matchCount };
+      }
+
+      html += '<div id="accordionGroup">';
+
+      themeEntries.forEach(([themeName, items], idx) => {
+        const visibleItems = queryLower ? items.filter(it => it.isMatch) : items;
+        if (queryLower && visibleItems.length === 0) return;
+
+        const isOpen = queryLower ? ' open' : (idx === 0 || idx === 1 ? ' open' : '');
+        const icon = getThemeIcon(themeName);
+
+        html += '<div class="accordion-item' + isOpen + '" data-cat="' + escapeHtml(themeName) + '">';
+        html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
+        html += '    <div class="acc-title">' + icon + ' <span>' + escapeHtml(themeName) + '</span> <span class="acc-count">' + visibleItems.length + (visibleItems.length === 1 ? ' resposta' : ' respostas') + '</span></div>';
+        html += '    <div class="theme-header-right" style="display:flex; align-items:center; gap:8px;">';
+        html += '      <button class="btn-theme-action organize-only" onclick="renameThemePrompt(\'' + patientName.replace(/'/g, "\\'") + '\', \'' + themeName.replace(/'/g, "\\'") + '\', event)" title="Renomear este tema">✏️ Renomear</button>';
+        html += '      <div class="acc-icon">▼</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="accordion-body">';
+
+        visibleItems.forEach(qaItem => {
+          html += '<div class="qa-card">';
+          html += '  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">';
+          html += '    <div class="qa-meta">';
+          html += '      <span class="qa-meta-form">📄 ' + escapeHtml(qaItem.form) + '</span>';
+          html += '      <span>•</span>';
+          html += '      <span>📅 ' + escapeHtml(qaItem.date) + '</span>';
+          html += '    </div>';
+          html += '    <button class="btn-move-qa" onclick="moveQuestionThemePrompt(\'' + patientName.replace(/'/g, "\\'") + '\', ' + qaItem.formIdx + ', ' + qaItem.qaIdx + ', \'' + themeName.replace(/'/g, "\\'") + '\', event)" title="Mover esta pergunta para outro tema">⇄ Mover tema</button>';
+          html += '  </div>';
+          html += '  <div class="qa-question">' + highlightText(qaItem.pergunta, searchQuery) + '</div>';
+          html += '  <div class="qa-answer' + (qaItem.isNotFilled ? ' not-filled' : '') + '">' + highlightText(qaItem.resposta, searchQuery) + '</div>';
+          html += '</div>';
+        });
+
+        html += '  </div>';
+        html += '</div>';
+      });
+
+      html += '</div>';
+
+      if (queryLower && matchCount === 0) {
+        html = '<div style="padding: 40px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border);">';
+        html += '  <span style="font-size: 32px; display: block; margin-bottom: 8px;">🔍</span>';
+        html += '  <strong>Nenhuma resposta encontrada para "' + escapeHtml(searchQuery) + '".</strong><br/>';
+        html += '  <span>Tente buscar por termos sinônimos (ex: "água", "intestino", "energia", "sono", "suplemento").</span>';
+        html += '</div>';
+      }
+
+      return { html, matchCount };
+    }
+
+    function renderFormsViewHtml(patientName, forms, searchQuery) {
+      const queryLower = (searchQuery || '').toLowerCase();
+      let matchCount = 0;
+
+      if (!forms || forms.length === 0) {
+        return {
+          html: '<div style="padding: 32px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border); margin-top: 16px;"><strong>Nenhum formulário registrado para esta paciente.</strong></div>',
+          matchCount: 0
+        };
+      }
+
+      let html = '<div class="forms-feed-container">';
+
+      forms.forEach((f, fIdx) => {
+        const qas = f.perguntas_e_respostas || [];
+        const filteredQas = [];
+
+        qas.forEach((qa, qaIdx) => {
+          let resp = qa.resposta;
+          let isNotFilled = false;
+          if (resp === null || resp === undefined || resp === '') {
+            isNotFilled = true;
+            resp = qa.obrigatoria === false ? 'Não se aplica / Não relatado' : 'Não preenchido';
+          } else if (Array.isArray(resp)) {
+            resp = resp.join(', ');
+          } else {
+            resp = String(resp);
+          }
+
+          const isMatch = !queryLower || qa.pergunta.toLowerCase().includes(queryLower) || resp.toLowerCase().includes(queryLower);
+          if (isMatch && queryLower) matchCount++;
+
+          if (isMatch) {
+            filteredQas.push({ qa, resp, isNotFilled, qaIdx });
+          }
+        });
+
+        if (queryLower && filteredQas.length === 0) return;
+
+        const isOpen = (fIdx === forms.length - 1 || queryLower) ? ' open' : '';
+        const qCount = qas.length;
+
+        html += '<div class="form-submission-card' + isOpen + '">';
+        html += '  <div class="form-submission-header" onclick="this.parentElement.classList.toggle(\'open\')">';
+        html += '    <div>';
+        html += '      <div class="form-sub-title">';
+        html += '        <span class="form-sub-badge">#' + (fIdx + 1) + '</span>';
+        html += '        <span>📄 ' + escapeHtml(f.titulo_formulario) + '</span>';
+        html += '      </div>';
+        html += '      <div class="form-sub-meta">📅 Preenchido em <strong>' + escapeHtml(f.respondido_em) + '</strong> • ' + qCount + ' perguntas totais' + (queryLower ? ' (<strong>' + filteredQas.length + ' correspondências</strong>)' : '') + '</div>';
+        html += '    </div>';
+        html += '    <div style="display: flex; align-items: center; gap: 10px;">';
+        html += '      <button class="btn-action-secondary" onclick="deletePatientFormPrompt(\'' + patientName.replace(/'/g, "\\'") + '\', ' + fIdx + ', event)" title="Excluir este formulário individual" style="color: #c62828; font-size: 12px; padding: 4px 10px;">🗑️ Excluir formulário</button>';
+        html += '      <span style="font-size: 13px; color: var(--text-muted);">▼</span>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="form-submission-body">';
+        html += '    <div class="form-qa-grid">';
+
+        filteredQas.forEach((item) => {
+          html += '<div class="qa-card" style="margin-bottom: 0;">';
+          html += '  <div class="qa-meta" style="margin-bottom: 4px;">';
+          html += '    <span style="font-weight: 700; color: var(--primary);">Q' + String(item.qaIdx + 1).padStart(2, '0') + '</span>';
+          html += '    <span>•</span>';
+          html += '    <span>' + escapeHtml(item.qa.tema || detectQuestionTheme(item.qa.pergunta)) + '</span>';
+          html += '  </div>';
+          html += '  <div class="qa-question">' + highlightText(item.qa.pergunta, searchQuery) + '</div>';
+          html += '  <div class="qa-answer' + (item.isNotFilled ? ' not-filled' : '') + '">' + highlightText(item.resp, searchQuery) + '</div>';
+          html += '</div>';
+        });
+
+        html += '    </div>';
+        html += '  </div>';
+        html += '</div>';
+      });
+
+      html += '</div>';
+
+      if (queryLower && matchCount === 0) {
+        html = '<div style="padding: 40px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border);">';
+        html += '  <span style="font-size: 32px; display: block; margin-bottom: 8px;">🔍</span>';
+        html += '  <strong>Nenhum formulário possui respostas para "' + escapeHtml(searchQuery) + '".</strong>';
+        html += '</div>';
+      }
+
+      return { html, matchCount };
+    }
+
+    function renderEvolutionViewHtml(patientName, forms, searchQuery) {
+      const queryLower = (searchQuery || '').toLowerCase();
+      let matchCount = 0;
+
+      const indicators = [
+        {
+          id: 'adesao',
+          title: '🎯 Adesão, Dedicação & Avaliação da Semana',
+          keywords: ['dedicou', 'semana alimentar', 'vitória', 'adesão', 'dificuldade', 'define sua semana', 'resumo da semana']
+        },
+        {
+          id: 'intestino',
+          title: '🌿 Trânsito Intestinal & Saúde Digestiva',
+          keywords: ['intestino', 'evacua', 'banheiro diariamente', 'gases', 'fezes', 'estômago', 'refluxo']
+        },
+        {
+          id: 'agua',
+          title: '💧 Hidratação & Consumo de Água',
+          keywords: ['água', 'líquidos', 'hidratação', 'beber água']
+        },
+        {
+          id: 'energia',
+          title: '⚡ Disposição, Nível de Energia & Sono',
+          keywords: ['disposição', 'energia', 'cansaço', 'sono', 'acorda', 'sonolência']
+        },
+        {
+          id: 'fome_saciedade',
+          title: '🍽️ Fome, Saciedade & Desejo por Doces/Massas',
+          keywords: ['fome', 'apetite', 'doces', 'massas', 'saciedade', 'terminar suas refeições']
+        },
+        {
+          id: 'treinos',
+          title: '🏋️ Treinos & Atividade Física',
+          keywords: ['musculação', 'treino', 'exercício', 'atividade física', 'corrida', 'cardio']
+        },
+        {
+          id: 'antropometria',
+          title: '⚖️ Peso, Medidas & Percepção Corporal',
+          keywords: ['peso atual', 'altura', 'meta desejada', 'medidas', 'perda de peso', 'roupas']
+        }
+      ];
+
+      let html = '<div class="evolution-metrics-container">';
+      let indicatorsRendered = 0;
+
+      indicators.forEach(ind => {
+        const matchingNodes = [];
+
+        forms.forEach((f, fIdx) => {
+          (f.perguntas_e_respostas || []).forEach(qa => {
+            const pLower = qa.pergunta.toLowerCase();
+            const hit = ind.keywords.some(k => pLower.includes(k));
+            if (hit) {
+              let resp = qa.resposta;
+              if (resp === null || resp === undefined || resp === '') resp = 'Não relatado';
+              else if (Array.isArray(resp)) resp = resp.join(', ');
+              else resp = String(resp);
+
+              const isMatch = !queryLower || qa.pergunta.toLowerCase().includes(queryLower) || resp.toLowerCase().includes(queryLower) || ind.title.toLowerCase().includes(queryLower);
+              if (isMatch && queryLower) matchCount++;
+
+              if (isMatch) {
+                matchingNodes.push({
+                  formTitle: f.titulo_formulario,
+                  date: f.respondido_em,
+                  pergunta: qa.pergunta,
+                  resposta: resp,
+                  formIdx: fIdx
+                });
+              }
+            }
+          });
+        });
+
+        if (matchingNodes.length > 0) {
+          indicatorsRendered++;
+          html += '<div class="evo-metric-card">';
+          html += '  <div class="evo-metric-header">';
+          html += '    <div class="evo-metric-title">' + ind.title + '</div>';
+          html += '    <span class="acc-count">' + matchingNodes.length + (matchingNodes.length === 1 ? ' registro' : ' registros') + '</span>';
+          html += '  </div>';
+          html += '  <div class="evo-timeline">';
+
+          matchingNodes.forEach(node => {
+            html += '<div class="evo-node">';
+            html += '  <div class="evo-node-header">';
+            html += '    <span class="evo-node-form">📄 ' + escapeHtml(node.formTitle) + '</span>';
+            html += '    <span>•</span>';
+            html += '    <span>📅 ' + escapeHtml(node.date) + '</span>';
+            html += '  </div>';
+            html += '  <div class="evo-node-question">' + highlightText(node.pergunta, searchQuery) + '</div>';
+            html += '  <div class="evo-node-answer">' + highlightText(node.resposta, searchQuery) + '</div>';
+            html += '</div>';
+          });
+
+          html += '  </div>';
+          html += '</div>';
+        }
+      });
+
+      html += '</div>';
+
+      if (indicatorsRendered === 0) {
+        html = '<div style="padding: 40px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border);">';
+        html += '  <span style="font-size: 32px; display: block; margin-bottom: 8px;">📈</span>';
+        html += '  <strong>Nenhum indicador correspondente encontrado.</strong><br/>';
+        html += '  <span>Importe mais formulários ou remova o filtro de busca para visualizar a evolução completa.</span>';
+        html += '</div>';
+      }
+
+      return { html, matchCount };
+    }
+
+    function renderSummaryViewHtml(patientName, forms, synth) {
+      let html = '';
+
+      html += '<div class="baseline-grid">';
+      html += '  <div class="baseline-box">';
+      html += '    <div class="baseline-box-title">🎯 Objetivo Principal</div>';
+      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.objetivo) + '</div>';
+      html += '  </div>';
+      html += '  <div class="baseline-box">';
+      html += '    <div class="baseline-box-title">⚖️ Antropometria & Histórico</div>';
+      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.historico) + '</div>';
+      html += '  </div>';
+      html += '  <div class="baseline-box">';
+      html += '    <div class="baseline-box-title">⚠️ Queixas Iniciais</div>';
+      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.queixas) + '</div>';
+      html += '  </div>';
+      html += '  <div class="baseline-box">';
+      html += '    <div class="baseline-box-title">🕒 Rotina & Treinos</div>';
+      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.rotina) + '</div>';
+      html += '  </div>';
+      html += '</div>';
+
+      html += '<div class="evolution-card" style="margin-top: 14px;">';
+      html += '  <strong>📊 Evolução Clínica Sintetizada:</strong> ' + escapeHtml(synth.evolutionSummary || (synth.evolucao && synth.evolucao.sintese) || "Acompanhamento clínico regular.");
+      html += '</div>';
+
+      html += '<div class="dual-grid" style="margin-top: 14px;">';
+      html += '  <div class="box-vitorias">';
+      html += '    <h4>🏆 Vitórias & Conquistas Consolidadas</h4>';
+      html += '    <ul class="list-items">';
+      (synth.vitorias || []).forEach(v => { html += '<li>' + escapeHtml(v) + '</li>'; });
+      html += '    </ul>';
+      html += '  </div>';
+      html += '  <div class="box-atencao">';
+      html += '    <h4>🔸 Pontos de Atenção & Alertas Clínicos</h4>';
+      html += '    <ul class="list-items">';
+      (synth.atencao || []).forEach(a => { html += '<li>' + escapeHtml(a) + '</li>'; });
+      html += '    </ul>';
+      html += '  </div>';
+      html += '</div>';
+
+      if (synth.condutaSugerida && synth.condutaSugerida.trim() !== '') {
+        html += '<div class="conduct-card" style="margin-top: 14px;">';
+        html += '  <h4>💡 Conduta Nutricional Recomendada (Próximo Passo Clínico)</h4>';
+        html += '  <p>' + escapeHtml(synth.condutaSugerida) + '</p>';
+        html += '</div>';
+      }
+
+      let meds = 'Nenhum medicamento informado.';
+      let allergies = 'Nenhuma alergia relatada.';
+      let diseases = 'Nenhuma patologia diagnosticada.';
+
+      forms.forEach(f => {
+        (f.perguntas_e_respostas || []).forEach(qa => {
+          const pLower = qa.pergunta.toLowerCase();
+          if (pLower.includes('medicamento') || pLower.includes('suplemento')) {
+            if (qa.resposta && String(qa.resposta).trim()) meds = String(qa.resposta);
+          }
+          if (pLower.includes('alergia') || pLower.includes('intolerância')) {
+            if (qa.resposta && String(qa.resposta).trim()) allergies = String(qa.resposta);
+          }
+          if (pLower.includes('doença já diagnosticada') || pLower.includes('patologia')) {
+            if (qa.resposta && String(qa.resposta).trim()) diseases = String(qa.resposta);
+          }
+        });
+      });
+
+      html += '<div class="med-facts-grid">';
+      html += '  <div class="med-fact-card">';
+      html += '    <div class="med-fact-title">💊 Medicamentos & Suplementos</div>';
+      html += '    <div class="med-fact-body">' + escapeHtml(meds) + '</div>';
+      html += '  </div>';
+      html += '  <div class="med-fact-card">';
+      html += '    <div class="med-fact-title">🚫 Alergias & Intolerâncias</div>';
+      html += '    <div class="med-fact-body">' + escapeHtml(allergies) + '</div>';
+      html += '  </div>';
+      html += '  <div class="med-fact-card">';
+      html += '    <div class="med-fact-title">🩺 Doenças Diagnosticadas</div>';
+      html += '    <div class="med-fact-body">' + escapeHtml(diseases) + '</div>';
+      html += '  </div>';
+      html += '</div>';
+
+      return html;
+    }
+
     function renderPatientView(name) {
-      const forms = patientsData[name];
+      const forms = patientsData[name] || [];
       const synth = clinicalSyntheses[name] || {
         badge: "Em Acompanhamento",
         badgeColor: "#4a5d4e",
-        baseline: { objetivo: "Acompanhamento geral", historico: "Registrado no Nutrio", queixas: "Relatadas em formulário", rotina: "Rotina padrão" },
+        baseline: { objetivo: "Acompanhamento geral", historico: "Registrado no prontuário", queixas: "Relatadas em formulário", rotina: "Rotina padrão" },
         evolutionSummary: "Paciente em acompanhamento regular.",
         vitorias: ["Adesão ao plano"],
         atencao: ["Revisão periódica"],
@@ -1100,12 +1932,12 @@
 
       let html = '';
 
-      // 1. Cabeçalho do Prontuário da Paciente
+      const displayName = getPatientDisplayName(name);
       html += '<div class="patient-card">';
       html += '  <div class="patient-card-header">';
       html += '    <div class="patient-header-top">';
       html += '      <div>';
-      html += '        <div class="patient-name-title">' + name;
+      html += '        <div class="patient-name-title">' + displayName;
       html += '          <span class="status-badge" style="background-color:' + synth.badgeColor + ';">' + synth.badge + '</span>';
       html += '        </div>';
       html += '        <div class="patient-meta-info">';
@@ -1114,7 +1946,7 @@
       html += '      </div>';
       html += '      <div class="patient-header-actions">';
       html += '        <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
-      html += '          📄 + Importar Formulário para ' + name;
+      html += '          📄 + Importar Formulário para ' + displayName;
       html += '        </button>';
       html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir prontuário desta paciente" style="color: #c62828;">';
       html += '          🗑️ Excluir';
@@ -1122,16 +1954,15 @@
       html += '      </div>';
       html += '    </div>';
 
-      // Histórico de Formulários da Paciente (Chips informativos)
       if (forms.length > 0) {
         html += '    <div class="patient-forms-chips">';
-        html += '      <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Formulários nesta paciente:</span>';
+        html += '      <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Envios desta paciente:</span>';
         forms.forEach((f, fIdx) => {
           const qCount = f.total_perguntas || (f.perguntas_e_respostas ? f.perguntas_e_respostas.length : 0);
-          html += '      <div class="form-chip" title="' + f.titulo_formulario + '">';
+          html += '      <div class="form-chip" title="' + escapeHtml(f.titulo_formulario) + '">';
           html += '        <span class="form-chip-num">#' + (fIdx + 1) + '</span>';
-          html += '        <strong>' + f.titulo_formulario + '</strong>';
-          html += '        <span class="form-chip-date">(' + f.respondido_em + ' • ' + qCount + ' perguntas)</span>';
+          html += '        <strong>' + escapeHtml(f.titulo_formulario) + '</strong>';
+          html += '        <span class="form-chip-date">(' + escapeHtml(f.respondido_em) + ' • ' + qCount + ' q)</span>';
           html += '        <button class="btn-delete-chip" onclick="deletePatientFormPrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + fIdx + ', event)" title="Excluir este formulário (caso tenha importado o arquivo errado)">🗑️</button>';
           html += '      </div>';
         });
@@ -1139,146 +1970,32 @@
       }
       html += '  </div>';
 
-      // 2. Ficha Diagnóstica de Linha de Base (Pré-Consulta)
-      html += '  <div class="baseline-grid">';
-      html += '    <div class="baseline-box">';
-      html += '      <div class="baseline-box-title">🎯 Objetivo Principal</div>';
-      html += '      <div class="baseline-box-content">' + synth.baseline.objetivo + '</div>';
+      html += '  <div class="view-mode-bar">';
+      html += '    <div class="view-tabs-container">';
+      html += '      <button class="view-tab-btn' + (currentViewMode === 'themes' ? ' active' : '') + '" data-mode="themes" onclick="switchViewMode(\'themes\')">📂 Por Eixo Temático</button>';
+      html += '      <button class="view-tab-btn' + (currentViewMode === 'forms' ? ' active' : '') + '" data-mode="forms" onclick="switchViewMode(\'forms\')">📋 Por Formulário</button>';
+      html += '      <button class="view-tab-btn' + (currentViewMode === 'evolution' ? ' active' : '') + '" data-mode="evolution" onclick="switchViewMode(\'evolution\')">📈 Evolução Comparativa</button>';
+      html += '      <button class="view-tab-btn' + (currentViewMode === 'summary' ? ' active' : '') + '" data-mode="summary" onclick="switchViewMode(\'summary\')">🩺 Resumo Clínico</button>';
       html += '    </div>';
-      html += '    <div class="baseline-box">';
-      html += '      <div class="baseline-box-title">⚖️ Antropometria & Histórico</div>';
-      html += '      <div class="baseline-box-content">' + synth.baseline.historico + '</div>';
-      html += '    </div>';
-      html += '    <div class="baseline-box">';
-      html += '      <div class="baseline-box-title">⚠️ Queixas Iniciais</div>';
-      html += '      <div class="baseline-box-content">' + synth.baseline.queixas + '</div>';
-      html += '    </div>';
-      html += '    <div class="baseline-box">';
-      html += '      <div class="baseline-box-title">🕒 Rotina & Treinos</div>';
-      html += '      <div class="baseline-box-content">' + synth.baseline.rotina + '</div>';
-      html += '    </div>';
-      html += '  </div>';
-
-      // 3. Resumo da Evolução Analisada
-      html += '  <div class="evolution-card">';
-      html += '    <strong>📊 Evolução Clínica:</strong> ' + (synth.evolutionSummary || (synth.evolucao && synth.evolucao.sintese) || "Acompanhamento clínico regular.");
-      html += '  </div>';
-
-      // 4. Vitórias vs Pontos de Atenção
-      html += '  <div class="dual-grid">';
-      html += '    <div class="box-vitorias">';
-      html += '      <h4>🏆 Vitórias & Conquistas Consolidadas</h4>';
-      html += '      <ul class="list-items">';
-      synth.vitorias.forEach(v => { html += '<li>' + v + '</li>'; });
-      html += '      </ul>';
-      html += '    </div>';
-
-      html += '    <div class="box-atencao">';
-      html += '      <h4>🔸 Pontos de Atenção & Ajustes</h4>';
-      html += '      <ul class="list-items">';
-      synth.atencao.forEach(a => { html += '<li>' + a + '</li>'; });
-      html += '      </ul>';
+      html += '    <div class="view-actions-right">';
+      html += '      <div class="search-box-wrapper">';
+      html += '        <span class="search-icon-left">🔍</span>';
+      html += '        <input type="text" id="globalSearchInput" value="' + escapeHtml(globalSearchQuery) + '" placeholder="Buscar nas respostas (ex: intestino, creatina, sono...)" oninput="handleGlobalSearch(this.value)" />';
+      html += '        <button id="searchClearBtn" class="search-clear-btn" style="' + (globalSearchQuery ? 'display:block;' : '') + '" onclick="clearGlobalSearch()" title="Limpar busca">✕</button>';
+      html += '      </div>';
+      html += '      <span id="searchResultsBadge" class="search-results-badge" style="display: none;"></span>';
+      html += '      <button id="btnOrganizeToggle" class="btn-organize-toggle' + (isOrganizeMode ? ' active' : '') + '" style="' + (currentViewMode === 'themes' ? 'display:inline-flex;' : 'display:none;') + '" onclick="toggleOrganizeMode()" title="Ativar para renomear eixos ou mover perguntas">';
+      html += isOrganizeMode ? '✅ Concluir Organização' : '🛠️ Organizar Eixos';
+      html += '      </button>';
+      html += '      <button class="btn-new-theme organize-only" onclick="createNewThemePrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Criar um novo eixo temático personalizado">➕ Novo Eixo</button>';
       html += '    </div>';
       html += '  </div>';
 
-      // 5. Conduta Sugerida (Ocultada se vazia, ex: paciente demonstrativa)
-      if (synth.condutaSugerida && synth.condutaSugerida.trim() !== '') {
-        html += '  <div class="conduct-card">';
-        html += '    <h4>💡 Conduta Nutricional Recomendada (Próximo Passo Clínico)</h4>';
-        html += '    <p>' + synth.condutaSugerida + '</p>';
-        html += '  </div>';
-      }
-
-      // 6. Eixos Temáticos Flexíveis & Dinâmicos
-      const dynamicThemes = {};
-      forms.forEach((f, formIdx) => {
-        (f.perguntas_e_respostas || []).forEach((qa, qaIdx) => {
-          const theme = qa.tema || detectQuestionTheme(qa.pergunta);
-          if (!dynamicThemes[theme]) dynamicThemes[theme] = [];
-          dynamicThemes[theme].push({
-            form: f.titulo_formulario,
-            date: f.respondido_em,
-            pergunta: qa.pergunta,
-            resposta: qa.resposta,
-            obrigatoria: qa.obrigatoria,
-            formIdx: formIdx,
-            qaIdx: qaIdx
-          });
-        });
-      });
-
-      html += '  <div class="functional-area-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 24px;">';
-      html += '    <div>';
-      html += '      <div class="functional-title">📂 Respostas dos Formulários por Tema</div>';
-      html += '      <div style="font-size: 12.5px; color: var(--text-muted);">Eixos temáticos flexíveis e adaptáveis. Você pode renomear temas ou mover perguntas livremente.</div>';
-      html += '    </div>';
-      html += '    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">';
-      html += '      <input type="text" id="qaFilterInput" class="filter-search-box" placeholder="🔍 Buscar perguntas ou respostas..." oninput="filterAnswers(this.value)" />';
-      html += '      <button class="btn-new-theme" onclick="createNewThemePrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Criar um novo eixo temático personalizado">➕ Novo Eixo</button>';
-      html += '    </div>';
-      html += '  </div>';
-
-      html += '  <div id="accordionGroup">';
-      const themeEntries = Object.entries(dynamicThemes);
-
-      if (themeEntries.length === 0) {
-        html += '<div style="padding: 32px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border); margin-top: 16px;">';
-        html += '  <span style="font-size: 32px; display: block; margin-bottom: 8px;">📄</span>';
-        html += '  <strong>Nenhum formulário cadastrado ainda.</strong><br/>';
-        html += '  <span>Clique no botão verde <strong>"📄 + Importar Formulário para ' + name.replace(/"/g, '&quot;') + '"</strong> no topo do prontuário para carregar o primeiro formulário desta paciente.</span>';
-        html += '</div>';
-      } else {
-        themeEntries.forEach(([themeName, items], idx) => {
-          const isOpen = idx === 0 || idx === 1 ? ' open' : '';
-          const icon = getThemeIcon(themeName);
-
-          html += '<div class="accordion-item' + isOpen + '" data-cat="' + themeName.replace(/"/g, '&quot;') + '">';
-          html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
-          html += '    <div class="acc-title">' + icon + ' <span>' + themeName + '</span> <span class="acc-count">' + items.length + (items.length === 1 ? ' resposta' : ' respostas') + '</span></div>';
-          html += '    <div class="theme-header-right">';
-          html += '      <button class="btn-theme-action" onclick="renameThemePrompt(\'' + name.replace(/'/g, "\\'") + '\', \'' + themeName.replace(/'/g, "\\'") + '\', event)" title="Renomear este tema">✏️ Renomear</button>';
-          html += '      <div class="acc-icon">▼</div>';
-          html += '    </div>';
-          html += '  </div>';
-          html += '  <div class="accordion-body">';
-
-          items.forEach(qaItem => {
-            let resp = qaItem.resposta;
-            let isNotFilled = false;
-
-            if (resp === null || resp === undefined || resp === '') {
-              isNotFilled = true;
-              resp = qaItem.obrigatoria === false ? 'Não se aplica / Não relatado (pergunta condicional)' : 'Não preenchido';
-            } else if (Array.isArray(resp)) {
-              resp = resp.join(', ');
-            } else {
-              resp = String(resp);
-            }
-
-            const searchString = (qaItem.pergunta + ' ' + resp).toLowerCase();
-
-            html += '<div class="qa-card" data-text="' + searchString.replace(/"/g, '&quot;') + '">';
-            html += '  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">';
-            html += '    <div class="qa-meta">';
-            html += '      <span class="qa-meta-form">📄 ' + qaItem.form + '</span>';
-            html += '      <span>•</span>';
-            html += '      <span>📅 ' + qaItem.date + '</span>';
-            html += '    </div>';
-            html += '    <button class="btn-move-qa" onclick="moveQuestionThemePrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + qaItem.formIdx + ', ' + qaItem.qaIdx + ', \'' + themeName.replace(/'/g, "\\'") + '\', event)" title="Mover esta pergunta para outro tema">📁 Mover tema</button>';
-            html += '  </div>';
-            html += '  <div class="qa-question">' + qaItem.pergunta + '</div>';
-            html += '  <div class="qa-answer' + (isNotFilled ? ' not-filled' : '') + '">' + resp + '</div>';
-            html += '</div>';
-          });
-
-          html += '  </div>';
-          html += '</div>';
-        });
-      }
-      html += '  </div>';
+      html += '  <div id="activeViewContent" class="' + (isOrganizeMode ? 'organize-active' : '') + '"></div>';
       html += '</div>';
 
       document.getElementById('mainContent').innerHTML = html;
+      renderActiveView();
     }
 
     function toggleAccordion(headerEl) {

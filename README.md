@@ -53,7 +53,7 @@ A proteção de dados sensíveis de saúde é a prioridade número um da arquite
 * 🛡️ **Zero Servidores Externos (100% Client-Side):** Todo o processamento de leitura de PDFs, extração de texto e estruturação de dados ocorre estritamente dentro da memória do navegador do próprio computador da nutricionista.
 * 🚫 **Nenhum Dado Sai da Sua Máquina:** Nenhum nome de paciente, resposta de questionário ou informação clínica trafega pela internet ou é salvo em nuvem de terceiros.
 * 💾 **Persistência Local Automática:** Os dados ficam salvos de forma resiliente no `localStorage` / `indexedDB` do navegador do computador de uso.
-* 🔒 **Opção de Sigilo por Sigla:** Possibilidade de mascarar o nome da paciente usando apenas suas iniciais (ex: *C.F.* ou *T.P.F.*) com um único clique.
+* 🔒 **Controle Discreto de Sigilo (Cadeado 🔒 / 🔓):** Alternância instantânea ao lado da paciente ativa. Permite alternar entre o modo protegido por iniciais (*C.R.S.F.*, *T.B.L.*) e nomes completos, garantindo privacidade durante atendimentos presenciais e compartilhamento de tela (LGPD).
 
 ---
 
@@ -67,9 +67,7 @@ Em questionários gerados por sistemas como o **Nutrio**, as perguntas e as resp
 * Pareia cada bloco de pergunta com sua respectiva resposta através das coordenadas verticais ($Y$), evitando que textos se misturem horizontalmente.
 * Realiza a **fusão inteligente de quebras de página**: perguntas que iniciam no final de uma página e terminam no início da seguinte são recompostas perfeitamente.
 
-### 2. Segmentação de Texto Contínuo (Orientações e Condutas)
-Para documentos corridos de orientações nutricionais e metas (como planos alimentares e relatórios de evolução):
-* O algoritmo detecta tópicos, horários de refeição, listas e cabeçalhos em maiúsculas, dividindo as orientações em blocos clínicos objetivos.
+NaN
 
 ---
 
@@ -118,15 +116,24 @@ Se desejar executar localmente no computador, sem necessidade de internet:
 4. Arraste ou selecione o arquivo PDF do formulário.
 5. O painel apresenta a prévia dos tópicos extraídos. Clique em **`✅ Salvar no Prontuário`**.
 
-### 2. Acompanhamento Contínuo de Consultas e Retornos
-* A cada nova consulta ou check-in quinzenal, basta abrir o prontuário da paciente e importar o novo formulário.
-* Os formulários ficam ordenados em chips de data (`Consulta #1`, `Consulta #2`...), permitindo alternar entre atendimentos e comparar a evolução das respostas ao longo dos meses.
+### 2. Navegação em 4 Abas Clínicas Especializadas
+O prontuário da paciente organiza as informações em 4 visões com propósitos complementares:
+1. 🩺 **Resumo Clínico (Visão Executiva Aberta):** Apresenta o panorama clínico integral da paciente na tela (Ponto de Partida/Baseline, Evolução, Vitórias, Alertas e Conduta) sem caixas colapsadas, permitindo leitura imediata.
+2. 🎯 **Por Eixo Temático (Visual Limpo e Organizado):** Agrupa o histórico nos 7 pilares clínicos com seções **recolhidas por padrão** para manter a tela limpa; basta clicar no eixo desejado para expandir.
+3. 📋 **Por Formulário (Histórico Cronológico):** Permite navegar atendimento a atendimento pelos chips de data (*#1*, *#2*...), com tópicos também **recolhidos por padrão** para consulta pontual.
+4. 📈 **Evolução Comparativa (Linha do Tempo):** Exibe as respostas lado a lado ao longo dos meses, facilitando a visualização de progressos e adesão.
 
-### 3. Exclusão de Formulários Enviados por Engano
+### 3. Barra de Ações Rápidas no Cabeçalho
+Posicionada estrategicamente logo abaixo do seletor da paciente ativa:
+* 📖 **Instruções:** Manual interativo completo acessível em qualquer tela.
+* 💾 **Dados & Backup ▾:** Exportação e restauração de dados em formato JSON em segundos.
+* 🖨️ **Imprimir / PDF:** Exportação limpa e sem ruídos para impressão ou arquivo digital.
+
+### 4. Exclusão de Formulários Enviados por Engano
 * Se você enviar um arquivo PDF incorreto ou em duplicidade, clique no ícone da lixeira vermelha (**`🗑️`**) localizado no próprio chip do formulário na linha do tempo.
 * O sistema solicitará confirmação e removerá apenas aquele formulário específico, preservando a paciente e todos os demais registros.
 
-### 4. Sistema de Backup Portátil (JSON)
+### 5. Sistema de Backup Portátil (JSON)
 O arquivo de backup é a garantia de portabilidade e proteção total dos seus dados:
 * **Exportar Backup:** No menu superior, clique em **`💾 Dados & Backup ▾`** ➔ **`💾 Exportar Backup (JSON)`**. Um arquivo leve contendo todos os prontuários será baixado. Guarde esse arquivo no seu Google Drive, pendrive ou e-mail de tempos em tempos.
 * **Restaurar Backup:** Ao formatar o computador ou mudar de notebook, abra o painel, clique em **`📥 Restaurar Backup (JSON)`** e selecione seu arquivo. Todo o histórico de todas as pacientes será restaurado no mesmo segundo.
@@ -152,7 +159,8 @@ painel-nutricional/
 ├── README.md             # Documentação técnica e guia do usuário
 └── lib/
     ├── pdf.min.js        # Biblioteca PDF.js (Mozilla) embutida localmente
-    └── pdf.worker.min.js # Web Worker para parsing assíncrono sem travar a interface
+    ├── pdf.worker.js     # Worker offline para protocolo local file:// e compatibilidade
+    └── pdf.worker.min.js # Web Worker assíncrono para parsing em alta performance
 ```
 
 * **Zero Build Steps:** Funciona nativamente sem exigir `npm install`, Webpack ou servidores Node.js.

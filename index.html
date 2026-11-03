@@ -1345,6 +1345,57 @@
       }
     }
 
+    /* Controles do Cabeçalho: Seletor no Topo e Ações Abaixo */
+    .header-patient-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    .header-quick-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #fbfaf7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .quick-actions-divider {
+      width: 1px;
+      height: 14px;
+      background: #e2dfd7;
+      margin: 0 3px;
+    }
+    .btn-action-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-action-ghost:hover {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 900px) {
+      .header-patient-controls {
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+
     .btn-privacy-toggle {
       display: inline-flex;
       align-items: center;
@@ -1374,6 +1425,34 @@
     .btn-privacy-toggle.inactive:hover {
       background: #ffe0b2;
       transform: translateY(-1px);
+    }
+
+    /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
+    .summary-dashboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .summary-section-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .summary-block-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-block-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
     }
 
     /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
@@ -4173,96 +4252,105 @@ initControls();
 
   <!-- Modal de Instruções de Uso & Guia do JSON -->
   <div class="modal-overlay" id="instructionsModalOverlay" onclick="closeModalOnBg(event, 'instructionsModalOverlay')">
-    <div class="modal-box" style="max-width: 680px;">
+    <div class="modal-box" style="max-width: 720px;">
       <div class="modal-header">
         <h3>📖 Como Usar o Painel Nutricional</h3>
         <button class="modal-close" onclick="closeInstructionsModal()">&times;</button>
       </div>
-      <div class="modal-body" style="line-height: 1.7; font-size: 14px;">
+      <div class="modal-body" style="line-height: 1.7; font-size: 14px; max-height: 75vh; overflow-y: auto; padding-right: 8px;">
         
-        <div style="background: #faf5ee; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 14px;">
-          <h4 style="color: var(--primary-dark); font-size: 15px; margin-bottom: 6px;">💡 Bem-vinda ao seu Painel de Prontuários!</h4>
-          <p style="color: var(--text); margin: 0;">Este aplicativo foi criado para simplificar e organizar o acompanhamento das suas pacientes. Ele reúne respostas de questionários, avaliações e relatórios em uma tela clínica dividida nos temas identificados no formulário.</p>
+        <div style="background: #faf5ee; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 16px;">
+          <h4 style="color: var(--primary-dark); font-size: 15px; margin-bottom: 6px;">💡 Bem-vinda ao seu Painel de Prontuários Clínicos!</h4>
+          <p style="color: var(--text); margin: 0;">Esta plataforma foi concebida sob medida para simplificar e qualificar a rotina de consultas nutricionais. Ela reúne questionários de pré-consulta, anamneses, check-ins periódicos e condutas em um prontuário ágil, seguro e integrado.</p>
         </div>
 
-        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-          📄 1. Como Cadastrar Pacientes e Importar Formulários em PDF
+        <!-- 1. Navegação Clínica em 4 Abas -->
+        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          🧭 1. Estrutura de Navegação do Prontuário (4 Abas Especializadas)
         </h4>
-        <p style="margin-bottom: 8px;">Você não precisa redigitar nada manualmente. Para manter a organização clínica, cada formulário é importado diretamente para a sua respectiva paciente:</p>
-        
-        <div style="background: #ffffff; border: 1.5px solid #d4e3d7; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
-          <strong style="color: #235928; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 14px;">
-            ➕ Para Cadastrar uma Nova Paciente:
-          </strong>
-          <ol style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
-            <li style="margin-bottom: 6px;">No topo da tela, clique no botão <strong><code>➕ Nova Paciente</code></strong> (ao lado de <em>Paciente Ativa:</em>).</li>
-            <li style="margin-bottom: 6px;">Digite o nome da paciente (ex: <em>Camila Santos</em> ou use iniciais como <em>C.S.</em>) e confirme.</li>
-            <li style="margin-bottom: 6px;">O prontuário da paciente será aberto. Clique no botão verde <strong><code>📄 + Importar Formulário para Camila Santos</code></strong> no topo do cartão dela.</li>
-            <li style="margin-bottom: 6px;">Arraste ou selecione o PDF do formulário (Nutrio, Google Forms, Anamnese, Check-in semanal, etc.).</li>
-            <li>O painel lerá todas as páginas, organizará as respostas nos eixos clínicos de forma flexível e salvará o prontuário na hora!</li>
-          </ol>
-        </div>
-
-        <div style="background: #ffffff; border: 1.5px solid #e2ddd3; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
-          <strong style="color: var(--primary-dark); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 14px;">
-            🔄 Para Adicionar Novos Formulários / Retornos da Mesma Paciente:
-          </strong>
-          <ol style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
-            <li style="margin-bottom: 6px;">Selecione a paciente desejada no menu <strong><code>Paciente Ativa:</code></strong>.</li>
-            <li style="margin-bottom: 6px;">Clique no botão verde <strong><code>📄 + Importar Formulário para [Nome]</code></strong>.</li>
-            <li>O novo formulário será anexado ao histórico dela como uma nova consulta na linha do tempo (com identificadores <em>#1</em>, <em>#2</em>...), permitindo comparar a evolução dela ao longo do tratamento!</li>
-          </ol>
-        </div>
-
-        <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
-          <strong style="color: var(--primary-dark); display: block; margin-bottom: 4px; font-size: 13.5px;">🔒 Sigilo e Exclusão:</strong>
-          <ul style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
-            <li style="margin-bottom: 4px;"><strong>Botão <code>🔒 Sigla</code>:</strong> Clique para alternar entre o nome completo e as iniciais da paciente (ex: <em>C.S.</em>) a qualquer momento para total privacidade (LGPD).</li>
-            <li style="margin-bottom: 4px;"><strong>Apagar um Formulário Específico (Upload Errado):</strong> Se você enviou um PDF errado ou duplicado, basta clicar no ícone <code>🗑️</code> ao lado daquele formulário específico (ex: <em>#2</em>) na linha de formulários da paciente. Isso remove apenas aquele PDF, sem apagar a paciente!</li>
-            <li><strong>Excluir Paciente Completa:</strong> Use o botão vermelho <code>🗑️ Excluir</code> no topo do prontuário caso queira remover todo o registro da paciente com confirmação de segurança.</li>
-          </ul>
-        </div>
-
-        <div style="background: #eef4f0; border: 1.5px solid #cce0d1; padding: 16px 18px; border-radius: 12px; margin: 16px 0;">
-          <h4 style="color: #235928; font-size: 15.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-            💾 2. O que é o arquivo "JSON de Backup"?
-          </h4>
-          <p style="margin-bottom: 8px;">
-            Muitas pessoas não sabem o que é um arquivo <code>.json</code> e isso é totalmente normal! A ideia por trás dele é muito simples:
-          </p>
-          <div style="background: #ffffff; border-radius: 8px; padding: 12px 14px; border: 1px dashed #2e7d32; margin-bottom: 10px;">
-            <p style="margin: 0; color: #1e4620; font-weight: 600;">
-              📦 Pense no arquivo JSON como uma "cópia de segurança digital" ou uma "pastinha compacta" que guarda todos os prontuários de todas as suas pacientes em um único arquivinho leve.
-            </p>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid #2e7d32; border-radius: 8px; padding: 10px 14px;">
+            <strong style="color: #2e7d32; font-size: 14px;">🩺 1º Resumo Clínico (Visão Executiva Aberta):</strong>
+            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Apresenta o panorama completo da paciente aberto na tela (sem caixas colapsadas), incluindo Ponto de Partida (Baseline), Resumo da Evolução, Vitórias Conquistadas, Pontos de Atenção e Conduta Nutricional recomendada.</p>
           </div>
-          <p style="margin-bottom: 8px; color: #b33a00; font-weight: 600;">
-            ⚠️ Você não precisa abrir esse arquivo no computador nem entender o que está escrito dentro dele!
+          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid var(--primary); border-radius: 8px; padding: 10px 14px;">
+            <strong style="color: var(--primary); font-size: 14px;">🎯 2º Por Eixo Temático (Visual Limpo e Organizado):</strong>
+            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Classifica as respostas nos 7 pilares clínicos (Rotina, Digestão, Apetite, etc.). Para não poluir a tela, as seções iniciam <strong>recolhidas por padrão</strong>; basta clicar no tema desejado para visualizá-lo.</p>
+          </div>
+          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid var(--accent); border-radius: 8px; padding: 10px 14px;">
+            <strong style="color: var(--accent); font-size: 14px;">📋 3º Por Formulário (Histórico Cronológico de Consultas):</strong>
+            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Permite navegar consulta a consulta pelos chips de data (<em>#1</em>, <em>#2</em>...). Os tópicos também iniciam <strong>recolhidos por padrão</strong>, permitindo abrir pontualmente a dúvida que você precisa checar no atendimento.</p>
+          </div>
+          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid #1565c0; border-radius: 8px; padding: 10px 14px;">
+            <strong style="color: #1565c0; font-size: 14px;">📈 4º Evolução Comparativa (Linha do Tempo Lado a Lado):</strong>
+            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Alinha as respostas de múltiplos formulários lado a lado, facilitando a constatação de avanços físicos, melhora de sintomas intestinais e consolidação de hábitos.</p>
+          </div>
+        </div>
+
+        <!-- 2. Controle de Sigilo (Cadeado) -->
+        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          🔒 2. Controle Discreto de Sigilo (Cadeado 🔒 / 🔓)
+        </h4>
+        <div style="background: #ffffff; border: 1.5px solid #cce0d1; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+          <p style="margin: 0 0 6px 0; color: var(--text);">
+            Ao lado do seletor da paciente ativa, você dispõe do botão em forma de cadeado (<strong><code>🔒</code></strong> ou <strong><code>🔓</code></strong>):
           </p>
-          <p style="margin-bottom: 6px;">Ele serve apenas para duas ações práticas no menu <code>💾 Dados & Backup ▾</code>:</p>
-          <ul style="margin-left: 20px;">
-            <li style="margin-bottom: 6px;"><strong>Para Guardar uma Cópia Segura (Exportar Backup):</strong> De tempos em tempos, clique em <code>💾 Exportar Backup (JSON)</code>. O arquivo será baixado para a sua pasta de Downloads. Você pode guardar uma cópia no seu Google Drive, e-mail ou pendrive.</li>
-            <li><strong>Para Recuperar ou Mudar de Computador (Restaurar Backup):</strong> Se você for usar o painel em outro computador (ex: no consultório), trocar de notebook ou formatar a máquina, basta abrir o link, ir em <code>📥 Restaurar Backup (JSON)</code> e escolher o seu arquivo salvo. Todas as suas pacientes voltam no mesmo segundo!</li>
+          <ul style="margin-left: 20px; margin-bottom: 0;">
+            <li style="margin-bottom: 4px;"><strong>Cadeado Fechado (<code>🔒</code>):</strong> Modo Sigilo Ativado. Os nomes das pacientes são exibidos estritamente pelas suas <strong>iniciais</strong> (ex: <em>C.R.S.F.</em>, <em>T.B.L.</em>, <em>L.B.F.</em>). Perfeito para atendimentos clínicos presenciais ou compartilhamento de tela (LGPD).</li>
+            <li><strong>Cadeado Aberto (<code>🔓</code>):</strong> Modo Aberto. Exibe os nomes completos para conferência administrativa rápida.</li>
           </ul>
         </div>
 
-        <div style="background: #fdfaf3; border: 1.5px solid #e8dec8; padding: 14px 16px; border-radius: 10px; margin: 16px 0;">
-          <h4 style="color: #8c6226; font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            🎨 3. Flexibilidade Total nos Eixos Temáticos
+        <!-- 3. Ações Rápidas no Cabeçalho -->
+        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          ⚡ 3. Barra de Ações Rápidas do Cabeçalho
+        </h4>
+        <p style="margin-bottom: 8px;">Diretamente abaixo da paciente ativa, você encontra a barra de utilitários rápidos:</p>
+        <div style="background: #fbfaf7; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
+          <ul style="margin-left: 20px; margin-bottom: 0;">
+            <li style="margin-bottom: 4px;"><strong>📖 Instruções:</strong> Abre este guia interativo de uso a qualquer momento.</li>
+            <li style="margin-bottom: 4px;"><strong>💾 Dados & Backup ▾:</strong> Permite exportar o prontuário completo em formato JSON ou restaurá-lo em segundos.</li>
+            <li><strong>🖨️ Imprimir / PDF:</strong> Gera uma versão limpa para impressão ou salvamento em PDF para enviar à paciente ou arquivar.</li>
+          </ul>
+        </div>
+
+        <!-- 4. Upload de Documentos Inteligente -->
+        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          📥 4. Como Importar Formulários em PDF (Nutrio, Google Forms, Check-ins)
+        </h4>
+        <div style="background: #ffffff; border: 1.5px solid #d4e3d7; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+          <ol style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
+            <li style="margin-bottom: 6px;">Selecione a paciente desejada no menu superior (ou clique em <strong><code>➕ Nova Paciente</code></strong> caso seja o primeiro atendimento).</li>
+            <li style="margin-bottom: 6px;">Clique no botão verde <strong><code>📄 + Importar Formulário</code></strong> no cartão da paciente.</li>
+            <li style="margin-bottom: 6px;">Clique na caixa pontilhada ou <strong>arraste e solte</strong> o PDF do questionário:
+              <ul style="margin-left: 20px; margin-top: 4px;">
+                <li><strong>Nutrio:</strong> Lê perfeitamente as tabelas de 2 colunas com pareamento automático de perguntas e respostas.</li>
+                <li><strong>Google Forms:</strong> Identifica as perguntas com asteriscos obrigatórios (<code>*</code>), elimina links longos e detecta o nome da respondente.</li>
+                <li><strong>Anamneses e Check-ins:</strong> Segmenta tópicos clínicos e horários de refeição de forma inteligente.</li>
+              </ul>
+            </li>
+            <li style="margin-top: 6px;">Confira a prévia e clique em <strong><code>✅ Salvar no Prontuário</code></strong>. O registro é anexado imediatamente!</li>
+          </ol>
+        </div>
+
+        <!-- 5. Backup em JSON -->
+        <div style="background: #eef4f0; border: 1.5px solid #cce0d1; padding: 14px 16px; border-radius: 10px; margin: 16px 0;">
+          <h4 style="color: #235928; font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            💾 5. O que é o arquivo "JSON de Backup"?
           </h4>
           <p style="margin: 0 0 6px 0; color: var(--text);">
-            Como existem formulários de todos os tipos (clínicos, esportivos, exames, pediátricos, check-ins semanais, etc.), o painel é flexível e adaptável:
+            O arquivo <code>.json</code> funciona como uma cópia de segurança digital completa, leve e segura. Você não precisa abri-lo:
           </p>
-          <ul style="margin-left: 20px; color: var(--text);">
-            <li><strong>Temas Automáticos ou Personalizados:</strong> O painel agrupa as perguntas pelos temas detectados no seu formulário.</li>
-            <li><strong>Renomear Temas:</strong> Clique no botão <code>✏️ Renomear</code> no cabeçalho de qualquer tema para alterar o título como preferir.</li>
-            <li><strong>Mover Perguntas:</strong> Em qualquer pergunta, clique em <code>📁 Mover tema</code> para transferi-la de eixo temático a qualquer momento.</li>
+          <ul style="margin-left: 20px; margin-bottom: 0;">
+            <li style="margin-bottom: 4px;"><strong>Exportar Backup:</strong> Salve uma cópia em seu Google Drive ou pendrive com regularidade através de <code>💾 Dados & Backup ▾ ➔ Exportar Backup (JSON)</code>.</li>
+            <li><strong>Restaurar Backup:</strong> Ao trocar de notebook ou formatar o computador, acesse <code>📥 Restaurar Backup (JSON)</code> para recarregar todos os prontuários e retornos no mesmo instante.</li>
           </ul>
         </div>
 
         <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-          🔒 4. Segurança & Sigilo Total (LGPD)
+          🛡️ 6. Privacidade Absoluta (LGPD)
         </h4>
-        <p style="margin: 0;">Nenhum dado das suas pacientes vai para a nuvem de terceiros ou servidores externos. Todas as informações e PDFs são lidos e guardados exclusivamente na memória do navegador do seu computador.</p>
+        <p style="margin: 0;">Nenhum dado ou documento sai do seu computador. Todo o processamento de leitura de PDF e armazenamento ocorre estritamente dentro da memória local do seu navegador, em conformidade com as diretrizes mais rigorosas de sigilo em saúde.</p>
 
       </div>
       <div class="modal-footer">
@@ -4270,7 +4358,6 @@ initControls();
       </div>
     </div>
   </div>
-
 
   <footer class="app-footer">
     <p>Desenvolvido por <strong>Thaý Carvalho - Núcleo Vida Nutrição</strong></p>

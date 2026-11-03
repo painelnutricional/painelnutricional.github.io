@@ -140,13 +140,19 @@ O arquivo de backup é a garantia de portabilidade e proteção total dos seus d
 
 ---
 
-## 🎨 Temas e Conforto Visual (WCAG)
+## 🎨 Estúdios de Design Visual (Modo: 1 / 2)
 
-O painel oferece **três paletas visuais completas** com alternância instantânea no canto superior direito:
+O painel foi desenhado para superar interfaces genéricas e oferecer uma experiência visual autêntica de consultório de alto padrão, permitindo alternar instantaneamente entre dois modos através do seletor **`Modo: 1 / 2`** no cabeçalho:
 
-* 🌿 **Padrão (Verde Clínico):** Foco, clareza e contraste balanceado para consultório.
-* 🍂 **Boho (Tons Terrosos & Acolhedores):** Estética humanizada e suave.
-* 🌙 **Dark Mode (Modo Noturno):** Alto contraste sem ofuscamento, ideal para sessões prolongadas de análise de relatórios à noite.
+* 🧘 **Modo 1: Quiet Luxury (Padrão do Sistema):**
+  - **Atmosfera:** Serenidade, respiro visual e sofisticação médica inspirada na estética de bem-estar (*Aesop, Oura Ring e spas clínicos de longevidade*).
+  - **Tipografia:** Serif clássica contemporânea (*Cormorant Garamond*) para títulos, nomes e citações de pacientes, combinada com *Outfit* para métricas e leitura limpa.
+  - **Paleta:** Fundo em tom pedra calcária/areia suave (`#F6F4EE`), cartões flutuantes em marfim perolado (`#FFFFFF` / `#FCFBF8`) e acentos refinados em eucalipto e argila.
+
+* ⚡ **Modo 2: Linear Health:**
+  - **Atmosfera:** Precisão cirúrgica, alta tecnologia e minimalismo suíço (*inspirado em Linear, Vercel e Apple*).
+  - **Tipografia:** Sem serifa geométrica de alta definição (*Inter Display*), com espaçamento refinado (*tracking -0.02em*).
+  - **Paleta:** Off-white contemporâneo (`#F8F9FA`), bordas de precisão em 1px cinza suave e micro-acentos em verde esmeralda clínico (`#10B981`).
 
 ---
 

@@ -1198,7 +1198,7 @@
           ➕ Nova Paciente
         </button>
         <button id="btnPrivacyToggle" class="btn-privacy-toggle active" onclick="togglePrivacyMode()" title="Alternar entre modo com sigilo (iniciais) e sem sigilo (nomes completos)">
-          🔒 Sigilo: ATIVADO
+          🔒 Sigilo: ATIVADO (Iniciais)
         </button>
       </div>
     </div>
@@ -1259,13 +1259,13 @@
       const btn = document.getElementById("btnPrivacyToggle");
       if (!btn) return;
       if (privacyMode) {
-        btn.innerHTML = "🔒 Sigilo: ATIVADO";
+        btn.innerHTML = "🔒 Sigilo: ATIVADO (Iniciais)";
         btn.className = "btn-privacy-toggle active";
-        btn.title = "Modo com Sigilo Ativo (exibindo siglas/iniciais). Clique para desativar e ver os nomes completos.";
+        btn.title = "Modo Sigilo Ativado (exibindo apenas siglas/iniciais). Clique para exibir os nomes completos.";
       } else {
-        btn.innerHTML = "🔓 Sigilo: DESATIVADO";
+        btn.innerHTML = "🔓 Sigilo: DESATIVADO (Nomes Reais)";
         btn.className = "btn-privacy-toggle inactive";
-        btn.title = "Modo sem Sigilo (exibindo nomes completos). Clique para ativar o sigilo.";
+        btn.title = "Modo Sigilo Desativado (exibindo nomes completos). Clique para proteger e exibir siglas.";
       }
     }
 
@@ -1275,24 +1275,33 @@
       updatePrivacyButtonUI();
       initControls();
       switchPatient(currentPatient);
-      showToast(privacyMode ? "Modo Sigilo Ativado (siglas)" : "Modo Sigilo Desativado (nomes completos)", "🔒");
+      showToast(privacyMode ? "🔒 Modo Sigilo Ativado (iniciais)" : "🔓 Modo Sigilo Desativado (nomes completos)", "🔒");
     }
-    
+
     function getPatientDisplayName(key) {
       if (!key) return "";
       const map = window.patientFullNameMap || {};
       if (privacyMode) {
+        // Se a chave já é a sigla no mapa
         if (map[key]) return key;
+        // Se a chave for o nome completo, achar a sigla
         for (const [sigla, fullName] of Object.entries(map)) {
           if (fullName.toLowerCase() === key.toLowerCase()) return sigla;
         }
+        // Fallback para nomes novos cadastrados
         const words = key.split(/\s+/).filter(w => w.length > 1);
         if (words.length >= 2 && !key.includes('.')) {
           return words.map(w => w[0].toUpperCase() + '.').join('');
         }
         return key;
+      } else {
+        // Modo sem sigilo: exibir o nome completo real
+        if (map[key]) return map[key];
+        for (const [sigla, fullName] of Object.entries(map)) {
+          if (sigla.toLowerCase() === key.toLowerCase()) return fullName;
+        }
+        return key;
       }
-      return map[key] || key;
     }
 
 
@@ -1437,6 +1446,9 @@
     let currentPatient = patientNames[0];
 
     function initControls() {
+      // Sincronizar estado visual do botão de sigilo
+      updatePrivacyButtonUI();
+
       // Garantir que 100% dos pacientes em patientsData estejam na lista
       const allKeys = Object.keys(patientsData);
       allKeys.forEach(k => {
@@ -1459,7 +1471,8 @@
           selectCustomOption(name);
         };
 
-        optDiv.innerHTML = '<span>' + name + '</span><span class="opt-badge">' + formCount + (formCount === 1 ? ' formulário' : ' formulários') + '</span>';
+        const displayName = getPatientDisplayName(name);
+        optDiv.innerHTML = '<span>' + escapeHtml(displayName) + '</span><span class="opt-badge">' + formCount + (formCount === 1 ? ' formulário' : ' formulários') + '</span>';
         menu.appendChild(optDiv);
       });
 
@@ -1482,7 +1495,8 @@
       const textElem = document.getElementById('selectedPatientText');
       if (textElem) {
         const formCount = patientsData[name] ? patientsData[name].length : 1;
-        textElem.innerHTML = name + ' <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">(' + formCount + (formCount === 1 ? ' formulário' : ' formulários') + ')</span>';
+        const displayName = getPatientDisplayName(name);
+        textElem.innerHTML = escapeHtml(displayName) + ' <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">(' + formCount + (formCount === 1 ? ' formulário' : ' formulários') + ')</span>';
       }
 
       // Marcar classe selected no menu
@@ -2021,22 +2035,22 @@
 
       html += '<div class="accordion-item">';
       html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
-      html += '    <div class="acc-title">🩺 <span>Fatos Médicos (Medicamentos, Alergias & Diagnósticos)</span></div>';
+      html += '    <div class="acc-title">🩺 <span>Fatos Médicos Coletados nos Formulários</span></div>';
       html += '    <div class="acc-icon">▼</div>';
       html += '  </div>';
       html += '  <div class="accordion-body">';
       html += '    <div class="med-facts-grid">';
       html += '      <div class="med-fact-card">';
-      html += '        <div class="med-fact-title">💊 Medicamentos & Suplementos</div>';
-      html += '        <div class="med-fact-body">' + escapeHtml(meds) + '</div>';
+      html += '        <h5>💊 Medicamentos & Suplementos</h5>';
+      html += '        <p>' + escapeHtml(meds) + '</p>';
       html += '      </div>';
       html += '      <div class="med-fact-card">';
-      html += '        <div class="med-fact-title">🚫 Alergias & Intolerâncias</div>';
-      html += '        <div class="med-fact-body">' + escapeHtml(allergies) + '</div>';
+      html += '        <h5>⚠️ Alergias & Intolerâncias</h5>';
+      html += '        <p>' + escapeHtml(allergies) + '</p>';
       html += '      </div>';
       html += '      <div class="med-fact-card">';
-      html += '        <div class="med-fact-title">🩺 Doenças Diagnosticadas</div>';
-      html += '        <div class="med-fact-body">' + escapeHtml(diseases) + '</div>';
+      html += '        <h5>📋 Patologias Diagnosticadas</h5>';
+      html += '        <p>' + escapeHtml(diseases) + '</p>';
       html += '      </div>';
       html += '    </div>';
       html += '  </div>';
@@ -2101,10 +2115,10 @@
 
       html += '  <div class="view-mode-bar">';
       html += '    <div class="view-tabs-container">';
+      html += '      <button class="view-tab-btn' + (currentViewMode === 'summary' ? ' active' : '') + '" data-mode="summary" onclick="switchViewMode(\'summary\')">🩺 Resumo Clínico</button>';
       html += '      <button class="view-tab-btn' + (currentViewMode === 'themes' ? ' active' : '') + '" data-mode="themes" onclick="switchViewMode(\'themes\')">📂 Por Eixo Temático</button>';
       html += '      <button class="view-tab-btn' + (currentViewMode === 'forms' ? ' active' : '') + '" data-mode="forms" onclick="switchViewMode(\'forms\')">📋 Por Formulário</button>';
       html += '      <button class="view-tab-btn' + (currentViewMode === 'evolution' ? ' active' : '') + '" data-mode="evolution" onclick="switchViewMode(\'evolution\')">📈 Evolução Comparativa</button>';
-      html += '      <button class="view-tab-btn' + (currentViewMode === 'summary' ? ' active' : '') + '" data-mode="summary" onclick="switchViewMode(\'summary\')">🩺 Resumo Clínico</button>';
       html += '    </div>';
       html += '    <div class="view-actions-right">';
       html += '      <div class="search-box-wrapper">';
@@ -2208,8 +2222,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v3';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v3';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v4';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v4';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -2217,7 +2231,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v3';
+    const IDB_NAME = 'PainelNutricionalDB_v4';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

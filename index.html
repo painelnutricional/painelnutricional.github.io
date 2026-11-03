@@ -1182,36 +1182,7 @@
       }
     }
 
-    .btn-privacy-toggle {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      flex-shrink: 0;
-    }
-    .btn-privacy-toggle.active {
-      background: #e8f5e9;
-      border: 1.5px solid #2e7d32;
-    }
-    .btn-privacy-toggle.active:hover {
-      background: #c8e6c9;
-      transform: translateY(-1px);
-    }
-    .btn-privacy-toggle.inactive {
-      background: #fff3e0;
-      border: 1.5px solid #e65100;
-    }
-    .btn-privacy-toggle.inactive:hover {
-      background: #ffe0b2;
-      transform: translateY(-1px);
-    }
+    
 
     /* Resumo Clínico em Sanfonas Limpas */
     .summary-accordions-group {
@@ -2287,8 +2258,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v4';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v4';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v5';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v5';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -2296,7 +2267,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v4';
+    const IDB_NAME = 'PainelNutricionalDB_v5';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

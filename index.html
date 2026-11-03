@@ -1120,6 +1120,44 @@
       line-height: 1.45;
     }
   
+  
+    .btn-privacy-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-privacy-toggle.active {
+      background: rgba(46, 125, 50, 0.12);
+      color: #2e7d32;
+      border: 1.5px solid rgba(46, 125, 50, 0.5);
+    }
+    .btn-privacy-toggle.active:hover {
+      background: rgba(46, 125, 50, 0.2);
+    }
+    .btn-privacy-toggle.inactive {
+      background: rgba(230, 81, 0, 0.12);
+      color: #e65100;
+      border: 1.5px solid rgba(230, 81, 0, 0.5);
+    }
+    .btn-privacy-toggle.inactive:hover {
+      background: rgba(230, 81, 0, 0.2);
+    }
+
+    /* Resumo Clínico em Sanfonas Limpas */
+    .summary-accordions-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  
   </style>
 
   <!-- PDF.js para processamento 100% no navegador (offline-first & LGPD compliant) -->
@@ -1158,6 +1196,9 @@
         </div>
         <button class="btn-new-patient-inline" onclick="openNewPatientModal()" title="Cadastrar nova paciente no painel">
           ➕ Nova Paciente
+        </button>
+        <button id="btnPrivacyToggle" class="btn-privacy-toggle active" onclick="togglePrivacyMode()" title="Alternar entre modo com sigilo (iniciais) e sem sigilo (nomes completos)">
+          🔒 Sigilo: ATIVADO
         </button>
       </div>
     </div>
@@ -1208,8 +1249,35 @@
     window.escapeHtml = escapeHtml;
 
     let privacyMode = (localStorage.getItem("painel_privacy_mode") !== "false");
-    window.patientFullNameMap = window.patientFullNameMap || {};
+    window.patientFullNameMap = {
+      "T.P.F. (Demonstração)": "Tatiana Prado Fernandes (Demonstração)",
+      "T.P.F.": "Tatiana Prado Fernandes"
+};
 
+    
+    function updatePrivacyButtonUI() {
+      const btn = document.getElementById("btnPrivacyToggle");
+      if (!btn) return;
+      if (privacyMode) {
+        btn.innerHTML = "🔒 Sigilo: ATIVADO";
+        btn.className = "btn-privacy-toggle active";
+        btn.title = "Modo com Sigilo Ativo (exibindo siglas/iniciais). Clique para desativar e ver os nomes completos.";
+      } else {
+        btn.innerHTML = "🔓 Sigilo: DESATIVADO";
+        btn.className = "btn-privacy-toggle inactive";
+        btn.title = "Modo sem Sigilo (exibindo nomes completos). Clique para ativar o sigilo.";
+      }
+    }
+
+    function togglePrivacyMode() {
+      privacyMode = !privacyMode;
+      localStorage.setItem("painel_privacy_mode", privacyMode ? "true" : "false");
+      updatePrivacyButtonUI();
+      initControls();
+      switchPatient(currentPatient);
+      showToast(privacyMode ? "Modo Sigilo Ativado (siglas)" : "Modo Sigilo Desativado (nomes completos)", "🔒");
+    }
+    
     function getPatientDisplayName(key) {
       if (!key) return "";
       const map = window.patientFullNameMap || {};
@@ -1443,7 +1511,7 @@
     });
 
     
-    let currentViewMode = localStorage.getItem('painel_view_mode') || 'themes'; // 'themes' | 'forms' | 'evolution' | 'summary'
+    let currentViewMode = localStorage.getItem('painel_view_mode') || 'summary'; // 'themes' | 'forms' | 'evolution' | 'summary'
     let isOrganizeMode = false;
     let globalSearchQuery = '';
 
@@ -1608,7 +1676,7 @@
         const visibleItems = queryLower ? items.filter(it => it.isMatch) : items;
         if (queryLower && visibleItems.length === 0) return;
 
-        const isOpen = queryLower ? ' open' : (idx === 0 || idx === 1 ? ' open' : '');
+        const isOpen = queryLower ? ' open' : '';
         const icon = getThemeIcon(themeName);
 
         html += '<div class="accordion-item' + isOpen + '" data-cat="' + escapeHtml(themeName) + '">';
@@ -1692,7 +1760,7 @@
 
         if (queryLower && filteredQas.length === 0) return;
 
-        const isOpen = (fIdx === forms.length - 1 || queryLower) ? ' open' : '';
+        const isOpen = queryLower ? ' open' : '';
         const qCount = qas.length;
 
         html += '<div class="form-submission-card' + isOpen + '">';
@@ -1817,12 +1885,14 @@
 
         if (matchingNodes.length > 0) {
           indicatorsRendered++;
-          html += '<div class="evo-metric-card">';
-          html += '  <div class="evo-metric-header">';
-          html += '    <div class="evo-metric-title">' + ind.title + '</div>';
-          html += '    <span class="acc-count">' + matchingNodes.length + (matchingNodes.length === 1 ? ' registro' : ' registros') + '</span>';
+          const isOpen = queryLower ? ' open' : '';
+          html += '<div class="accordion-item' + isOpen + '">';
+          html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
+          html += '    <div class="acc-title">' + ind.title + ' <span class="acc-count">' + matchingNodes.length + (matchingNodes.length === 1 ? ' registro' : ' registros') + '</span></div>';
+          html += '    <div class="acc-icon">▼</div>';
           html += '  </div>';
-          html += '  <div class="evo-timeline">';
+          html += '  <div class="accordion-body">';
+          html += '    <div class="evo-timeline">';
 
           matchingNodes.forEach(node => {
             html += '<div class="evo-node">';
@@ -1836,6 +1906,7 @@
             html += '</div>';
           });
 
+          html += '    </div>';
           html += '  </div>';
           html += '</div>';
         }
@@ -1854,54 +1925,81 @@
       return { html, matchCount };
     }
 
+    
     function renderSummaryViewHtml(patientName, forms, synth) {
-      let html = '';
+      let html = '<div class="summary-accordions-group">';
 
-      html += '<div class="baseline-grid">';
-      html += '  <div class="baseline-box">';
-      html += '    <div class="baseline-box-title">🎯 Objetivo Principal</div>';
-      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.objetivo) + '</div>';
+      // 1. Linha de Base, Objetivos & Ponto de Partida
+      html += '<div class="accordion-item">';
+      html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
+      html += '    <div class="acc-title">🎯 <span>Linha de Base, Objetivos & Ponto de Partida</span></div>';
+      html += '    <div class="acc-icon">▼</div>';
       html += '  </div>';
-      html += '  <div class="baseline-box">';
-      html += '    <div class="baseline-box-title">⚖️ Antropometria & Histórico</div>';
-      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.historico) + '</div>';
-      html += '  </div>';
-      html += '  <div class="baseline-box">';
-      html += '    <div class="baseline-box-title">⚠️ Queixas Iniciais</div>';
-      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.queixas) + '</div>';
-      html += '  </div>';
-      html += '  <div class="baseline-box">';
-      html += '    <div class="baseline-box-title">🕒 Rotina & Treinos</div>';
-      html += '    <div class="baseline-box-content">' + escapeHtml(synth.baseline.rotina) + '</div>';
+      html += '  <div class="accordion-body">';
+      html += '    <div class="baseline-grid">';
+      html += '      <div class="baseline-box">';
+      html += '        <div class="baseline-box-title">🎯 Objetivo Principal</div>';
+      html += '        <div class="baseline-box-content">' + escapeHtml(synth.baseline.objetivo) + '</div>';
+      html += '      </div>';
+      html += '      <div class="baseline-box">';
+      html += '        <div class="baseline-box-title">⚖️ Antropometria & Histórico</div>';
+      html += '        <div class="baseline-box-content">' + escapeHtml(synth.baseline.historico) + '</div>';
+      html += '      </div>';
+      html += '      <div class="baseline-box">';
+      html += '        <div class="baseline-box-title">⚠️ Queixas Iniciais</div>';
+      html += '        <div class="baseline-box-content">' + escapeHtml(synth.baseline.queixas) + '</div>';
+      html += '      </div>';
+      html += '      <div class="baseline-box">';
+      html += '        <div class="baseline-box-title">🕒 Rotina & Treinos</div>';
+      html += '        <div class="baseline-box-content">' + escapeHtml(synth.baseline.rotina) + '</div>';
+      html += '      </div>';
+      html += '    </div>';
       html += '  </div>';
       html += '</div>';
 
-      html += '<div class="evolution-card" style="margin-top: 14px;">';
-      html += '  <strong>📊 Evolução Clínica Sintetizada:</strong> ' + escapeHtml(synth.evolutionSummary || (synth.evolucao && synth.evolucao.sintese) || "Acompanhamento clínico regular.");
-      html += '</div>';
-
-      html += '<div class="dual-grid" style="margin-top: 14px;">';
-      html += '  <div class="box-vitorias">';
-      html += '    <h4>🏆 Vitórias & Conquistas Consolidadas</h4>';
-      html += '    <ul class="list-items">';
+      // 2. Evolução Clínica Sintetizada, Vitórias & Pontos de Atenção
+      html += '<div class="accordion-item">';
+      html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
+      html += '    <div class="acc-title">📊 <span>Evolução Clínica, Vitórias & Pontos de Atenção</span></div>';
+      html += '    <div class="acc-icon">▼</div>';
+      html += '  </div>';
+      html += '  <div class="accordion-body">';
+      html += '    <div class="evolution-card">';
+      html += '      <strong>📊 Síntese Analisada:</strong> ' + escapeHtml(synth.evolutionSummary || (synth.evolucao && synth.evolucao.sintese) || "Acompanhamento clínico regular.");
+      html += '    </div>';
+      html += '    <div class="dual-grid" style="margin-top: 14px;">';
+      html += '      <div class="box-vitorias">';
+      html += '        <h4>🏆 Vitórias & Conquistas Consolidadas</h4>';
+      html += '        <ul class="list-items">';
       (synth.vitorias || []).forEach(v => { html += '<li>' + escapeHtml(v) + '</li>'; });
-      html += '    </ul>';
-      html += '  </div>';
-      html += '  <div class="box-atencao">';
-      html += '    <h4>🔸 Pontos de Atenção & Alertas Clínicos</h4>';
-      html += '    <ul class="list-items">';
+      html += '        </ul>';
+      html += '      </div>';
+      html += '      <div class="box-atencao">';
+      html += '        <h4>🔸 Pontos de Atenção & Alertas Clínicos</h4>';
+      html += '        <ul class="list-items">';
       (synth.atencao || []).forEach(a => { html += '<li>' + escapeHtml(a) + '</li>'; });
-      html += '    </ul>';
+      html += '        </ul>';
+      html += '      </div>';
+      html += '    </div>';
       html += '  </div>';
       html += '</div>';
 
+      // 3. Conduta Nutricional Recomendada (se cadastrada)
       if (synth.condutaSugerida && synth.condutaSugerida.trim() !== '') {
-        html += '<div class="conduct-card" style="margin-top: 14px;">';
-        html += '  <h4>💡 Conduta Nutricional Recomendada (Próximo Passo Clínico)</h4>';
-        html += '  <p>' + escapeHtml(synth.condutaSugerida) + '</p>';
+        html += '<div class="accordion-item">';
+        html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
+        html += '    <div class="acc-title">💡 <span>Conduta Nutricional Recomendada (Próximo Passo)</span></div>';
+        html += '    <div class="acc-icon">▼</div>';
+        html += '  </div>';
+        html += '  <div class="accordion-body">';
+        html += '    <div class="conduct-card">';
+        html += '      <p>' + escapeHtml(synth.condutaSugerida) + '</p>';
+        html += '    </div>';
+        html += '  </div>';
         html += '</div>';
       }
 
+      // 4. Extrato Rápido de Fatos Médicos Coletados
       let meds = 'Nenhum medicamento informado.';
       let allergies = 'Nenhuma alergia relatada.';
       let diseases = 'Nenhuma patologia diagnosticada.';
@@ -1921,23 +2019,33 @@
         });
       });
 
-      html += '<div class="med-facts-grid">';
-      html += '  <div class="med-fact-card">';
-      html += '    <div class="med-fact-title">💊 Medicamentos & Suplementos</div>';
-      html += '    <div class="med-fact-body">' + escapeHtml(meds) + '</div>';
+      html += '<div class="accordion-item">';
+      html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
+      html += '    <div class="acc-title">🩺 <span>Fatos Médicos (Medicamentos, Alergias & Diagnósticos)</span></div>';
+      html += '    <div class="acc-icon">▼</div>';
       html += '  </div>';
-      html += '  <div class="med-fact-card">';
-      html += '    <div class="med-fact-title">🚫 Alergias & Intolerâncias</div>';
-      html += '    <div class="med-fact-body">' + escapeHtml(allergies) + '</div>';
-      html += '  </div>';
-      html += '  <div class="med-fact-card">';
-      html += '    <div class="med-fact-title">🩺 Doenças Diagnosticadas</div>';
-      html += '    <div class="med-fact-body">' + escapeHtml(diseases) + '</div>';
+      html += '  <div class="accordion-body">';
+      html += '    <div class="med-facts-grid">';
+      html += '      <div class="med-fact-card">';
+      html += '        <div class="med-fact-title">💊 Medicamentos & Suplementos</div>';
+      html += '        <div class="med-fact-body">' + escapeHtml(meds) + '</div>';
+      html += '      </div>';
+      html += '      <div class="med-fact-card">';
+      html += '        <div class="med-fact-title">🚫 Alergias & Intolerâncias</div>';
+      html += '        <div class="med-fact-body">' + escapeHtml(allergies) + '</div>';
+      html += '      </div>';
+      html += '      <div class="med-fact-card">';
+      html += '        <div class="med-fact-title">🩺 Doenças Diagnosticadas</div>';
+      html += '        <div class="med-fact-body">' + escapeHtml(diseases) + '</div>';
+      html += '      </div>';
+      html += '    </div>';
       html += '  </div>';
       html += '</div>';
 
+      html += '</div>';
       return html;
     }
+  
 
     function renderPatientView(name) {
       const forms = patientsData[name] || [];
@@ -2100,8 +2208,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v2';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v2';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v3';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v3';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -2109,7 +2217,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v2';
+    const IDB_NAME = 'PainelNutricionalDB_v3';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

@@ -176,9 +176,9 @@ O **Painel Nutricional** é uma iniciativa independente e 100% gratuita, criada 
 Se este prontuário facilita o seu atendimento no consultório ou seus estudos acadêmicos e você deseja incentivar a criação de novas funcionalidades e a manutenção ativa da ferramenta:
 
 * **Chave Pix (Aleatória):** `f3605cd9-0b5c-48e4-9a5d-a45e7fd00b68`
-* **Beneficiária:** Thaý Carvalho (*CRN10-14724*)
+* **Banco:** Bradesco
 
-*Muito obrigada pelo carinho e por fortalecer a tecnologia aplicada à nutrição!* 🌱
+*Muito obrigada pelo carinho e por fortalecer a tecnologia aplicada à nutrição!* 🦾🌱
 
 ---
 
@@ -193,5 +193,5 @@ Idealizado e desenvolvido por **Thayâne Carvalho** — Nutricionista (*CRN10-14
 ---
 
 <div align="center">
-  <sub>Desenvolvido com carinho para valorizar o tempo clínico e a relação nutricionista-paciente 🌱</sub>
+  <sub>Desenvolvido com carinho para valorizar o tempo clínico e a relação nutricionista-paciente 🦾🌱</sub>
 </div>

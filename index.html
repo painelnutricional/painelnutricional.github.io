@@ -1396,6 +1396,57 @@
       }
     }
 
+    /* Controles do Cabeçalho: Seletor no Topo e Ações Abaixo */
+    .header-patient-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    .header-quick-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #fbfaf7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .quick-actions-divider {
+      width: 1px;
+      height: 14px;
+      background: #e2dfd7;
+      margin: 0 3px;
+    }
+    .btn-action-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-action-ghost:hover {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 900px) {
+      .header-patient-controls {
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+
     .btn-privacy-toggle {
       display: inline-flex;
       align-items: center;
@@ -1425,6 +1476,73 @@
     .btn-privacy-toggle.inactive:hover {
       background: #ffe0b2;
       transform: translateY(-1px);
+    }
+
+    /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
+    .summary-dashboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .summary-section-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .summary-block-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-block-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    /* Rodapé e Botão de Apoio via Pix */
+    .app-footer {
+      padding: 24px 20px 36px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+      background: #faf9f6;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .btn-support-pill {
+      background: #faf5ee;
+      border: 1.5px solid var(--accent);
+      color: #8c6226;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .btn-support-pill:hover {
+      background: #f4ecdf;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(179, 139, 89, 0.15);
     }
 
     /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
@@ -4359,8 +4477,58 @@ initControls();
     </div>
   </div>
 
+  <!-- Modal: Apoie o Projeto via Pix -->
+  <div class="modal-overlay" id="supportModalOverlay" onclick="closeModalOnBg(event, 'supportModalOverlay')">
+    <div class="modal-box" style="max-width: 520px; border-radius: 14px;">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 8px;">
+          ☕ Apoie o Painel Nutricional
+        </h3>
+        <button class="modal-close" onclick="closeSupportModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="line-height: 1.6; font-size: 14px;">
+        <div style="background: #faf5ee; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 16px;">
+          <p style="margin: 0; color: var(--text);">
+            O <strong>Painel Nutricional</strong> é uma iniciativa 100% gratuita, independente e com foco absoluto na privacidade e segurança clínica (LGPD).
+          </p>
+        </div>
+
+        <p style="margin-bottom: 14px; color: var(--text);">
+          Se este prontuário tem facilitado a sua rotina no consultório ou nos estudos e você deseja incentivar a criação de novas melhorias, qualquer contribuição é muito bem-vinda!
+        </p>
+
+        <div style="background: #ffffff; border: 1.5px solid #e2ddd3; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary-dark); margin-bottom: 6px;">
+            🔑 Chave Pix (Aleatória):
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="pixKeyInput" value="f3605cd9-0b5c-48e4-9a5d-a45e7fd00b68" readonly style="flex: 1; min-width: 260px; font-family: monospace; font-size: 13.5px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 6px; background: #fdfdfd; color: var(--text); user-select: all;" />
+            <button id="btnCopyPix" class="btn-import-pdf" onclick="copyPixKey()" style="white-space: nowrap; padding: 8px 16px; font-size: 13px;">
+              📋 Copiar Chave
+            </button>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+            Beneficiária: <strong>Thaý Carvalho</strong> • Nutricionista CRN10-14724
+          </div>
+        </div>
+
+        <p style="margin: 0; text-align: center; color: var(--text-muted); font-size: 13px;">
+          Muito obrigada pelo carinho e apoio à tecnologia na nutrição! 🌱
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: flex-end;">
+        <button class="btn-action-ghost" onclick="closeSupportModal()" style="padding: 7px 16px;">Fechar</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="app-footer">
-    <p>Desenvolvido por <strong>Thaý Carvalho - Núcleo Vida Nutrição</strong></p>
+    <div class="footer-inner">
+      <p>Desenvolvido por <strong>Thaý Carvalho - Núcleo Vida Nutrição</strong> • CRN10-14724</p>
+      <button class="btn-support-pill" onclick="openSupportModal()" title="Apoie o desenvolvimento deste painel gratuito">
+        ☕ Apoie este Projeto (Pix)
+      </button>
+    </div>
   </footer>
 
 </body>

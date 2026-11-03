@@ -169,6 +169,19 @@ painel-nutricional/
 
 ---
 
+## ☕ Apoie este Projeto
+
+O **Painel Nutricional** é uma iniciativa independente e 100% gratuita, criada para valorizar o tempo clínico e qualificar a relação nutricionista-paciente com total segurança e respeito à LGPD.
+
+Se este prontuário facilita o seu atendimento no consultório ou seus estudos acadêmicos e você deseja incentivar a criação de novas funcionalidades e a manutenção ativa da ferramenta:
+
+* **Chave Pix (Aleatória):** `f3605cd9-0b5c-48e4-9a5d-a45e7fd00b68`
+* **Beneficiária:** Thaý Carvalho (*CRN10-14724*)
+
+*Muito obrigada pelo carinho e por fortalecer a tecnologia aplicada à nutrição!* 🌱
+
+---
+
 ## 👩‍⚕️ Autoria & Contato
 
 Idealizado e desenvolvido por **Thayâne Carvalho** — Nutricionista (*CRN10-14724*) e Engenheira de Produção, com foco em gestão de projetos, inovação e tecnologia aplicadas à saúde e ao impacto social.

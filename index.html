@@ -1294,6 +1294,57 @@
       }
     }
 
+    /* Controles do Cabeçalho: Seletor no Topo e Ações Abaixo */
+    .header-patient-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    .header-quick-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #fbfaf7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .quick-actions-divider {
+      width: 1px;
+      height: 14px;
+      background: #e2dfd7;
+      margin: 0 3px;
+    }
+    .btn-action-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-action-ghost:hover {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 900px) {
+      .header-patient-controls {
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+
     .btn-privacy-toggle {
       display: inline-flex;
       align-items: center;
@@ -1323,6 +1374,34 @@
     .btn-privacy-toggle.inactive:hover {
       background: #ffe0b2;
       transform: translateY(-1px);
+    }
+
+    /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
+    .summary-dashboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .summary-section-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .summary-block-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-block-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
     }
 
     /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
@@ -3135,6 +3214,11 @@ initControls();
               if (/^P[áa]gina\s+\d+(\s+de\s+\d+)?$/i.test(l)) return false;
               if (/CRN\d+-\d+/i.test(l)) return false;
               if (/^Nutricionista\s+Tha[ýy]\s+Carvalho$/i.test(l)) return false;
+              if (/^https?:\/\/docs\.google\.com/i.test(l)) return false;
+              if (/^\d+\s*\/\s*\d+$/.test(l)) return false;
+              if (/\bindica\s+uma\s+pergunta\s+obrigat[óo]ria\b/i.test(l)) return false;
+              if (/\beste\s+conte[úu]do\s+n[ãa]o\s+foi\s+criado\s+nem\s+aprovado\b/i.test(l)) return false;
+              if (/^The respondent's email/i.test(l)) return false;
               return true;
             });
 

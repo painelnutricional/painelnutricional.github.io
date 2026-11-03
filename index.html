@@ -2112,81 +2112,101 @@ initControls();
     }
 
     function confirmSavePdfForm() {
-      if (!window._currentExtractedPdf) return;
-      const extracted = window._currentExtractedPdf;
-      const nameInput = document.getElementById("pdfPatientName");
-      const titleInput = document.getElementById("pdfFormTitle");
-      const dateInput = document.getElementById("pdfFormDate");
+      try {
+        if (!window._currentExtractedPdf) return;
+        const extracted = window._currentExtractedPdf;
+        const nameInput = document.getElementById("pdfPatientName");
+        const titleInput = document.getElementById("pdfFormTitle");
+        const dateInput = document.getElementById("pdfFormDate");
 
-      const patientName = nameInput ? nameInput.value.trim() : extracted.patientName;
-      const formTitle = titleInput ? titleInput.value.trim() : extracted.formTitle;
-      const formDate = dateInput ? dateInput.value.trim() : extracted.date;
+        const patientName = nameInput ? nameInput.value.trim() : (targetPatientForImport || extracted.patientName);
+        const formTitle = titleInput ? titleInput.value.trim() : extracted.formTitle;
+        const formDate = dateInput ? dateInput.value.trim() : extracted.date;
 
-      if (!patientName) {
-        alert("Por favor, preencha a sigla ou nome da paciente.");
-        return;
-      }
+        if (!patientName) {
+          alert("Por favor, preencha a sigla ou nome da paciente.");
+          return;
+        }
 
-      const newForm = {
-        id: Date.now(),
-        uuid: 'form-' + Date.now(),
-        paciente: patientName,
-        paciente_id: Date.now(),
-        titulo_formulario: formTitle,
-        respondido_em: formDate,
-        total_perguntas: extracted.qaList.length,
-        perguntas_respondidas: extracted.qaList.length,
-        perguntas_e_respostas: extracted.qaList
-      };
+        const newForm = {
+          id: Date.now(),
+          uuid: 'form-' + Date.now(),
+          paciente: patientName,
+          paciente_id: Date.now(),
+          titulo_formulario: formTitle,
+          respondido_em: formDate,
+          total_perguntas: extracted.qaList.length,
+          perguntas_respondidas: extracted.qaList.length,
+          perguntas_e_respostas: extracted.qaList
+        };
 
-      if (!patientsData[patientName]) {
-        patientsData[patientName] = [];
-        patientNames.unshift(patientName);
-      }
-      patientsData[patientName].push(newForm);
+        if (!patientsData[patientName]) {
+          patientsData[patientName] = [];
+        }
+        patientsData[patientName].push(newForm);
 
-      // Gerar ou atualizar sumário da paciente
-      if (!clinicalSyntheses[patientName]) {
-        // Tentar extrair do formulário informações para os 4 cards da baseline
+        if (!patientNames.includes(patientName)) {
+          patientNames.unshift(patientName);
+        }
+
+        // Extrair informações diagnósticas do formulário para baseline
         let objetivo = "Reeducação alimentar e equilíbrio nutricional.";
-        let antropometria = "Avaliação física e peso inicial relatados no formulário.";
-        let queixas = "Sintomas e queixas relatados na pré-consulta.";
+        let antropometria = "Avaliação física e peso relatados no formulário.";
+        let queixas = "Sintomas e queixas relatados no formulário.";
         let rotina = "Rotina diária e atividades físicas relatadas.";
 
-        extracted.qaList.forEach(qa => {
-          const lp = qa.pergunta.toLowerCase();
-          const lr = qa.resposta;
-          if (lp.includes("peso") || lp.includes("altura")) antropometria = lr;
-          if (lp.includes("objetivo") || lp.includes("meta") || lp.includes("gostaria de melhorar")) objetivo = lr;
-          if (lp.includes("queixa") || lp.includes("intestino") || lp.includes("sintoma") || lp.includes("cansaço")) queixas = lr;
-          if (lp.includes("rotina") || lp.includes("treino") || lp.includes("exercício")) rotina = lr;
-        });
+        if (extracted.qaList && extracted.qaList.length > 0) {
+          extracted.qaList.forEach(qa => {
+            const lp = (qa.pergunta || "").toLowerCase();
+            const lr = qa.resposta || "";
+            if (lp.includes("peso") || lp.includes("altura")) antropometria = lr;
+            if (lp.includes("objetivo") || lp.includes("meta") || lp.includes("gostaria de melhorar")) objetivo = lr;
+            if (lp.includes("queixa") || lp.includes("intestino") || lp.includes("sintoma") || lp.includes("cansaço")) queixas = lr;
+            if (lp.includes("rotina") || lp.includes("treino") || lp.includes("exercício")) rotina = lr;
+          });
+        }
 
-        clinicalSyntheses[patientName] = {
-          badge: "Acompanhamento Ativo",
-          badgeColor: "#2e7d32",
-          baseline: {
-            objetivo: objetivo,
-            historico: antropometria,
-            queixas: queixas,
-            rotina: rotina
-          },
-          evolutionSummary: `${patientName} teve seu formulário "${formTitle}" importado com sucesso via PDF. Respostas organizadas nos temas clínicos abaixo.`,
-          vitorias: ["Formulário preenchido e analisado pela equipe."],
-          atencao: ["Verificar pontos destacados nas respostas dos questionários."],
-          condutaSugerida: "Seguir com as recomendações personalizadas."
-        };
-      } else {
-        // Se já existia, adicionar nota de novo formulário
-        clinicalSyntheses[patientName].evolucao.sintese += ` [Atualizado com ${formTitle} em ${formDate}]`;
+        // Gerar ou atualizar sumário da paciente de forma segura
+        if (!clinicalSyntheses[patientName]) {
+          clinicalSyntheses[patientName] = {
+            badge: "Acompanhamento Ativo",
+            badgeColor: "#2e7d32",
+            baseline: {
+              objetivo: objetivo,
+              historico: antropometria,
+              queixas: queixas,
+              rotina: rotina
+            },
+            evolutionSummary: `${patientName} teve o formulário "${formTitle}" importado com sucesso via PDF. Respostas organizadas nos temas clínicos abaixo.`,
+            vitorias: ["Formulário preenchido e analisado pela equipe."],
+            atencao: ["Verificar pontos destacados nas respostas dos questionários."],
+            condutaSugerida: "Seguir com as recomendações personalizadas."
+          };
+        } else {
+          const synth = clinicalSyntheses[patientName];
+          if (!synth.baseline) synth.baseline = {};
+          if (!synth.baseline.objetivo || synth.baseline.objetivo.includes("Aguardando")) synth.baseline.objetivo = objetivo;
+          if (!synth.baseline.historico || synth.baseline.historico.includes("Aguardando")) synth.baseline.historico = antropometria;
+          if (!synth.baseline.queixas || synth.baseline.queixas.includes("Aguardando")) synth.baseline.queixas = queixas;
+          if (!synth.baseline.rotina || synth.baseline.rotina.includes("Aguardando")) synth.baseline.rotina = rotina;
+
+          if (synth.evolutionSummary) {
+            synth.evolutionSummary += ` • [${formTitle} adicionado em ${formDate}]`;
+          } else {
+            synth.evolutionSummary = `Formulário "${formTitle}" adicionado em ${formDate}.`;
+          }
+        }
+
+        targetPatientForImport = null;
+        saveToLocalStorage(false);
+        closePdfModal();
+        initControls();
+        switchPatient(patientName);
+        showToast(`Formulário de ${patientName} salvo no prontuário com sucesso!`, "✅");
+      } catch (err) {
+        console.error("Erro ao salvar formulário:", err);
+        alert("Erro ao salvar formulário: " + err.message);
       }
-
-      saveToLocalStorage(false);
-      closePdfModal();
-  
-initControls();
-      switchPatient(patientName);
-      showToast(`Formulário de ${patientName} importado com sucesso!`, "📄");
     }
 
     // Inicialização da persistência local assíncrona

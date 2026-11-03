@@ -1447,6 +1447,57 @@
       }
     }
 
+    /* Controles do Cabeçalho: Seletor no Topo e Ações Abaixo */
+    .header-patient-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    .header-quick-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #fbfaf7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .quick-actions-divider {
+      width: 1px;
+      height: 14px;
+      background: #e2dfd7;
+      margin: 0 3px;
+    }
+    .btn-action-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn-action-ghost:hover {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 900px) {
+      .header-patient-controls {
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+
     .btn-privacy-toggle {
       display: inline-flex;
       align-items: center;
@@ -1476,6 +1527,73 @@
     .btn-privacy-toggle.inactive:hover {
       background: #ffe0b2;
       transform: translateY(-1px);
+    }
+
+    /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
+    .summary-dashboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .summary-section-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .summary-block-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-block-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    /* Rodapé e Botão de Apoio via Pix */
+    .app-footer {
+      padding: 24px 20px 36px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+      background: #faf9f6;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .btn-support-pill {
+      background: #faf5ee;
+      border: 1.5px solid var(--accent);
+      color: #8c6226;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .btn-support-pill:hover {
+      background: #f4ecdf;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(179, 139, 89, 0.15);
     }
 
     /* Resumo Clínico Aberto & Sofisticado (Inteiro na tela) */
@@ -3182,6 +3300,53 @@ initControls();
         .replace(/'/g, "&#039;");
     }
 
+    
+    // Funções de Apoio ao Projeto via Pix
+    function openSupportModal() {
+      const modal = document.getElementById("supportModalOverlay");
+      if (modal) modal.classList.add("active");
+    }
+
+    function closeSupportModal() {
+      const modal = document.getElementById("supportModalOverlay");
+      if (modal) modal.classList.remove("active");
+    }
+
+    function copyPixKey() {
+      const pixKey = "f3605cd9-0b5c-48e4-9a5d-a45e7fd00b68";
+      const btn = document.getElementById("btnCopyPix");
+      const input = document.getElementById("pixKeyInput");
+
+      const onSuccess = () => {
+        if (btn) {
+          btn.innerHTML = "✅ Chave Copiada!";
+          btn.style.background = "#2e7d32";
+          btn.style.borderColor = "#2e7d32";
+          btn.style.color = "#ffffff";
+          setTimeout(() => {
+            btn.innerHTML = "📋 Copiar Chave";
+            btn.style.background = "";
+            btn.style.borderColor = "";
+            btn.style.color = "";
+          }, 3000);
+        }
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pixKey).then(onSuccess).catch(() => {
+          if (input) {
+            input.select();
+            document.execCommand("copy");
+            onSuccess();
+          }
+        });
+      } else if (input) {
+        input.select();
+        document.execCommand("copy");
+        onSuccess();
+      }
+    }
+  
     function openInstructionsModal() {
       const modal = document.getElementById("instructionsModalOverlay");
       if (modal) modal.classList.add("active");

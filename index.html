@@ -2184,6 +2184,32 @@
       color: #EDEAE3;
     }
 
+    /* Linha Alinhada: Meta Info + Ações (Importar / Excluir) */
+    .patient-header-top {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    .patient-meta-and-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      width: 100%;
+      margin-top: 4px;
+    }
+    .patient-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .patient-meta-info {
+      margin-top: 0 !important;
+    }
+
     /* Gaveta Discreta de Envios da Paciente */
     .patient-submissions-drawer {
       margin: 12px 0 18px 0;
@@ -2352,13 +2378,6 @@
 
       <!-- Linha Inferior: Ações do Sistema Alinhadas à Direita -->
       <div class="header-quick-actions">
-        <!-- Seletor Exclusivo Modo: 1 / 2 (Quiet Luxury Claro / Dark) -->
-        <div class="mode-toggle-segmented" title="Seletor de Ambiente Visual">
-          <span class="mode-label-text">Modo:</span>
-          <button id="btnMode1" class="btn-mode-pill active" onclick="setVisualMode(1)" title="Modo 1: Quiet Luxury (Claro - Padrão)">1</button>
-          <button id="btnMode2" class="btn-mode-pill" onclick="setVisualMode(2)" title="Modo 2: Quiet Luxury Dark (Modo Escuro)">2</button>
-        </div>
-        <div class="quick-actions-divider"></div>
         <button class="btn-action-ghost" onclick="openInstructionsModal()" title="Guia Rápido do Painel">
           <span class="action-icon">📖</span>
           <span class="action-label">Instruções</span>
@@ -2373,6 +2392,13 @@
           <span class="action-icon">🖨️</span>
           <span class="action-label">Imprimir</span>
         </button>
+        <div class="quick-actions-divider"></div>
+        <!-- Seletor Exclusivo Modo: 1 / 2 (Após Imprimir) -->
+        <div class="mode-toggle-segmented" title="Seletor de Ambiente Visual">
+          <span class="mode-label-text">Modo:</span>
+          <button id="btnMode1" class="btn-mode-pill active" onclick="setVisualMode(1)" title="Modo 1: Quiet Luxury (Claro - Padrão)">1</button>
+          <button id="btnMode2" class="btn-mode-pill" onclick="setVisualMode(2)" title="Modo 2: Quiet Luxury Dark (Modo Escuro)">2</button>
+        </div>
       </div>
     </div>
   </header>
@@ -2399,6 +2425,8 @@
 
     let privacyMode = (localStorage.getItem("painel_privacy_mode") !== "false");
     window.patientFullNameMap = {
+      "T.P.F. (Demonstração)": "Tatiana Prado Fernandes (Demonstração)",
+      "T.P.F.": "Tatiana Prado Fernandes",
       "M.S.A.": "Mariana Souza Alves (Paciente Demo)",
       "C.O.R.": "Camila Oliveira Rocha (Paciente Demo)",
       "B.L.M.": "Beatriz Lima Mendes (Paciente Demo)",
@@ -3216,21 +3244,21 @@
       html += '<div class="patient-card">';
       html += '  <div class="patient-card-header">';
       html += '    <div class="patient-header-top">';
-      html += '      <div>';
-      html += '        <div class="patient-name-title">' + displayName;
-      html += '          <span class="status-badge" style="background-color:' + synth.badgeColor + ';">' + synth.badge + '</span>';
-      html += '        </div>';
+      html += '      <div class="patient-name-title">' + displayName;
+      html += '        <span class="status-badge" style="background-color:' + synth.badgeColor + ';">' + synth.badge + '</span>';
+      html += '      </div>';
+      html += '      <div class="patient-meta-and-actions-row">';
       html += '        <div class="patient-meta-info">';
       html += '          📅 <strong>' + forms.length + (forms.length === 1 ? ' formulário analisado' : ' formulários analisados') + '</strong>' + (forms.length > 0 ? ' • Último registro: <strong>' + forms[forms.length - 1].respondido_em + '</strong>' : '');
       html += '        </div>';
-      html += '      </div>';
-      html += '      <div class="patient-header-actions">';
-      html += '        <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
-      html += '          📄 + Importar Formulário';
-      html += '        </button>';
-      html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir cadastro desta paciente" style="color: #c62828;">';
-      html += '          🗑️ Excluir cadastro';
-      html += '        </button>';
+      html += '        <div class="patient-header-actions">';
+      html += '          <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
+      html += '            📄 + Importar Formulário';
+      html += '          </button>';
+      html += '          <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir cadastro desta paciente" style="color: #c62828;">';
+      html += '            🗑️ Excluir cadastro';
+      html += '          </button>';
+      html += '        </div>';
       html += '      </div>';
       html += '    </div>';
 
@@ -3367,8 +3395,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v8';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v8';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v9';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v9';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3376,7 +3404,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v8';
+    const IDB_NAME = 'PainelNutricionalDB_v9';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

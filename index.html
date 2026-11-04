@@ -2510,7 +2510,7 @@
     <div class="header-patient-controls">
       <!-- Linha Superior: Seletor da Paciente Ativa + Nova Paciente + Cadeado de Sigilo -->
       <div class="selector-container">
-        <label class="selector-label">Paciente Ativa:</label>
+        <label class="selector-label">Paciente:</label>
         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
           <div class="custom-select-wrapper" id="customSelectWrapper">
             <div class="custom-select-trigger" id="customSelectTrigger" onclick="toggleCustomSelect(event)">
@@ -2521,8 +2521,8 @@
               <!-- Gerado via JS com exatamente 9 itens visíveis e os demais ocultos pela barra de rolagem -->
             </div>
           </div>
-          <button class="btn-new-patient-inline" onclick="openNewPatientModal()" title="Cadastrar nova paciente no painel">
-            ➕ Nova Paciente
+          <button class="btn-new-patient-inline" onclick="openNewPatientModal()" title="Cadastrar novo paciente no painel">
+            ➕ Novo Paciente
           </button>
           <button id="btnPrivacyToggle" class="btn-privacy-toggle active" onclick="togglePrivacyMode()" title="Modo Sigilo Ativado (Iniciais). Clique para ver nomes completos." aria-label="Modo Sigilo">🔒</button>
         </div>
@@ -2618,6 +2618,26 @@
       showToast(privacyMode ? "🔒 Sigilo Ativado (Iniciais)" : "🔓 Sigilo Desativado (Nomes Completos)", "🔒");
     }
 
+    
+    function isFemalePatient(name) {
+      if (!name) return false;
+      const femaleNames = [
+        'clarisse', 'tatiana', 'lívia', 'livia', 'angélica', 'angelica', 
+        'melina', 'isabel', 'ana', 'paloma', 'mariana', 'camila', 'beatriz', 
+        'fernanda', 'juliana', 'patricia', 'patrícia', 'carolina', 'letícia', 
+        'leticia', 'amanda', 'bruna', 'carla', 'daniela', 'gabriela', 'helena', 
+        'isabela', 'júlia', 'julia', 'larissa', 'luana', 'marina', 'natália', 
+        'natalia', 'renata', 'sabrina', 'vanessa', 'paula', 'claudia', 'cláudia',
+        'marcela', 'monica', 'mônica', 'danielle', 'michele', 'michelle'
+      ];
+      const map = window.patientFullNameMap || {};
+      const full = (map[name] || name).trim();
+      const first = full.split(' ')[0].toLowerCase().replace(/[^a-záàâãéèêíïóôõöúç]/g, '');
+      if (femaleNames.includes(first)) return true;
+      if (first.endsWith('a') && !['luca', 'lucas', 'elias', 'jonas', 'matias', 'nicolas', 'josué'].includes(first)) return true;
+      return false;
+    }
+  
     function getPatientDisplayName(key) {
       if (!key) return "";
       const map = window.patientFullNameMap || {};
@@ -2800,11 +2820,11 @@
       if (patientNames.length === 0) {
         const textElem = document.getElementById('selectedPatientText');
         if (textElem) {
-          textElem.innerHTML = '<span style="color:var(--text-muted); font-style: italic;">Nenhuma paciente ativa</span>';
+          textElem.innerHTML = '<span style="color:var(--text-muted); font-style: italic;">Nenhum paciente selecionado</span>';
         }
         const menu = document.getElementById('customOptionsMenu');
         if (menu) {
-          menu.innerHTML = '<div style="padding: 14px 18px; font-size: 13px; color: var(--text-muted); text-align: center;">Nenhuma paciente cadastrada</div>';
+          menu.innerHTML = '<div style="padding: 14px 18px; font-size: 13px; color: var(--text-muted); text-align: center;">Nenhum paciente cadastrado</div>';
         }
         return;
       }
@@ -3094,7 +3114,7 @@
 
       if (!forms || forms.length === 0) {
         return {
-          html: '<div style="padding: 32px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border); margin-top: 16px;"><strong>Nenhum formulário registrado para esta paciente.</strong></div>',
+          html: '<div style="padding: 32px; text-align: center; color: var(--text-muted); background: #faf9f6; border-radius: 12px; border: 1px dashed var(--border); margin-top: 16px;"><strong>Nenhum formulário registrado para este paciente.</strong></div>',
           matchCount: 0
         };
       }
@@ -3420,10 +3440,10 @@
       html += '    </div>';
       html += '    <div class="patient-header-actions-col">';
       html += '      <div class="patient-actions-top-row">';
-      html += '        <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
+      html += '        <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar questionário ou consulta em PDF para ' + (isFemalePatient(name) ? 'esta' : 'este') + ' paciente">';
       html += '          📄 + Importar Formulário';
       html += '        </button>';
-      html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir cadastro desta paciente" style="color: #c62828;">';
+      html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir cadastro ' + (isFemalePatient(name) ? 'desta' : 'deste') + ' paciente" style="color: #c62828;">';
       html += '          🗑️ Excluir cadastro';
       html += '        </button>';
       html += '      </div>';
@@ -3560,8 +3580,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v13';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v13';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v14';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v14';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3569,7 +3589,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v13';
+    const IDB_NAME = 'PainelNutricionalDB_v14';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)
@@ -3823,7 +3843,7 @@ initControls();
       const input = document.getElementById("newPatientNameInput");
       let name = input ? input.value.trim() : "";
       if (!name) {
-        alert("Por favor, informe a sigla ou nome da paciente.");
+        alert("Por favor, informe a sigla ou nome do paciente.");
         return;
       }
       // Verificação insensível a maiúsculas/minúsculas para evitar duplicatas confusas
@@ -3835,7 +3855,7 @@ initControls();
         initControls();
         switchPatient(existingKey);
         closeNewPatientModal();
-        showToast(`Paciente ${existingKey} já cadastrada. Prontuário aberto!`, "👤");
+        showToast(`Paciente ${existingKey} já cadastrad${isFemalePatient(existingKey) ? "a" : "o"}. Prontuário aberto!`, "👤");
         return;
       }
 
@@ -3866,7 +3886,7 @@ initControls();
           queixas: "Aguardando preenchimento do formulário de pré-consulta.",
           rotina: "Aguardando informações sobre rotina e treinos."
         },
-        evolutionSummary: "Paciente recém-cadastrada no painel. Pronto para importar questionários em PDF.",
+        evolutionSummary: "Paciente recém-cadastrad" + (isFemalePatient(name) ? "a" : "o") + " no painel. Pronto para importar questionários em PDF.",
         vitorias: ["Cadastro inicial realizado no painel."],
         atencao: ["Importar o PDF do questionário da paciente para gerar a síntese clínica."],
         condutaSugerida: "Realizar anamnese e planejar metas iniciais."
@@ -3878,7 +3898,7 @@ initControls();
 initControls();
       switchPatient(name);
       closeNewPatientModal();
-      showToast(`Paciente ${name} cadastrada com sucesso!`, "👤");
+      showToast(`Paciente ${name} cadastrad${isFemalePatient(name) ? "a" : "o"} com sucesso!`, "👤");
     }
 
     // ==========================================
@@ -3989,7 +4009,7 @@ initControls();
       html += '        Criar Novo Cadastro';
       html += '      </h3>';
       html += '      <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">';
-      html += '        Cadastre uma paciente real para anexar questionários de pré-consulta, anamnese ou check-ins do Nutrio e Google Forms.';
+      html += '        Cadastre um paciente para anexar questionários de pré-consulta, anamnese ou check-ins.';
       html += '      </p>';
       html += '      <button class="btn-import-patient-form" style="width: 100%; justify-content: center; pointer-events: none;">';
       html += '        ➕ Cadastrar Paciente';
@@ -4268,7 +4288,7 @@ initControls();
             renderCustomSelectOptions();
             renderPatientSummary(currentPatient);
             closeImportExportModal();
-            alert("Backup restaurado com sucesso! " + patientNames.length + " pacientes carregadas.");
+            alert("Backup restaurado com sucesso! " + patientNames.length + " pacientes carregados.");
           }
         } catch (err) {
           alert("Erro ao restaurar arquivo: " + err.message);
@@ -4875,7 +4895,7 @@ initControls();
         const formDate = dateInput ? dateInput.value.trim() : extracted.date;
 
         if (!patientName) {
-          alert("Por favor, preencha a sigla ou nome da paciente.");
+          alert("Por favor, preencha a sigla ou nome do paciente.");
           return;
         }
 
@@ -5433,7 +5453,7 @@ initControls();
           <div class="form-group">
             <label>Paciente Detectada:</label>
             <div style="display: flex; gap: 8px;">
-              <input type="text" id="pdfPatientName" placeholder="Ex: T.P.F. ou Nome da Paciente" style="flex: 1;" />
+              <input type="text" id="pdfPatientName" placeholder="Ex: T.P.F. ou Nome do Paciente" style="flex: 1;" />
               <button class="btn-action-secondary" type="button" onclick="anonymizePatientInput()" title="Converter para siglas (Ex: Tatiana Lopes -> T.L.)">🔒 Sigla</button>
             </div>
           </div>
@@ -5470,14 +5490,14 @@ initControls();
   <div class="modal-overlay" id="newPatientModalOverlay" onclick="closeModalOnBg(event, 'newPatientModalOverlay')">
     <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header">
-        <h3>➕ Nova Paciente</h3>
+        <h3>➕ Cadastrar Novo Paciente</h3>
         <button class="modal-close" onclick="closeNewPatientModal()">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>Sigla ou Nome da Paciente:</label>
+          <label>Sigla ou Nome do Paciente:</label>
           <input type="text" id="newPatientNameInput" placeholder="Ex: M.C.S. ou Maria Silva" />
-          <span style="font-size: 11.5px; color: var(--text-muted);">Recomendamos o uso de siglas para preservar a privacidade da paciente.</span>
+          <span style="font-size: 11.5px; color: var(--text-muted);">Recomendamos o uso de siglas para preservar a privacidade do paciente (LGPD).</span>
         </div>
       </div>
       <div class="modal-footer">
@@ -5515,7 +5535,7 @@ initControls();
             <span>📤</span> Exportar Cópia de Segurança
           </h4>
           <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
-            Baixa um arquivo JSON seguro com o histórico completo de todas as pacientes para você salvar no seu Google Drive, nuvem ou pendrive.
+            Baixa um arquivo JSON seguro com o histórico completo de todos os pacientes para você salvar no seu Google Drive, nuvem ou pendrive.
           </p>
           <button class="btn-import-patient-form" style="width: 100%; justify-content: center;" onclick="exportFullBackup()">
             💾 Baixar Arquivo de Backup (.json)
@@ -5554,17 +5574,17 @@ initControls();
         </div>
 
         <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin: 18px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">⚡ 1. Barra de Ações Rápidas do Cabeçalho</h4>
-        <p style="color: var(--text-muted); margin-bottom: 10px;">Diretamente abaixo da paciente ativa, você encontra a barra de utilitários rápidos:</p>
+        <p style="color: var(--text-muted); margin-bottom: 10px;">Diretamente abaixo do paciente ativo, você encontra a barra de utilitários rápidos:</p>
         <ul style="padding-left: 20px; margin-bottom: 18px; color: var(--text);">
           <li style="margin-bottom: 6px;"><strong>📖 Instruções:</strong> Abre este guia interativo de uso a qualquer momento.</li>
           <li style="margin-bottom: 6px;"><strong>💾 Dados &amp; Backup ▾:</strong> Permite exportar o prontuário completo em formato JSON ou restaurá-lo em segundos.</li>
-          <li style="margin-bottom: 6px;"><strong>🖨️ Imprimir / PDF:</strong> Gera uma versão limpa para impressão ou salvamento em PDF para enviar à paciente ou arquivar.</li>
+          <li style="margin-bottom: 6px;"><strong>🖨️ Imprimir / PDF:</strong> Gera uma versão limpa para impressão ou salvamento em PDF para entregar ao paciente ou arquivar.</li>
         </ul>
 
         <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin: 18px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">📥 2. Como Importar Formulários em PDF (Nutrio, Google Forms, Check-ins)</h4>
         <ol style="padding-left: 20px; margin-bottom: 18px; color: var(--text);">
-          <li style="margin-bottom: 6px;">Selecione a paciente desejada no menu superior (ou clique em <strong>➕ Nova Paciente</strong> caso seja o primeiro atendimento).</li>
-          <li style="margin-bottom: 6px;">Clique no botão verde <strong>📄 + Importar Formulário</strong> no cartão da paciente.</li>
+          <li style="margin-bottom: 6px;">Selecione o paciente desejado no menu superior (ou clique em <strong>➕ Novo Paciente</strong> caso seja o primeiro atendimento).</li>
+          <li style="margin-bottom: 6px;">Clique no botão verde <strong>📄 + Importar Formulário</strong> no cartão do paciente.</li>
           <li style="margin-bottom: 6px;">Clique na caixa pontilhada ou arraste e solte o PDF do questionário:</li>
           <li style="margin-bottom: 6px;">Confira a prévia e clique em <strong>✅ Salvar no Prontuário</strong>. O registro é anexado imediatamente!</li>
         </ol>

@@ -2186,6 +2186,62 @@
       color: #EDEAE3;
     }
 
+    /* Harmonização e Alto Contraste no Modo Escuro (Quiet Luxury Dark) */
+    body.mode-quiet-luxury-dark .box-vitorias {
+      background: rgba(110, 139, 117, 0.12) !important;
+      border: 1px solid rgba(110, 139, 117, 0.35) !important;
+      border-radius: 14px !important;
+      color: #EDEAE3 !important;
+    }
+    body.mode-quiet-luxury-dark .box-vitorias h4 {
+      color: #9ECBA8 !important;
+    }
+    body.mode-quiet-luxury-dark .box-vitorias .list-items li {
+      color: #EDEAE3 !important;
+    }
+    body.mode-quiet-luxury-dark .box-vitorias .list-items li::before {
+      color: #9ECBA8 !important;
+    }
+
+    body.mode-quiet-luxury-dark .box-atencao {
+      background: rgba(199, 167, 125, 0.12) !important;
+      border: 1px solid rgba(199, 167, 125, 0.35) !important;
+      border-radius: 14px !important;
+      color: #EDEAE3 !important;
+    }
+    body.mode-quiet-luxury-dark .box-atencao h4 {
+      color: #E6C291 !important;
+    }
+    body.mode-quiet-luxury-dark .box-atencao .list-items li {
+      color: #EDEAE3 !important;
+    }
+    body.mode-quiet-luxury-dark .box-atencao .list-items li::before {
+      color: #E6C291 !important;
+    }
+
+    body.mode-quiet-luxury-dark .med-fact-card {
+      background: #242320 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    body.mode-quiet-luxury-dark .med-fact-title {
+      color: #E6C291 !important;
+    }
+    body.mode-quiet-luxury-dark .med-fact-body {
+      color: #D6D1C7 !important;
+    }
+
+    body.mode-quiet-luxury-dark .conduct-card {
+      background: rgba(199, 167, 125, 0.1) !important;
+      border: 1px solid rgba(199, 167, 125, 0.3) !important;
+      color: #EDEAE3 !important;
+    }
+    body.mode-quiet-luxury-dark .conduct-card h4 {
+      color: #E6C291 !important;
+    }
+    body.mode-quiet-luxury-dark .conduct-card p {
+      color: #EDEAE3 !important;
+    }
+
     /* Linha Alinhada: Meta Info + Ações (Importar / Excluir) */
     .patient-header-top {
       display: flex;
@@ -3176,12 +3232,7 @@
       html += '</div>';
 
       // 4. Conduta Nutricional Recomendada (se cadastrada)
-      if (synth.condutaSugerida && synth.condutaSugerida.trim() !== '') {
-        html += '<div class="conduct-card" style="margin-bottom: 0;">';
-        html += '  <h4>💡 Conduta Nutricional Recomendada (Próximo Passo)</h4>';
-        html += '  <p>' + escapeHtml(synth.condutaSugerida) + '</p>';
-        html += '</div>';
-      }
+      // Condutas clínicas omitidas da versão pública em conformidade com o Código de Ética do CFN
 
       // 5. Extrato Rápido de Fatos Médicos Coletados
       let meds = 'Nenhum medicamento informado.';
@@ -3397,8 +3448,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v9';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v9';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v10';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v10';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3406,7 +3457,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v9';
+    const IDB_NAME = 'PainelNutricionalDB_v10';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)
@@ -3968,6 +4019,82 @@ initControls();
     }
   
     
+    // Gestão de Backup Geral (Exportar / Restaurar JSON)
+    function openImportExportModal() {
+      const modal = document.getElementById("importExportModalOverlay");
+      if (modal) modal.classList.add("active");
+    }
+
+    function closeImportExportModal() {
+      const modal = document.getElementById("importExportModalOverlay");
+      if (modal) modal.classList.remove("active");
+    }
+
+    function exportFullBackup() {
+      try {
+        const backupData = {
+          version: "1.0",
+          exportedAt: new Date().toISOString(),
+          patientsData: patientsData,
+          clinicalSyntheses: clinicalSyntheses,
+          patientFullNameMap: window.patientFullNameMap || {}
+        };
+        const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const dateStr = new Date().toISOString().split("T")[0];
+        a.href = url;
+        a.download = 'backup_painel_nutricional_' + dateStr + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        alert("Erro ao exportar backup: " + err.message);
+      }
+    }
+
+    function handleBackupFileSelected(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed.patientsData) {
+            throw new Error("Arquivo de backup inválido ou em formato incompatível.");
+          }
+
+          if (confirm("Deseja restaurar os dados deste backup? Os registros atuais serão mesclados/substituídos pelos do backup.")) {
+            patientsData = parsed.patientsData;
+            if (parsed.clinicalSyntheses) {
+              clinicalSyntheses = parsed.clinicalSyntheses;
+            }
+            if (parsed.patientFullNameMap) {
+              window.patientFullNameMap = Object.assign(window.patientFullNameMap || {}, parsed.patientFullNameMap);
+            }
+
+            saveToLocalStorage(false);
+            patientNames = Object.keys(patientsData);
+            if (patientNames.length > 0) {
+              currentPatient = patientNames[0];
+            }
+            renderCustomSelectOptions();
+            renderPatientSummary(currentPatient);
+            closeImportExportModal();
+            alert("Backup restaurado com sucesso! " + patientNames.length + " pacientes carregadas.");
+          }
+        } catch (err) {
+          alert("Erro ao restaurar arquivo: " + err.message);
+        } finally {
+          event.target.value = "";
+        }
+      };
+      reader.readAsText(file);
+    }
+  
+
     // Controle Dinâmico de Modos Visuais (Modo 1: Quiet Luxury Claro / Modo 2: Quiet Luxury Dark)
     function setVisualMode(mode) {
       const body = document.body;
@@ -5186,107 +5313,88 @@ initControls();
 
 
   <!-- Modal de Instruções de Uso & Guia do JSON -->
+    <!-- Modal Dados & Backup (Exportar / Restaurar JSON) -->
+  <div class="modal-overlay" id="importExportModalOverlay" onclick="closeModalOnBg(event, 'importExportModalOverlay')">
+    <div class="modal-box" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3>💾 Dados &amp; Backup do Prontuário</h3>
+        <button class="modal-close" onclick="closeImportExportModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="line-height: 1.6; font-size: 14px; padding-right: 8px;">
+        <p style="color: var(--text-muted); margin-bottom: 20px;">
+          Faça a gestão completa dos seus prontuários com total segurança. O arquivo de backup (.json) contém todos os cadastros, formulários importados e sínteses clínicas.
+        </p>
+
+        <div style="background: var(--card-subtle-bg); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 16px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <span>📤</span> Exportar Cópia de Segurança
+          </h4>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+            Baixa um arquivo JSON seguro com o histórico completo de todas as pacientes para você salvar no seu Google Drive, nuvem ou pendrive.
+          </p>
+          <button class="btn-import-patient-form" style="width: 100%; justify-content: center;" onclick="exportFullBackup()">
+            💾 Baixar Arquivo de Backup (.json)
+          </button>
+        </div>
+
+        <div style="background: var(--card-subtle-bg); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <span>📥</span> Restaurar Cópia de Segurança
+          </h4>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+            Se trocou de computador ou deseja recuperar seus dados, selecione seu arquivo de backup (.json) para restaurar todos os cadastros instantaneamente.
+          </p>
+          <input type="file" id="backupFileInput" accept=".json" style="display: none;" onchange="handleBackupFileSelected(event)">
+          <button class="btn-action-secondary" style="width: 100%; justify-content: center; padding: 10px 16px;" onclick="document.getElementById('backupFileInput').click()">
+            📂 Selecionar Arquivo JSON para Restaurar
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top: 20px; display: flex; justify-content: flex-end;">
+        <button class="btn-action-secondary" onclick="closeImportExportModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="instructionsModalOverlay" onclick="closeModalOnBg(event, 'instructionsModalOverlay')">
     <div class="modal-box" style="max-width: 720px;">
       <div class="modal-header">
         <h3>📖 Como Usar o Painel Nutricional</h3>
         <button class="modal-close" onclick="closeInstructionsModal()">&times;</button>
       </div>
-      <div class="modal-body" style="line-height: 1.7; font-size: 14px; max-height: 75vh; overflow-y: auto; padding-right: 8px;">
-        
-        <div style="background: #faf5ee; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 16px;">
-          <h4 style="color: var(--primary-dark); font-size: 15px; margin-bottom: 6px;">💡 Bem-vinda ao seu Painel de Prontuários Clínicos!</h4>
-          <p style="color: var(--text); margin: 0;">Esta plataforma foi concebida sob medida para simplificar e qualificar a rotina de consultas nutricionais. Ela reúne questionários de pré-consulta, anamneses, check-ins periódicos e condutas em um prontuário ágil, seguro e integrado.</p>
+            <div class="modal-body" style="line-height: 1.7; font-size: 14px; max-height: 75vh; overflow-y: auto; padding-right: 8px;">
+        <div style="background: var(--card-subtle-bg); border-left: 4px solid var(--accent); padding: 14px 18px; border-radius: 0 10px 10px 0; margin-bottom: 22px;">
+          <h4 style="font-size: 15px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">💡 Bem-vinda ao seu Painel de Prontuários Clínicos!</h4>
+          <p style="margin: 0; color: var(--text);">Esta plataforma foi desenvolvida sob medida para simplificar a rotina de consultas nutricionais. Ela reúne questionários de pré-consulta, anamneses, check-ins periódicos e condutas em um prontuário ágil, seguro e integrado.</p>
         </div>
 
-        <!-- 1. Navegação Clínica em 4 Abas -->
-        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-          🧭 1. Estrutura de Navegação do Prontuário (4 Abas Especializadas)
-        </h4>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
-          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid #2e7d32; border-radius: 8px; padding: 10px 14px;">
-            <strong style="color: #2e7d32; font-size: 14px;">🩺 1º Resumo Clínico (Visão Executiva Aberta):</strong>
-            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Apresenta o panorama completo da paciente aberto na tela (sem caixas colapsadas), incluindo Ponto de Partida (Baseline), Resumo da Evolução, Vitórias Conquistadas, Pontos de Atenção e Conduta Nutricional recomendada.</p>
-          </div>
-          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid var(--primary); border-radius: 8px; padding: 10px 14px;">
-            <strong style="color: var(--primary); font-size: 14px;">🎯 2º Por Eixo Temático (Visual Limpo e Organizado):</strong>
-            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Classifica as respostas nos 7 pilares clínicos (Rotina, Digestão, Apetite, etc.). Para não poluir a tela, as seções iniciam <strong>recolhidas por padrão</strong>; basta clicar no tema desejado para visualizá-lo.</p>
-          </div>
-          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid var(--accent); border-radius: 8px; padding: 10px 14px;">
-            <strong style="color: var(--accent); font-size: 14px;">📋 3º Por Formulário (Histórico Cronológico de Consultas):</strong>
-            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Permite navegar consulta a consulta pelos chips de data (<em>#1</em>, <em>#2</em>...). Os tópicos também iniciam <strong>recolhidos por padrão</strong>, permitindo abrir pontualmente a dúvida que você precisa checar no atendimento.</p>
-          </div>
-          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 3.5px solid #1565c0; border-radius: 8px; padding: 10px 14px;">
-            <strong style="color: #1565c0; font-size: 14px;">📈 4º Evolução Comparativa (Linha do Tempo Lado a Lado):</strong>
-            <p style="margin: 4px 0 0 0; color: var(--text); font-size: 13.5px;">Alinha as respostas de múltiplos formulários lado a lado, facilitando a constatação de avanços físicos, melhora de sintomas intestinais e consolidação de hábitos.</p>
-          </div>
+        <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin: 18px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">⚡ 1. Barra de Ações Rápidas do Cabeçalho</h4>
+        <p style="color: var(--text-muted); margin-bottom: 10px;">Diretamente abaixo da paciente ativa, você encontra a barra de utilitários rápidos:</p>
+        <ul style="padding-left: 20px; margin-bottom: 18px; color: var(--text);">
+          <li style="margin-bottom: 6px;"><strong>📖 Instruções:</strong> Abre este guia interativo de uso a qualquer momento.</li>
+          <li style="margin-bottom: 6px;"><strong>💾 Dados &amp; Backup ▾:</strong> Permite exportar o prontuário completo em formato JSON ou restaurá-lo em segundos.</li>
+          <li style="margin-bottom: 6px;"><strong>🖨️ Imprimir / PDF:</strong> Gera uma versão limpa para impressão ou salvamento em PDF para enviar à paciente ou arquivar.</li>
+        </ul>
+
+        <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin: 18px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">📥 2. Como Importar Formulários em PDF (Nutrio, Google Forms, Check-ins)</h4>
+        <ol style="padding-left: 20px; margin-bottom: 18px; color: var(--text);">
+          <li style="margin-bottom: 6px;">Selecione a paciente desejada no menu superior (ou clique em <strong>➕ Nova Paciente</strong> caso seja o primeiro atendimento).</li>
+          <li style="margin-bottom: 6px;">Clique no botão verde <strong>📄 + Importar Formulário</strong> no cartão da paciente.</li>
+          <li style="margin-bottom: 6px;">Clique na caixa pontilhada ou arraste e solte o PDF do questionário:</li>
+          <li style="margin-bottom: 6px;">Confira a prévia e clique em <strong>✅ Salvar no Prontuário</strong>. O registro é anexado imediatamente!</li>
+        </ol>
+
+        <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin: 18px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">💾 3. O que é o arquivo "JSON de Backup"?</h4>
+        <p style="color: var(--text-muted); margin-bottom: 8px;">O arquivo <code>.json</code> funciona como uma cópia de segurança digital completa, leve e segura. Você não precisa abri-lo:</p>
+        <ul style="padding-left: 20px; margin-bottom: 18px; color: var(--text);">
+          <li style="margin-bottom: 6px;"><strong>Exportar Backup:</strong> Salve uma cópia em seu Google Drive ou pendrive com regularidade através de <em>💾 Dados &amp; Backup ▾ ➔ Exportar Backup (JSON)</em>.</li>
+          <li style="margin-bottom: 6px;"><strong>Restaurar Backup:</strong> Ao trocar de notebook ou formatar o computador, acesse <em>📥 Restaurar Backup (JSON)</em> para recarregar todos os prontuários e retornos no mesmo instante.</li>
+        </ul>
+
+        <div style="background: rgba(110, 139, 117, 0.08); border-left: 4px solid var(--primary); padding: 14px 18px; border-radius: 0 10px 10px 0; margin-top: 20px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">🛡️ 4. Privacidade Absoluta (LGPD)</h4>
+          <p style="margin: 0; color: var(--text);">Nenhum dado ou documento sai do seu computador. Todo o processamento de leitura de PDF e armazenamento ocorre dentro da memória local do seu navegador.</p>
         </div>
-
-        <!-- 2. Controle de Sigilo (Cadeado) -->
-        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-          🔒 2. Controle Discreto de Sigilo (Cadeado 🔒 / 🔓)
-        </h4>
-        <div style="background: #ffffff; border: 1.5px solid #cce0d1; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
-          <p style="margin: 0 0 6px 0; color: var(--text);">
-            Ao lado do seletor da paciente ativa, você dispõe do botão em forma de cadeado (<strong><code>🔒</code></strong> ou <strong><code>🔓</code></strong>):
-          </p>
-          <ul style="margin-left: 20px; margin-bottom: 0;">
-            <li style="margin-bottom: 4px;"><strong>Cadeado Fechado (<code>🔒</code>):</strong> Modo Sigilo Ativado. Os nomes das pacientes são exibidos estritamente pelas suas <strong>iniciais</strong> (ex: <em>C.R.S.F.</em>, <em>T.B.L.</em>, <em>L.B.F.</em>). Perfeito para atendimentos clínicos presenciais ou compartilhamento de tela (LGPD).</li>
-            <li><strong>Cadeado Aberto (<code>🔓</code>):</strong> Modo Aberto. Exibe os nomes completos para conferência administrativa rápida.</li>
-          </ul>
-        </div>
-
-        <!-- 3. Ações Rápidas no Cabeçalho -->
-        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-          ⚡ 3. Barra de Ações Rápidas do Cabeçalho
-        </h4>
-        <p style="margin-bottom: 8px;">Diretamente abaixo da paciente ativa, você encontra a barra de utilitários rápidos:</p>
-        <div style="background: #fbfaf7; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
-          <ul style="margin-left: 20px; margin-bottom: 0;">
-            <li style="margin-bottom: 4px;"><strong>📖 Instruções:</strong> Abre este guia interativo de uso a qualquer momento.</li>
-            <li style="margin-bottom: 4px;"><strong>💾 Dados & Backup ▾:</strong> Permite exportar o prontuário completo em formato JSON ou restaurá-lo em segundos.</li>
-            <li><strong>🖨️ Imprimir / PDF:</strong> Gera uma versão limpa para impressão ou salvamento em PDF para enviar à paciente ou arquivar.</li>
-          </ul>
-        </div>
-
-        <!-- 4. Upload de Documentos Inteligente -->
-        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-          📥 4. Como Importar Formulários em PDF (Nutrio, Google Forms, Check-ins)
-        </h4>
-        <div style="background: #ffffff; border: 1.5px solid #d4e3d7; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
-          <ol style="margin-left: 20px; margin-bottom: 0; padding-left: 0;">
-            <li style="margin-bottom: 6px;">Selecione a paciente desejada no menu superior (ou clique em <strong><code>➕ Nova Paciente</code></strong> caso seja o primeiro atendimento).</li>
-            <li style="margin-bottom: 6px;">Clique no botão verde <strong><code>📄 + Importar Formulário</code></strong> no cartão da paciente.</li>
-            <li style="margin-bottom: 6px;">Clique na caixa pontilhada ou <strong>arraste e solte</strong> o PDF do questionário:
-              <ul style="margin-left: 20px; margin-top: 4px;">
-                <li><strong>Nutrio:</strong> Lê perfeitamente as tabelas de 2 colunas com pareamento automático de perguntas e respostas.</li>
-                <li><strong>Google Forms:</strong> Identifica as perguntas com asteriscos obrigatórios (<code>*</code>), elimina links longos e detecta o nome da respondente.</li>
-                <li><strong>Anamneses e Check-ins:</strong> Segmenta tópicos clínicos e horários de refeição de forma inteligente.</li>
-              </ul>
-            </li>
-            <li style="margin-top: 6px;">Confira a prévia e clique em <strong><code>✅ Salvar no Prontuário</code></strong>. O registro é anexado imediatamente!</li>
-          </ol>
-        </div>
-
-        <!-- 5. Backup em JSON -->
-        <div style="background: #eef4f0; border: 1.5px solid #cce0d1; padding: 14px 16px; border-radius: 10px; margin: 16px 0;">
-          <h4 style="color: #235928; font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            💾 5. O que é o arquivo "JSON de Backup"?
-          </h4>
-          <p style="margin: 0 0 6px 0; color: var(--text);">
-            O arquivo <code>.json</code> funciona como uma cópia de segurança digital completa, leve e segura. Você não precisa abri-lo:
-          </p>
-          <ul style="margin-left: 20px; margin-bottom: 0;">
-            <li style="margin-bottom: 4px;"><strong>Exportar Backup:</strong> Salve uma cópia em seu Google Drive ou pendrive com regularidade através de <code>💾 Dados & Backup ▾ ➔ Exportar Backup (JSON)</code>.</li>
-            <li><strong>Restaurar Backup:</strong> Ao trocar de notebook ou formatar o computador, acesse <code>📥 Restaurar Backup (JSON)</code> para recarregar todos os prontuários e retornos no mesmo instante.</li>
-          </ul>
-        </div>
-
-        <h4 style="color: var(--primary-dark); font-size: 15px; margin-top: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-          🛡️ 6. Privacidade Absoluta (LGPD)
-        </h4>
-        <p style="margin: 0;">Nenhum dado ou documento sai do seu computador. Todo o processamento de leitura de PDF e armazenamento ocorre estritamente dentro da memória local do seu navegador, em conformidade com as diretrizes mais rigorosas de sigilo em saúde.</p>
-
       </div>
       <div class="modal-footer">
         <button class="btn-import-pdf" onclick="closeInstructionsModal()">Entendi, vamos começar!</button>

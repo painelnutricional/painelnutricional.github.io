@@ -5,10 +5,10 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-    <!-- Google Fonts: Cormorant Garamond, Outfit, Inter -->
+    <!-- Google Fonts: Plus Jakarta Sans, Outfit, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Nutricional | Prontuário & Gestão Clínica</title>
   <style>
@@ -1900,7 +1900,7 @@
   
   
     /* ==================================================== */
-    /* SISTEMA DE DESIGN EXCLUSIVO: QUIET LUXURY (MODO 1: CLARO / MODO 2: ESCURO) */
+    /* SISTEMA DE DESIGN EXCLUSIVO: QUIET LUXURY COM PLUS JAKARTA SANS */
     /* ==================================================== */
 
     /* MODO 1: QUIET LUXURY CLARO (Padrão do Sistema) */
@@ -1919,7 +1919,7 @@
       --accent-light: #FAF8F5;
       --success: #3E5A44;
       --font-family-base: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-family-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-family-title: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --card-shadow: 0 15px 40px -10px rgba(46, 44, 41, 0.04), 0 1px 3px rgba(46, 44, 41, 0.02);
       --border-radius-card: 22px;
       font-family: var(--font-family-base);
@@ -1935,12 +1935,13 @@
       box-shadow: 0 2px 16px rgba(46, 44, 41, 0.03);
     }
 
+    .brand-text h1,
     body.mode-quiet-luxury-light .brand-text h1,
     body:not(.mode-quiet-luxury-dark) .brand-text h1 {
-      font-family: var(--font-family-serif);
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-family: var(--font-family-title) !important;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
       color: var(--primary-dark);
     }
@@ -1961,11 +1962,12 @@
       background: var(--card-bg);
     }
 
+    .patient-name-title,
     body.mode-quiet-luxury-light .patient-name-title,
     body:not(.mode-quiet-luxury-dark) .patient-name-title {
-      font-family: var(--font-family-serif);
-      font-size: 36px;
-      font-weight: 600;
+      font-family: var(--font-family-title) !important;
+      font-size: 29px;
+      font-weight: 700;
       letter-spacing: -0.5px;
       color: var(--primary-dark);
     }
@@ -2013,7 +2015,7 @@
       --accent-light: #282724;
       --success: #6E8B75;
       --font-family-base: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-family-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-family-title: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --card-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
       --border-radius-card: 22px;
       font-family: var(--font-family-base);
@@ -2029,10 +2031,10 @@
     }
 
     body.mode-quiet-luxury-dark .brand-text h1 {
-      font-family: var(--font-family-serif);
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-family: var(--font-family-title) !important;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
       color: #EDEAE3;
     }
@@ -2052,9 +2054,9 @@
     }
 
     body.mode-quiet-luxury-dark .patient-name-title {
-      font-family: var(--font-family-serif);
-      font-size: 36px;
-      font-weight: 600;
+      font-family: var(--font-family-title) !important;
+      font-size: 29px;
+      font-weight: 700;
       letter-spacing: -0.5px;
       color: #EDEAE3;
     }

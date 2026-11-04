@@ -148,11 +148,11 @@ A profissional pode alternar instantaneamente entre os dois ambientes no cabeça
 
 * 🧘 **Modo 1: Quiet Luxury (Claro — Padrão do Sistema):**
   - **Atmosfera:** Serenidade, luminosidade suave e leitura confortável.
-  - **Tipografia:** Serif clássica contemporânea (*Cormorant Garamond*) para títulos e nomes de pacientes, combinada com *Outfit* para métricas e leitura clínica fluida.
+  - **Tipografia:** *Plus Jakarta Sans* para o logotipo e nomes de pacientes (proporcionando modernismo clínico suíço de alta precisão), combinada com *Outfit* para métricas e leitura clínica fluida.
   - **Paleta:** Fundo em tom pedra calcária/areia suave (`#F6F4EE`), cartões flutuantes em marfim perolado (`#FFFFFF` / `#FCFBF8`) e acentos refinados em eucalipto e argila.
 
 * 🌙 **Modo 2: Quiet Luxury Dark (Modo Escuro Nobre):**
-  - **Atmosfera:** O mesmo requinte e sofisticação do Quiet Luxury, adaptado para ambientes escuros com acabamento aveludado (sem pretos chapados ou contrastes agressivos).
+  - **Atmosfera:** O mesmo requinte e autoridade científica do Quiet Luxury com *Plus Jakarta Sans*, adaptado para ambientes escuros com acabamento aveludado (sem pretos chapados ou contrastes agressivos).
   - **Paleta:** Fundo em ardósia carvão quente (`#161514`), cartões nobres (`#201F1D`), texto em marfim perolado (`#EDEAE3`) e acentos em dourado argila suave (`#C7A77D`) e verde sálvia (`#6E8B75`).
 
 ---

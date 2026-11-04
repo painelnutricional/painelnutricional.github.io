@@ -2242,48 +2242,54 @@
       color: #EDEAE3 !important;
     }
 
-    /* Linha Alinhada: Meta Info + Ações (Importar / Excluir) */
-    .patient-header-top {
+    /* Reorganização Harmoniosa do Cabeçalho da Paciente e Eixos */
+    .patient-card-header {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: flex-start !important;
+      flex-wrap: wrap !important;
+      gap: 16px !important;
+      margin-bottom: 12px !important;
+      padding-bottom: 14px !important;
+      border-bottom: 1px solid var(--border) !important;
+    }
+    .patient-header-left {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      width: 100%;
+      gap: 4px;
     }
-    .patient-meta-and-actions-row {
+    .patient-header-actions-col {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 14px;
-      width: 100%;
-      margin-top: 4px;
+      gap: 8px;
     }
-    .patient-header-actions {
+    .patient-actions-top-row {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
-    .patient-meta-info {
-      margin-top: 0 !important;
-    }
-
-    /* Gaveta Discreta de Envios da Paciente */
-    .patient-submissions-drawer {
-      margin: 12px 0 18px 0;
+    .patient-actions-drawer-row {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      position: relative;
     }
     .submissions-collapse {
+      position: relative;
       display: inline-block;
     }
     .submissions-summary-pill {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 5px 14px;
+      padding: 4px 14px;
       background: rgba(0, 0, 0, 0.03);
       border: 1px solid var(--border);
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
@@ -2294,6 +2300,7 @@
     body.mode-quiet-luxury-dark .submissions-summary-pill {
       background: rgba(255, 255, 255, 0.04);
       color: #9C968D;
+      border-color: rgba(255, 255, 255, 0.1);
     }
     .submissions-summary-pill::-webkit-details-marker {
       display: none;
@@ -2308,7 +2315,7 @@
       color: #EDEAE3;
     }
     .submissions-count-icon {
-      font-size: 13px;
+      font-size: 12.5px;
     }
     .submissions-toggle-arrow {
       font-size: 10px;
@@ -2318,19 +2325,32 @@
     .submissions-collapse[open] .submissions-toggle-arrow {
       transform: rotate(180deg);
     }
-    .compact-drawer-chips {
-      margin-top: 10px;
+    .submissions-collapse[open] .compact-drawer-chips {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 50;
+      min-width: 290px;
+      max-width: 400px;
+      max-height: 240px;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: var(--card-bg);
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      padding: 12px 14px;
-      background: var(--card-subtle-bg);
-      border: 1px dashed var(--border);
-      border-radius: 12px;
+    }
+    body.mode-quiet-luxury-dark .submissions-collapse[open] .compact-drawer-chips {
+      background: #242320;
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
     }
     .compact-chip {
       padding: 4px 10px !important;
-      font-size: 12px !important;
+      font-size: 11.5px !important;
       gap: 6px !important;
     }
     .form-chip-title-cut {
@@ -2338,6 +2358,19 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    /* Subir os eixos de visualização bem próximos da linha do cabeçalho */
+    .view-mode-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 0 !important;
+      border-top: none !important;
+      padding-top: 0 !important;
+      margin-bottom: 16px !important;
     }
 
     /* Seletor Segmentado no Cabeçalho (Modo: 1 / 2) */
@@ -3295,48 +3328,46 @@
 
       const displayName = getPatientDisplayName(name);
       html += '<div class="patient-card">';
-      html += '  <div class="patient-card-header">';
-      html += '    <div class="patient-header-top">';
+            html += '  <div class="patient-card-header">';
+      html += '    <div class="patient-header-left">';
       html += '      <div class="patient-name-title">' + displayName;
       html += '        <span class="status-badge" style="background-color:' + synth.badgeColor + ';">' + synth.badge + '</span>';
       html += '      </div>';
-      html += '      <div class="patient-meta-and-actions-row">';
-      html += '        <div class="patient-meta-info">';
-      html += '          📅 <strong>' + forms.length + (forms.length === 1 ? ' formulário analisado' : ' formulários analisados') + '</strong>' + (forms.length > 0 ? ' • Último registro: <strong>' + forms[forms.length - 1].respondido_em + '</strong>' : '');
-      html += '        </div>';
-      html += '        <div class="patient-header-actions">';
-      html += '          <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
-      html += '            📄 + Importar Formulário';
-      html += '          </button>';
-      html += '          <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir cadastro desta paciente" style="color: #c62828;">';
-      html += '            🗑️ Excluir cadastro';
-      html += '          </button>';
-      html += '        </div>';
+      html += '      <div class="patient-meta-info">';
+      html += '        📅 <strong>' + forms.length + (forms.length === 1 ? ' formulário analisado' : ' formulários analisados') + '</strong>' + (forms.length > 0 ? ' • Último registro: <strong>' + forms[forms.length - 1].respondido_em + '</strong>' : '');
       html += '      </div>';
       html += '    </div>';
-
+      html += '    <div class="patient-header-actions-col">';
+      html += '      <div class="patient-actions-top-row">';
+      html += '        <button class="btn-import-patient-form" onclick="openPdfModalForPatient(\'' + name.replace(/'/g, "\\'") + '\')" title="Importar um novo questionário ou consulta em PDF para esta paciente">';
+      html += '          📄 + Importar Formulário';
+      html += '        </button>';
+      html += '        <button class="btn-action-secondary" onclick="deleteCurrentPatientPrompt(\'' + name.replace(/'/g, "\\'") + '\')" title="Excluir cadastro desta paciente" style="color: #c62828;">';
+      html += '          🗑️ Excluir cadastro';
+      html += '        </button>';
+      html += '      </div>';
       if (forms.length > 0) {
-        html += '    <div class="patient-submissions-drawer">';
-        html += '      <details class="submissions-collapse">';
-        html += '        <summary class="submissions-summary-pill" title="Clique para ver ou excluir arquivos importados">';
-        html += '          <span class="submissions-count-icon">📁</span>';
-        html += '          <span class="submissions-count-text">' + forms.length + (forms.length === 1 ? ' formulário arquivado' : ' formulários arquivados') + '</span>';
-        html += '          <span class="submissions-toggle-arrow">▾</span>';
-        html += '        </summary>';
-        html += '        <div class="compact-drawer-chips">';
+        html += '      <div class="patient-actions-drawer-row">';
+        html += '        <details class="submissions-collapse">';
+        html += '          <summary class="submissions-summary-pill" title="Clique para ver ou excluir arquivos importados">';
+        html += '            <span class="submissions-count-icon">📁</span>';
+        html += '            <span class="submissions-count-text">' + forms.length + (forms.length === 1 ? ' formulário arquivado' : ' formulários arquivados') + '</span>';
+        html += '            <span class="submissions-toggle-arrow">▾</span>';
+        html += '          </summary>';
+        html += '          <div class="compact-drawer-chips">';
         forms.forEach((f, fIdx) => {
-          const qCount = f.total_perguntas || (f.perguntas_e_respostas ? f.perguntas_e_respostas.length : 0);
-          html += '          <div class="form-chip compact-chip" title="' + escapeHtml(f.titulo_formulario) + '">';
-          html += '            <span class="form-chip-num">#' + (fIdx + 1) + '</span>';
-          html += '            <strong class="form-chip-title-cut">' + escapeHtml(f.titulo_formulario) + '</strong>';
-          html += '            <span class="form-chip-date">(' + escapeHtml(f.respondido_em) + ')</span>';
-          html += '            <button class="btn-delete-chip" onclick="deletePatientFormPrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + fIdx + ', event)" title="Excluir este arquivo">🗑️</button>';
-          html += '          </div>';
+          html += '            <div class="form-chip compact-chip" title="' + escapeHtml(f.titulo_formulario) + '">';
+          html += '              <span class="form-chip-num">#' + (fIdx + 1) + '</span>';
+          html += '              <strong class="form-chip-title-cut">' + escapeHtml(f.titulo_formulario) + '</strong>';
+          html += '              <span class="form-chip-date">(' + escapeHtml(f.respondido_em) + ')</span>';
+          html += '              <button class="btn-delete-chip" onclick="deletePatientFormPrompt(\'' + name.replace(/'/g, "\\'") + '\', ' + fIdx + ', event)" title="Excluir este arquivo">🗑️</button>';
+          html += '            </div>';
         });
-        html += '        </div>';
-        html += '      </details>';
-        html += '    </div>';
+        html += '          </div>';
+        html += '        </details>';
+        html += '      </div>';
       }
+      html += '    </div>';
       html += '  </div>';
 
       html += '  <div class="view-mode-bar">';
@@ -3448,8 +3479,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v10';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v10';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v11';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v11';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3457,7 +3488,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v10';
+    const IDB_NAME = 'PainelNutricionalDB_v11';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

@@ -2242,40 +2242,86 @@
       color: #EDEAE3 !important;
     }
 
-    /* Reorganização Harmoniosa do Cabeçalho da Paciente e Eixos */
+    /* Reorganização Harmoniosa do Cabeçalho da Paciente e Eixos com Posicionamento Estável */
     .patient-card-header {
       display: flex !important;
       justify-content: space-between !important;
       align-items: flex-start !important;
-      flex-wrap: wrap !important;
-      gap: 16px !important;
+      flex-wrap: nowrap !important;
+      gap: 20px !important;
       margin-bottom: 12px !important;
       padding-bottom: 14px !important;
       border-bottom: 1px solid var(--border) !important;
     }
     .patient-header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+    }
+    .patient-name-title {
+      white-space: normal !important;
+      word-break: break-word !important;
+      line-height: 1.25 !important;
     }
     .patient-header-actions-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 8px !important;
+      flex: 0 0 auto !important;
+      margin-left: auto !important;
     }
     .patient-actions-top-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      flex-wrap: nowrap !important;
+      justify-content: flex-end !important;
     }
     .patient-actions-drawer-row {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      position: relative;
+      display: flex !important;
+      justify-content: center !important;
+      width: 100% !important;
+      position: relative !important;
+    }
+
+    /* Estabilidade no Seletor do Topo: largura constante com ou sem sigilo */
+    .custom-select-wrapper {
+      position: relative !important;
+      user-select: none !important;
+      width: 290px !important;
+      max-width: 290px !important;
+      min-width: 290px !important;
+    }
+    .custom-select-trigger {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    #selectedPatientText {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      display: inline-block !important;
+      max-width: 230px !important;
+    }
+    .header-patient-controls {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-end !important;
+      gap: 7px !important;
+      flex-shrink: 0 !important;
+    }
+    .header-quick-actions {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      padding: 3px 8px !important;
+      flex-shrink: 0 !important;
     }
     .submissions-collapse {
       position: relative;
@@ -3330,9 +3376,7 @@
       html += '<div class="patient-card">';
             html += '  <div class="patient-card-header">';
       html += '    <div class="patient-header-left">';
-      html += '      <div class="patient-name-title">' + displayName;
-      html += '        <span class="status-badge" style="background-color:' + synth.badgeColor + ';">' + synth.badge + '</span>';
-      html += '      </div>';
+      html += '      <div class="patient-name-title">' + displayName + '</div>';
       html += '      <div class="patient-meta-info">';
       html += '        📅 <strong>' + forms.length + (forms.length === 1 ? ' formulário analisado' : ' formulários analisados') + '</strong>' + (forms.length > 0 ? ' • Último registro: <strong>' + forms[forms.length - 1].respondido_em + '</strong>' : '');
       html += '      </div>';
@@ -3479,8 +3523,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v11';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v11';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v12';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v12';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3488,7 +3532,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v11';
+    const IDB_NAME = 'PainelNutricionalDB_v12';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

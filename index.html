@@ -3580,8 +3580,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v14';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v14';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v15';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v15';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3589,7 +3589,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v14';
+    const IDB_NAME = 'PainelNutricionalDB_v15';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)
@@ -5497,7 +5497,7 @@ initControls();
         <div class="form-group">
           <label>Sigla ou Nome do Paciente:</label>
           <input type="text" id="newPatientNameInput" placeholder="Ex: M.C.S. ou Maria Silva" />
-          <span style="font-size: 11.5px; color: var(--text-muted);">Recomendamos o uso de siglas para preservar a privacidade do paciente (LGPD).</span>
+          
         </div>
       </div>
       <div class="modal-footer">
@@ -5619,7 +5619,7 @@ initControls();
       <div class="modal-body" style="line-height: 1.6; font-size: 14px;">
         <div style="background: #faf5ee; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 16px;">
           <p style="margin: 0; color: var(--text);">
-            O <strong>Painel Nutricional</strong> é uma iniciativa 100% gratuita, independente e com foco absoluto na privacidade e segurança clínica (LGPD).
+            O <strong>Painel Nutricional</strong> é uma iniciativa 100% gratuita e independente.
           </p>
         </div>
 

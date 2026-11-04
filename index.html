@@ -2419,6 +2419,21 @@
       margin-bottom: 16px !important;
     }
 
+    /* Estilos do Estado Vazio (Sem Pacientes) */
+    .empty-action-card:hover {
+      border-color: var(--primary) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+    }
+    body.mode-quiet-luxury-dark .empty-action-card {
+      background: #242320 !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    body.mode-quiet-luxury-dark .empty-action-card:hover {
+      border-color: var(--primary) !important;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+    }
+
     /* Seletor Segmentado no Cabeçalho (Modo: 1 / 2) */
     .mode-toggle-segmented {
       display: inline-flex;
@@ -2593,7 +2608,13 @@
       localStorage.setItem("painel_privacy_mode", privacyMode ? "true" : "false");
       updatePrivacyButtonUI();
       initControls();
+      if (patientNames.length > 0 && currentPatient && patientsData[currentPatient]) {
       switchPatient(currentPatient);
+    } else if (patientNames.length > 0) {
+      switchPatient(patientNames[0]);
+    } else {
+      renderEmptyState();
+    }
       showToast(privacyMode ? "🔒 Sigilo Ativado (Iniciais)" : "🔓 Sigilo Desativado (Nomes Completos)", "🔒");
     }
 
@@ -2775,6 +2796,18 @@
           patientNames.push(k);
         }
       });
+
+      if (patientNames.length === 0) {
+        const textElem = document.getElementById('selectedPatientText');
+        if (textElem) {
+          textElem.innerHTML = '<span style="color:var(--text-muted); font-style: italic;">Nenhuma paciente ativa</span>';
+        }
+        const menu = document.getElementById('customOptionsMenu');
+        if (menu) {
+          menu.innerHTML = '<div style="padding: 14px 18px; font-size: 13px; color: var(--text-muted); text-align: center;">Nenhuma paciente cadastrada</div>';
+        }
+        return;
+      }
 
       const menu = document.getElementById('customOptionsMenu');
       if (!menu) return;
@@ -3359,6 +3392,10 @@
   
 
     function renderPatientView(name) {
+      if (!name || !patientsData[name] || patientNames.length === 0) {
+        renderEmptyState();
+        return;
+      }
       const forms = patientsData[name] || [];
       const synth = clinicalSyntheses[name] || {
         badge: "Em Acompanhamento",
@@ -3523,8 +3560,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v12';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v12';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v13';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v13';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3532,7 +3569,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v12';
+    const IDB_NAME = 'PainelNutricionalDB_v13';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)
@@ -3910,8 +3947,8 @@ initControls();
       }
     }
 
-    function deleteCurrentPatientPrompt(patientName) {
-      if (confirm(`Deseja realmente excluir o prontuário de ${patientName}? Esta ação não pode ser desfeita.`)) {
+        function deleteCurrentPatientPrompt(patientName) {
+      if (confirm(`Deseja realmente excluir o cadastro de ${patientName}? Esta ação não pode ser desfeita.`)) {
         delete patientsData[patientName];
         delete clinicalSyntheses[patientName];
         const idx = patientNames.indexOf(patientName);
@@ -3919,14 +3956,87 @@ initControls();
         saveToLocalStorage(false);
 
         if (patientNames.length === 0) {
-          // Se não houver mais pacientes, recriar um demo
-          resetToDemonstrationData();
+          currentPatient = null;
+          initControls();
+          renderEmptyState();
         } else {
           initControls();
           switchPatient(patientNames[0]);
         }
-        showToast(`Paciente ${patientName} excluída com sucesso.`, "🗑️");
+        showToast("Cadastro excluído com sucesso.", "🗑️");
       }
+    }
+
+    function renderEmptyState() {
+      const container = document.getElementById('mainContent');
+      if (!container) return;
+
+      let html = '';
+      html += '<div class="patient-card empty-state-card" style="text-align: center; padding: 56px 32px; max-width: 780px; margin: 32px auto;">';
+      html += '  <div style="font-size: 46px; margin-bottom: 12px;">📋</div>';
+      html += '  <h2 style="font-family: var(--font-family-title); font-size: 26px; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px;">';
+      html += '    Nenhum Prontuário Ativo no Momento';
+      html += '  </h2>';
+      html += '  <p style="font-size: 15px; color: var(--text-muted); max-width: 520px; margin: 0 auto 36px; line-height: 1.6;">';
+      html += '    O cadastro foi excluído com sucesso. Escolha uma das opções abaixo para iniciar um novo atendimento ou restaurar o modelo de demonstração:';
+      html += '  </p>';
+      html += '  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; text-align: left; margin-bottom: 28px;">';
+      
+      // Card 1: Criar Novo Cadastro
+      html += '    <div class="empty-action-card" onclick="openNewPatientModal()" style="background: var(--card-subtle-bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 26px; cursor: pointer; transition: all 0.2s ease;">';
+      html += '      <div style="font-size: 30px; margin-bottom: 12px;">➕</div>';
+      html += '      <h3 style="font-family: var(--font-family-title); font-size: 17px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px;">';
+      html += '        Criar Novo Cadastro';
+      html += '      </h3>';
+      html += '      <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">';
+      html += '        Cadastre uma paciente real para anexar questionários de pré-consulta, anamnese ou check-ins do Nutrio e Google Forms.';
+      html += '      </p>';
+      html += '      <button class="btn-import-patient-form" style="width: 100%; justify-content: center; pointer-events: none;">';
+      html += '        ➕ Cadastrar Paciente';
+      html += '      </button>';
+      html += '    </div>';
+
+      // Card 2: Restaurar Paciente Demonstração
+      html += '    <div class="empty-action-card" onclick="restoreDemoWithoutConfirm()" style="background: var(--card-subtle-bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 26px; cursor: pointer; transition: all 0.2s ease;">';
+      html += '      <div style="font-size: 30px; margin-bottom: 12px;">🔄</div>';
+      html += '      <h3 style="font-family: var(--font-family-title); font-size: 17px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px;">';
+      html += '        Restaurar Paciente Demonstração';
+      html += '      </h3>';
+      html += '      <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">';
+      html += '        Recarregue a paciente exemplo com histórico completo de consultas, sínteses e dados preenchidos para tour e demonstração.';
+      html += '      </p>';
+      html += '      <button class="btn-action-secondary" style="width: 100%; justify-content: center; pointer-events: none;">';
+      html += '        ✨ Restaurar Demonstração';
+      html += '      </button>';
+      html += '    </div>';
+
+      html += '  </div>';
+
+      // Rodapé do card: Restaurar Backup
+      html += '  <div style="border-top: 1px solid var(--border); padding-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">';
+      html += '    <span style="font-size: 13.5px; color: var(--text-muted);">Já possui um arquivo de prontuários em seu computador?</span>';
+      html += '    <button class="btn-action-ghost" onclick="openImportExportModal()" style="font-weight: 700; text-decoration: underline; cursor: pointer;">';
+      html += '      💾 Restaurar Cópia de Segurança (.json)';
+      html += '    </button>';
+      html += '  </div>';
+
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    function restoreDemoWithoutConfirm() {
+      for (const k in patientsData) delete patientsData[k];
+      for (const k in clinicalSyntheses) delete clinicalSyntheses[k];
+      Object.assign(patientsData, JSON.parse(JSON.stringify(DEFAULT_PATIENTS_BACKUP)));
+      Object.assign(clinicalSyntheses, JSON.parse(JSON.stringify(DEFAULT_SUMMARIES_BACKUP)));
+      saveToLocalStorage(false);
+      patientNames.length = 0;
+      Object.keys(patientsData).forEach(k => patientNames.push(k));
+      currentPatient = patientNames[0] || "T.P.F. (Demonstração)";
+      initControls();
+      switchPatient(currentPatient);
+      showToast("Paciente demonstração restaurada com sucesso!", "🔄");
     }
 
     function closeModalOnBg(e, modalId) {

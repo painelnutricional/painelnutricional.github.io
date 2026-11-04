@@ -2186,10 +2186,67 @@
       color: #EDEAE3;
     }
 
-    /* Harmonização e Alto Contraste no Modo Escuro (Quiet Luxury Dark) */
+    /* Harmonização e Alto Contraste: Modo Claro (Quiet Luxury Light) */
+    body:not(.mode-quiet-luxury-dark) .box-vitorias,
+    body.mode-quiet-luxury-light .box-vitorias {
+      background: #F4F8F4 !important;
+      border: 1px solid #C8E2CB !important;
+      border-radius: 14px !important;
+      color: #2E2C29 !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .box-vitorias h4,
+    body.mode-quiet-luxury-light .box-vitorias h4 {
+      color: #2E7D32 !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .box-vitorias .list-items li,
+    body.mode-quiet-luxury-light .box-vitorias .list-items li {
+      color: #2E2C29 !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .box-vitorias .list-items li::before,
+    body.mode-quiet-luxury-light .box-vitorias .list-items li::before {
+      color: #2E7D32 !important;
+    }
+
+    body:not(.mode-quiet-luxury-dark) .box-atencao,
+    body.mode-quiet-luxury-light .box-atencao {
+      background: #FDF7F2 !important;
+      border: 1px solid #FAE1CE !important;
+      border-radius: 14px !important;
+      color: #2E2C29 !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .box-atencao h4,
+    body.mode-quiet-luxury-light .box-atencao h4 {
+      color: #C05621 !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .box-atencao .list-items li,
+    body.mode-quiet-luxury-light .box-atencao .list-items li {
+      color: #2E2C29 !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .box-atencao .list-items li::before,
+    body.mode-quiet-luxury-light .box-atencao .list-items li::before {
+      color: #C05621 !important;
+    }
+
+    body:not(.mode-quiet-luxury-dark) .med-fact-card,
+    body.mode-quiet-luxury-light .med-fact-card {
+      background: #FCFBF8 !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 12px !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .med-fact-title,
+    body.mode-quiet-luxury-light .med-fact-title {
+      color: var(--primary-dark) !important;
+      font-weight: 700 !important;
+    }
+    body:not(.mode-quiet-luxury-dark) .med-fact-body,
+    body.mode-quiet-luxury-light .med-fact-body {
+      color: #2E2C29 !important;
+    }
+
+    /* Harmonização e Alto Contraste: Modo Escuro (Quiet Luxury Dark) */
     body.mode-quiet-luxury-dark .box-vitorias {
-      background: rgba(110, 139, 117, 0.12) !important;
-      border: 1px solid rgba(110, 139, 117, 0.35) !important;
+      background: #242320 !important;
+      border: 1px solid rgba(110, 139, 117, 0.45) !important;
       border-radius: 14px !important;
       color: #EDEAE3 !important;
     }
@@ -2204,8 +2261,8 @@
     }
 
     body.mode-quiet-luxury-dark .box-atencao {
-      background: rgba(199, 167, 125, 0.12) !important;
-      border: 1px solid rgba(199, 167, 125, 0.35) !important;
+      background: #242320 !important;
+      border: 1px solid rgba(199, 167, 125, 0.45) !important;
       border-radius: 14px !important;
       color: #EDEAE3 !important;
     }
@@ -2222,12 +2279,14 @@
     body.mode-quiet-luxury-dark .med-fact-card {
       background: #242320 !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 12px !important;
     }
     body.mode-quiet-luxury-dark .med-fact-title {
       color: #E6C291 !important;
+      font-weight: 700 !important;
     }
     body.mode-quiet-luxury-dark .med-fact-body {
-      color: #D6D1C7 !important;
+      color: #EDEAE3 !important;
     }
 
     body.mode-quiet-luxury-dark .conduct-card {
@@ -3580,8 +3639,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v15';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v15';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v16';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v16';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3589,7 +3648,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v15';
+    const IDB_NAME = 'PainelNutricionalDB_v16';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

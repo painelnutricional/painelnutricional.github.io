@@ -4002,8 +4002,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v18';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v18';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v19';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v19';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -4011,7 +4011,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v18';
+    const IDB_NAME = 'PainelNutricionalDB_v19';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)

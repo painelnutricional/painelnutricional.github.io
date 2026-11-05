@@ -2542,6 +2542,17 @@
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
     }
 
+    .acc-count {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 3px !important;
+    }
+    body.mode-quiet-luxury-dark .acc-count {
+      background: rgba(110, 139, 117, 0.2) !important;
+      color: #B9D6C0 !important;
+      border: 1px solid rgba(110, 139, 117, 0.35) !important;
+    }
+
     /* ==================================================== */
     /* VERSÃO COMPACTA & RESPONSIVA MOBILE (SMARTPHONES)    */
     /* ==================================================== */
@@ -2831,6 +2842,33 @@
       .baseline-box, .evolution-card, .conduct-card {
         padding: 12px 12px !important;
         font-size: 13px !important;
+      }
+
+      /* Abas Retráteis no Mobile: apenas número compacto sem texto extenso */
+      .acc-count-label {
+        display: none !important;
+      }
+      .acc-count {
+        min-width: 20px !important;
+        height: 19px !important;
+        padding: 0 6px !important;
+        border-radius: 10px !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        letter-spacing: 0 !important;
+      }
+      .accordion-header {
+        padding: 12px 14px !important;
+      }
+      .accordion-header .acc-title {
+        font-size: 13.5px !important;
+        gap: 6px !important;
+      }
+      .acc-icon {
+        font-size: 11px !important;
       }
 
       /* 5. Modais Compactos para Telas de Celular */
@@ -3452,7 +3490,7 @@
 
         html += '<div class="accordion-item' + isOpen + '" data-cat="' + escapeHtml(themeName) + '">';
         html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
-        html += '    <div class="acc-title">' + icon + ' <span>' + escapeHtml(themeName) + '</span> <span class="acc-count">' + visibleItems.length + (visibleItems.length === 1 ? ' resposta' : ' respostas') + '</span></div>';
+        html += '    <div class="acc-title">' + icon + ' <span>' + escapeHtml(themeName) + '</span> <span class="acc-count" title="' + visibleItems.length + (visibleItems.length === 1 ? ' resposta' : ' respostas') + '"><span class="acc-count-num">' + visibleItems.length + '</span><span class="acc-count-label">' + (visibleItems.length === 1 ? ' resposta' : ' respostas') + '</span></span></div>';
         html += '    <div class="theme-header-right" style="display:flex; align-items:center; gap:8px;">';
         html += '      <button class="btn-theme-action organize-only" onclick="renameThemePrompt(\'' + patientName.replace(/'/g, "\\'") + '\', \'' + themeName.replace(/'/g, "\\'") + '\', event)" title="Renomear este tema">✏️ Renomear</button>';
         html += '      <div class="acc-icon">▼</div>';
@@ -3659,7 +3697,7 @@
           const isOpen = queryLower ? ' open' : '';
           html += '<div class="accordion-item' + isOpen + '">';
           html += '  <div class="accordion-header" onclick="toggleAccordion(this)">';
-          html += '    <div class="acc-title">' + ind.title + ' <span class="acc-count">' + matchingNodes.length + (matchingNodes.length === 1 ? ' registro' : ' registros') + '</span></div>';
+          html += '    <div class="acc-title">' + ind.title + ' <span class="acc-count" title="' + matchingNodes.length + (matchingNodes.length === 1 ? ' registro' : ' registros') + '"><span class="acc-count-num">' + matchingNodes.length + '</span><span class="acc-count-label">' + (matchingNodes.length === 1 ? ' registro' : ' registros') + '</span></span></div>';
           html += '    <div class="acc-icon">▼</div>';
           html += '  </div>';
           html += '  <div class="accordion-body">';
@@ -3964,8 +4002,8 @@ initControls();
     // ==========================================
     // PERSISTÊNCIA LOCAL (LOCALSTORAGE) & BACKUP
     // ==========================================
-    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v17';
-    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v17';
+    const STORAGE_KEY_DATA = 'painel_nutri_patients_data_v18';
+    const STORAGE_KEY_SUMMARIES = 'painel_nutri_summaries_data_v18';
     const DEFAULT_PATIENTS_BACKUP = JSON.parse(JSON.stringify(patientsData));
     const DEFAULT_SUMMARIES_BACKUP = JSON.parse(JSON.stringify(clinicalSyntheses));
 
@@ -3973,7 +4011,7 @@ initControls();
     // ==========================================
     // CAMADA DUPLA DE ARMAZENAMENTO PROTEGIDO (LOCALSTORAGE + INDEXEDDB)
     // ==========================================
-    const IDB_NAME = 'PainelNutricionalDB_v17';
+    const IDB_NAME = 'PainelNutricionalDB_v18';
     const IDB_STORE = 'prontuarios_store';
 
     // Solicitar persistência duradoura ao navegador (impede que o navegador limpe automaticamente)
